@@ -1,0 +1,384 @@
+﻿@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
+
+@media print 
+{
+    .noPrint 
+    {
+        display:none;
+    }
+
+    .header_container {
+        display: none;
+    }
+}
+
+.flat_button_green {
+    background-color: #009900;
+    color: #FFFFFF;
+    border: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    padding: 5px;
+    border-radius: 4px;
+    text-align:center;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-size: 110%;
+}
+
+#HomeLink {
+    font-size: 8pt;
+    float: left;
+    padding: 5px;
+    display: block;
+    color: #0000FF;
+    border: 1px solid #C0C0C0;
+    background-color: #FFFFFF;
+}
+
+.flat_button_green:hover {
+    background-color: #00AA00;
+}
+
+.flat_button_red {
+}
+
+.flat_button_gray {
+}
+
+.checkbox_description {
+    font-size: 9pt;
+    padding-left: 5px;
+}
+
+.nav_link_normal {
+    color: blue;
+}
+
+.nav_link_admin {        
+    color: #008800;
+}
+
+.navigation_table {
+    font-size: 16pt;
+}
+
+.large_text_area {
+    border: 1px solid #777777;
+}
+
+.navigation_table_name {
+    font-size: 16pt;
+    padding: 5px;
+    border-bottom: 1px dotted #C0C0C0;
+}
+
+
+.navigation_table_name a {    
+    text-decoration: none;
+}
+
+.navigation_table_description {
+    font-size: 12pt;
+    border-bottom: 1px dotted #C0C0C0;
+    padding: 5px;
+}
+
+body {
+    font-size: 10pt;
+    font-family: Arial;
+    padding: 0;
+    margin: 0;
+    background-color: #F0F0F0;
+}
+
+.fixed_width_page_container {
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 25px;
+    margin-top: 0;
+    padding-top: 0;
+    background-color: #FFFFFF;
+    padding-bottom: 50px;
+}
+
+.rc_heading_lskysd {
+    font-size: 12pt;
+    font-weight: normal;
+}
+
+.rc_heading_schoolname {
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+.rc_heading_date {
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.rc_studentname {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+.pagebreak {
+    page-break-after: always;
+}
+
+.rc_objectivetext {
+    font-size: 9pt;
+}
+
+.course_name {
+    font-size: 14pt;
+    font-family: Arial;
+}
+
+#loggedInUserBanner {        
+    font-size: 8pt;
+    text-align: right;
+    padding: 10px;    
+    border: 0;
+    border-bottom: 1px solid #404040;
+    border-left: 1px solid #404040;
+    background-color: #202020;
+    float: right;
+    color: white;
+}
+
+#loggedInUserBanner a {
+    color: white;
+}
+
+h1 {
+    font-family: Arial;
+}
+
+.CenteredTable {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.LoginFormContainer {
+    border: 1px solid #C0C0C0;
+    background-color: #FFFFFF;
+    text-align: center;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+
+.small_infobox {
+    background-color: #F0F0F0;
+    font-size: 10pt;
+    border: 1px solid #C0C0C0;
+    padding: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.button {
+    margin: 20px;
+    padding: 10px;
+    width: 200px;
+    border: 1px solid #555555;
+    background-color: #C0C0C0;
+    display: block;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+}
+
+.datatable_header {
+    border: 1px solid black;
+    background-color: #555555; 
+    color: white;
+    font-size: 10pt;
+}
+
+.datatable_sub_header {
+    border: 1px solid black;
+    background-color: #DDDDDD; 
+    color: black;
+    font-size: 10pt;
+}
+
+.datatable tr.row:hover td, .datatable tr.altrow:hover td {
+    color: #000;
+    background-color: #FFFACD;
+}
+
+.datatable td {
+    border: 1px solid #D0D0D0;
+    font-size: 10pt;
+}
+
+
+.td_total {
+    font-weight: bold;
+}
+
+.td_male {
+    background-color: #F0F0F0;
+}
+
+.td_female {    
+    background-color: #F0F0F0;
+}
+
+.page_container {
+    padding: 15px;
+}
+
+#LogOutLink {
+    color: black;
+    background-color: rgba(255, 255, 255, 0.7);  
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    padding: 2px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: table-cell;
+    width: 80px;
+    height: 50px;
+    vertical-align: middle; 
+    text-align: center;
+    font-weight: bold;
+}
+
+#LogOutLink:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+#LoggedInUserInfo {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 0;
+    margin-left: auto;
+    text-align: right;
+    vertical-align: top;
+    font-size: 8pt;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 5px;
+    padding: 2px;
+    vertical-align: middle; 
+    display: table-cell;
+    text-align: center;  
+    height: 50px;       
+    width: 300px; 
+}
+
+#LSKYLogo {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 0;
+    margin-left: 10px;  
+    height: 60px; 
+    width: 60px; 
+}
+
+#PageTitle {
+    font-size: 20pt;
+    padding-left: 7px;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    display: inline;    
+}
+
+#PageTitle_Specific {
+    padding: 5px; 
+    font-size: 20pt;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Roboto', sans-serif;
+    display: inline;
+}
+
+.header_container {
+  color: #FFFFFF;
+  height: 64px;
+  /* Background color for district: 25383C */
+  /* Background color for schools: 4682B4 */
+  /* Background color for public: 007730 */
+  background-color: #25383C;
+  border: 0;
+  
+  /* Background color for district: 45585C */
+  /* Background color for schools: 689AD3 */
+  /* Background color for public: 228A4C */
+  border-bottom: 3px solid #45585C;
+  padding: 0;
+  margin: 0; 
+}
+
+.header_centeredcontent {
+}
+
+.navbar {
+    padding: 10px;
+    margin-left: 10px;
+}
+
+.header_button:hover {
+    background-color: #FFFACD;
+}
+
+.header_button {
+    color: black;
+    text-decoration: none;
+    font-size: 10pt;
+    font-family: Arial;
+    border: 1px solid #666666;
+    background-color: #C0C0C0;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+
+.large_infobox_important {    
+    padding: 20px;
+    font-size: 12pt;
+    border: 1px solid #dbb936;
+    background-color: #fadf88;
+}
+
+.nav_link {
+    font-weight: bold;
+    color: #ff7d00;
+    font-size: 12pt;
+}
+
+.large_infobox {
+    padding: 20px;
+    font-size: 12pt;
+    border: 1px solid #C0C0C0;
+}
+
+.footer {
+    font-size: 10pt;
+    text-align: center;
+    border: 0;
+    border-top: 1px solid #C0C0C0;
+    margin: 25px;
+    padding: 5px;
+}
+
+.search_result {
+    background-color: #00FFFF;
+}
+
+.front_page_heading {
+   font-family: Arial;
+   font-size: 16pt;
+   color: #000000;
+   background-color: #F0F0F0;
+   border: 1px solid #C0C0C0;
+   padding: 5px;
+   padding-left: 15px;
+
+}
