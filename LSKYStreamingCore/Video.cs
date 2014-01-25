@@ -17,8 +17,6 @@ namespace LSKYStreamingCore
         public string DescriptionLarge { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public string ThumbnailURLSmall { get; set; }
-        public string ThumbnailURLLarge { get; set; }
         public DateTime DateAdded { get; set; }
         public DateTime DateAired { get; set; }
         public int DurationInSeconds { get; set; }
@@ -38,6 +36,8 @@ namespace LSKYStreamingCore
         public string LegacyVideoID { get; set; }
         public DateTime DateAvailable { get; set; }
         public DateTime DateExpires { get; set; }
+        public string ThumbnailURLSmall { get; set; }
+        public string ThumbnailURLLarge { get; set; }
         public TimeSpan Duration { 
             get {
                 return new TimeSpan(0,0,this.DurationInSeconds);

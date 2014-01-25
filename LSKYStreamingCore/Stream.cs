@@ -26,6 +26,45 @@ namespace LSKYStreamingCore
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }
 
+        public TimeSpan GetTimeUntilStarts()
+        {
+            return this.StreamStartTime.Subtract(DateTime.Now);
+        }
+
+        public string GetTimeUntilStartsInEnglish()
+        {
+            double totalMinutes = this.GetTimeUntilStarts().TotalMinutes;
+            if (totalMinutes == 1)
+            {
+                return "1 minute";
+            }
+            else if (totalMinutes <= 120)
+            {
+                return Math.Round(totalMinutes, 0) + " minutes";
+            }
+            else
+            {
+                double totalHours = this.GetTimeUntilStarts().TotalHours;
+                if (totalHours == 1)
+                {
+                    return "1 hour";
+                }
+                else
+                {
+                    if ((totalHours % 1) == 0)
+                    {
+
+                        return Math.Round(totalHours, 0) + " hours";
+                    }
+                    else
+                    {
+
+                        return Math.Round(totalHours, 1) + " hours";
+                    }
+                }
+            }
+        }
+
 
         public Stream(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnailSmall, string thumbnailLarge, int width, 
             int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate) 

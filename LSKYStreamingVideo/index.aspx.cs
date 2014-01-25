@@ -92,6 +92,12 @@ namespace LSKYStreamingVideo
             int thumb_height = 225;
             string player_url = "#";
 
+            string thumbnailURL = "none.png";
+            if (!string.IsNullOrEmpty(stream.ThumbnailURLLarge))
+            {
+                thumbnailURL = stream.ThumbnailURLLarge;
+            }
+            
             TimeSpan time_since_start = DateTime.Now.Subtract(stream.StreamStartTime);
             TimeSpan expected_duration = stream.StreamEndTime.Subtract(stream.StreamStartTime);
             TimeSpan time_until_finish = stream.StreamEndTime.Subtract(DateTime.Now);
@@ -109,8 +115,9 @@ namespace LSKYStreamingVideo
             returnMe.Append("<tr>");
 
             returnMe.Append("<td align=\"left\" valign=\"top\" width=\"" + thumb_width + "\">");
-            returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + player_url + "\">");            
-            returnMe.Append("<div style=\"background-color: white; width: " + thumb_width + "px; height: " + thumb_height +"px; border: 1px solid black;\">&nbsp;</div>");
+            returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + player_url + "\">");
+            returnMe.Append("<div style=\"background-image: url('thumbnails/large/" + thumbnailURL + "'); background-size: " + thumb_width +"px " + thumb_height + "px; background-repeat: no-repeat; width: " + thumb_width + "px; height: " + thumb_height + "px; border: 0;\">");
+            returnMe.Append("</div>");
             returnMe.Append("</a>");
             returnMe.Append("</td>");
 
@@ -167,6 +174,7 @@ namespace LSKYStreamingVideo
 
             return returnMe.ToString();
         }
+
         private string BuildLiveStreamDisplay(List<Stream> LiveStreams)
         {
             StringBuilder returnMe = new StringBuilder();
@@ -231,9 +239,17 @@ namespace LSKYStreamingVideo
                 foreach (Stream stream in dates.Value)
                 {
                     returnMe.Append("<tr>");
-                    returnMe.Append("<td width=\"25%\" valign=\"top\"><div class=\"upcoming_stream_time\"><b>" + stream.StreamStartTime.ToShortTimeString() + "</b></td>");
+                    returnMe.Append("<td width=\"25%\" valign=\"top\">");
+                    returnMe.Append("<div class=\"upcoming_stream_time\"><b>" + stream.StreamStartTime.ToShortTimeString() + "</b>");
+                    if (stream.GetTimeUntilStarts().TotalMinutes <= 120)
+                    {
+                        // If the stream is about to start, draw attention to it
+                        returnMe.Append("<div class=\"upcoming_shortly\">(" + stream.GetTimeUntilStartsInEnglish() + ") </div>");
+                    }
+                    returnMe.Append("</td>");
                     returnMe.Append("<td valign=\"top\">");
                     returnMe.Append("<div class=\"upcoming_stream_name\" >" + stream.Name + "</div>");
+                    
                     returnMe.Append("<div class=\"upcoming_stream_info\">Expected duration: " + stream.GetExpectedDuration() + "</div>");
                     if (!string.IsNullOrEmpty(stream.Location))
                     {
@@ -257,13 +273,24 @@ namespace LSKYStreamingVideo
         {
             StringBuilder returnMe = new StringBuilder();
 
+            string thumbnailURL = "none.png";
+            string playerURL = "player/?i=" + video.ID;
+
+            if (!string.IsNullOrEmpty(video.ThumbnailURLSmall))
+            {
+                thumbnailURL = video.ThumbnailURLSmall;
+            }
+
             returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%\">");
             returnMe.Append("<tr>");
 
-            returnMe.Append("<td valign=\"top\" width=\"128\"><div style=\"width: 135px; text-align: right; height: 128px; border: 1px solid black; background-color: white;\"></div></td>");
+            returnMe.Append("<td valign=\"top\" width=\"128\">");
+            returnMe.Append("<a href=\""+playerURL+"\">");
+            returnMe.Append("<div style=\"width: 135px; text-align: right; height: 128px; background-color: white; background-image: url(thumbnails/small/" + thumbnailURL + ");background-size: 128px 128px; background-repeat: no-repeat;\"></div></td>");
+            returnMe.Append("</a>");
 
             returnMe.Append("<td valign=\"top\"><div class=\"video_list_info_container\">");
-            returnMe.Append("<div class=\"video_list_name\">" + video.Name + "</div>");
+            returnMe.Append("<a style=\"text-decoration: none;\" href=\""+playerURL+"\"><div class=\"video_list_name\">" + video.Name + "</div></a>");
             returnMe.Append("<div class=\"video_list_info\">Duration: " + video.GetDurationInEnglish() + "</div>");
             returnMe.Append("<div class=\"video_list_info\">Submitted by: " + video.Author + "</div>");
             returnMe.Append("<div class=\"video_list_info\">Recorded at: " + video.Location + "</div>");
@@ -288,6 +315,7 @@ namespace LSKYStreamingVideo
             return returnMe.ToString();
 
         }
+
         private string BuildFeaturedVideoDisplay(List<Video> videos)
         {
             int maxFeaturedVideos = 4;

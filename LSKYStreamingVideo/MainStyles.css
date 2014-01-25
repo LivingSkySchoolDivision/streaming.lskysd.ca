@@ -409,6 +409,7 @@ h1 {
 
 .upcoming_stream_name {
     font-size: 9pt;
+    font-weight: bold;
 }
 
 .upcoming_stream_info {
@@ -441,4 +442,21 @@ h1 {
     font-size: 8pt;
     color: #333333;
     margin-left: 5px;
+}
+
+.upcoming_shortly {
+    font-weight: bold;
+    color: #009900;
+    font-size: 8pt;
+}
+
+.player_container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.html5_player {
+    margin-left: auto;
+    margin-right: auto;
+    
 }

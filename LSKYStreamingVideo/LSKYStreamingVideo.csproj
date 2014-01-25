@@ -73,10 +73,18 @@
     <Content Include="icon_xml.gif" />
     <Content Include="icon_zip.gif" />
     <Content Include="index.aspx" />
+    <Content Include="live\lsky_stream_poster.png" />
+    <Content Include="live\Preview.png" />
+    <Content Include="live\StrendinSmoothStreamArchive.xap" />
     <Content Include="Logo_Circle_Notext_Trans.png" />
     <Content Include="lsky_logo_text.png" />
     <Content Include="lsky_logo_watermark.png" />
     <Content Include="MainStyles.css" />
+    <Content Include="player\index.aspx" />
+    <Content Include="player\lsky_stream_poster.png" />
+    <Content Include="player\Preview.png" />
+    <Content Include="player\StrendinSmoothStreamArchive.xap" />
+    <Content Include="trans_background.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +93,13 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="player\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="player\index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +126,7 @@
       <Name>LSKYStreamingCore</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

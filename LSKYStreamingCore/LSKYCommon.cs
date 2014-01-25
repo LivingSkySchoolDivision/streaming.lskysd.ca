@@ -172,6 +172,34 @@ namespace LSKYStreamingCore
                 }                
             }
         }
+
+        public static string SanitizeQueryStringID(string dirtyString)
+        {
+            int max_size = 10;            
+
+            StringBuilder returnMe = new StringBuilder();
+
+            string working = string.Empty;
+            if (dirtyString.Length <= max_size)
+            {
+                working = dirtyString;
+            }
+            else
+            {
+                working = dirtyString.Substring(0, max_size);
+            }
+
+            foreach (char c in working)
+            {
+                if (BaseUrlChars.Contains(c))
+                {
+                    returnMe.Append(c);
+                }
+            }            
+
+            return returnMe.ToString();
+
+        }
         
         
     }
