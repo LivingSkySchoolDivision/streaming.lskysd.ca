@@ -50,39 +50,6 @@
     padding-left: 5px;
 }
 
-.nav_link_normal {
-    color: blue;
-}
-
-.nav_link_admin {        
-    color: #008800;
-}
-
-.navigation_table {
-    font-size: 16pt;
-}
-
-.large_text_area {
-    border: 1px solid #777777;
-}
-
-.navigation_table_name {
-    font-size: 16pt;
-    padding: 5px;
-    border-bottom: 1px dotted #C0C0C0;
-}
-
-
-.navigation_table_name a {    
-    text-decoration: none;
-}
-
-.navigation_table_description {
-    font-size: 12pt;
-    border-bottom: 1px dotted #C0C0C0;
-    padding: 5px;
-}
-
 body {
     font-size: 10pt;
     font-family: Arial;
@@ -100,41 +67,6 @@ body {
     padding-top: 0;
     background-color: #FFFFFF;
     padding-bottom: 50px;
-}
-
-.rc_heading_lskysd {
-    font-size: 12pt;
-    font-weight: normal;
-}
-
-.rc_heading_schoolname {
-    font-size: 20pt;
-    font-weight: bold;
-    text-align: center;
-}
-
-.rc_heading_date {
-    text-align: center;
-    font-size: 10pt;
-    font-weight: bold;
-}
-
-.rc_studentname {
-    font-size: 14pt;
-    font-weight: bold;
-}
-
-.pagebreak {
-    page-break-after: always;
-}
-
-.rc_objectivetext {
-    font-size: 9pt;
-}
-
-.course_name {
-    font-size: 14pt;
-    font-family: Arial;
 }
 
 #loggedInUserBanner {        
@@ -157,7 +89,7 @@ h1 {
     font-family: Arial;
 }
 
-.CenteredTable {
+.Centered {
     margin-left: auto;
     margin-right: auto;
 }
@@ -221,14 +153,6 @@ h1 {
 
 .td_total {
     font-weight: bold;
-}
-
-.td_male {
-    background-color: #F0F0F0;
-}
-
-.td_female {    
-    background-color: #F0F0F0;
 }
 
 .page_container {
@@ -315,9 +239,6 @@ h1 {
   margin: 0; 
 }
 
-.header_centeredcontent {
-}
-
 .navbar {
     padding: 10px;
     margin-left: 10px;
@@ -347,12 +268,6 @@ h1 {
     background-color: #fadf88;
 }
 
-.nav_link {
-    font-weight: bold;
-    color: #ff7d00;
-    font-size: 12pt;
-}
-
 .large_infobox {
     padding: 20px;
     font-size: 12pt;
@@ -360,25 +275,78 @@ h1 {
 }
 
 .footer {
-    font-size: 10pt;
+    font-size: 8pt;
     text-align: center;
     border: 0;
     border-top: 1px solid #C0C0C0;
     margin: 25px;
     padding: 5px;
+    color: #555555;
 }
 
 .search_result {
     background-color: #00FFFF;
 }
 
-.front_page_heading {
+
+
+.stream_title {
+  font-family: Arial;
+  font-size: 14pt;
+  font-weight: bold;
+  border: 0;
+  padding-bottom: 0px;
+ }
+
+ .stream_description {
+  font-family: Arial;
+  font-size: 10pt;
+  color: #202020;
+  padding-left: 5px;
+ }
+
+ .stream_info {
+  font-family: Arial;
+  font-size: 8pt;
+  color: #404040;
+  border: 0;
+  padding-left: 5px;
+ }
+
+ .front_page_heading {
+     /*
    font-family: Arial;
    font-size: 16pt;
    color: #000000;
    background-color: #F0F0F0;
    border: 1px solid #C0C0C0;
    padding: 5px;
-   padding-left: 15px;
+   padding-left: 15px;*/
+         
+    text-decoration: none;
+    text-align:left;
+    font-size: 18pt;
+    font-weight: bold;
+    font-family: Roboto;
+    border: 0;
 
 }
+.green {
+    /*
+        background-color: rgba(0,255,0,0.10);
+    border: 1px solid #009900;
+        */
+}
+
+.live_indicator {
+    display: inline;
+    font-size: 10pt;
+    color: #005500;
+    background-color: rgba(0,255,0,0.10);
+    border: 1px solid #009900;
+    padding: 0px;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    }
