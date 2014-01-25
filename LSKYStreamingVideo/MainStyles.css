@@ -197,12 +197,12 @@ h1 {
 }
 
 #LSKYLogo {
-    margin-top: auto;
+    margin-top: 2px;
     margin-bottom: auto;
     margin-right: 0;
     margin-left: 10px;  
-    height: 60px; 
-    width: 60px; 
+    height: 40px; 
+    width: 40px; 
 }
 
 #PageTitle {
@@ -224,7 +224,7 @@ h1 {
 
 .header_container {
   color: #FFFFFF;
-  height: 64px;
+  height: 45px;
   /* Background color for district: 25383C */
   /* Background color for schools: 4682B4 */
   /* Background color for public: 007730 */
@@ -239,9 +239,33 @@ h1 {
   margin: 0; 
 }
 
+.alertbar {
+    background-color: red;
+    color: white;
+    border: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    width: 1024px; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    padding-top: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 5px;
+}
+
 .navbar {
-    padding: 10px;
-    margin-left: 10px;
+    background-color: yellow;
+    border: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    width: 1024px; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    padding-top: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 5px;
 }
 
 .header_button:hover {

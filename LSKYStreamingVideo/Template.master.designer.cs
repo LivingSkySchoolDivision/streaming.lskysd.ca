@@ -49,15 +49,6 @@ namespace LSKYStreamingVideo {
         protected global::System.Web.UI.WebControls.ContentPlaceHolder Body;
         
         /// <summary>
-        /// Footer control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder Footer;
-        
-        /// <summary>
         /// lblServerTime control.
         /// </summary>
         /// <remarks>

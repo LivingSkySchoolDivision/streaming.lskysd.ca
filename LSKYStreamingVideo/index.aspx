@@ -18,5 +18,3 @@
     <asp:Literal ID="litNewestVideos" Visible="false" runat="server"></asp:Literal>
     
 </asp:Content>
-<asp:Content ID="Content3" ContentPlaceHolderID="Footer" runat="server">
-</asp:Content>

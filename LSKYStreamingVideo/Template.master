@@ -26,11 +26,13 @@
             </tr>
         </table> 
     </div>
+    <div class="navbar">Navigation bar goes here with links to videos and maybe video categories, maybe an about page with instructions on how to contact us, maybe a help page, maybe a larger list of upcoming streams</div>
+    <div class="alertbar">Alert bar goes here </div>
     <div class="fixed_width_page_container"><br />
         <asp:ContentPlaceHolder ID="Body" runat="server"></asp:ContentPlaceHolder>
         <div class="footer">
-        <asp:ContentPlaceHolder ID="Footer" runat="server"></asp:ContentPlaceHolder>
-        <b>Current server time: </b><asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label>
+        Streaming Site Version 3.0, written by Mark Strendin for Living Sky School Division<br />
+        Current server time is <asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label>
         </div>
     </div>
     </form>
