@@ -65,8 +65,7 @@ body {
     padding: 25px;
     margin-top: 0;
     padding-top: 0;
-    background-color: #FFFFFF;
-    padding-bottom: 50px;
+    background-color: #FFFFFF;    
 }
 
 #loggedInUserBanner {        
@@ -255,7 +254,11 @@ h1 {
 }
 
 .navbar {
-    background-color: yellow;
+    background-color: #689AD3;
+    text-align: right;
+    font-size: 14pt;
+    font-family: Roboto, Arial;
+    color: white;
     border: 0;
     border-bottom: 1px solid rgba(0,0,0,0.1);
     width: 1024px; 
@@ -266,6 +269,20 @@ h1 {
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 5px;
+}
+
+.navbar_link {
+    text-decoration: none;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+}
+
+.navbar_link:hover {
+    border: 0;
+    border-bottom: 2px solid white;
 }
 
 .header_button:hover {
@@ -374,3 +391,54 @@ h1 {
     padding-right: 10px;
     border-radius: 4px;
     }
+
+.index_date_display {
+  font-family: Arial;
+  padding: 5px;
+  border: 0;
+  border-bottom: 1px solid #C0C0C0;
+  margin-bottom: 10px;
+  font-weight: bold;
+  background-color: #F0F0F0;
+}
+
+.upcoming_stream_time {
+    margin-left: 10px; 
+    font-size: 9pt;
+}
+
+.upcoming_stream_name {
+    font-size: 9pt;
+}
+
+.upcoming_stream_info {
+     margin-left: 5px; 
+     font-size: 8pt; 
+     color: #444444;
+}
+
+.small_thumbnail {
+    width: 128px;
+    height: 128px;
+    border: 1px solid black;
+}
+
+.video_list_info_container {
+    padding-left: 5px;
+}
+
+.video_list_name {
+    font-size: 14pt;
+}
+
+.video_list_info {
+    font-size: 8pt;
+    color: #444444;
+    margin-left: 5px;
+}
+
+.video_list_description {
+    font-size: 8pt;
+    color: #333333;
+    margin-left: 5px;
+}

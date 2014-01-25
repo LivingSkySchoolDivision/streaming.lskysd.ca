@@ -31,24 +31,6 @@ namespace LSKYStreamingVideo {
         protected global::System.Web.UI.WebControls.Literal litLiveStreams;
         
         /// <summary>
-        /// title_upcoming control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl title_upcoming;
-        
-        /// <summary>
-        /// litUpcomingStreams control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litUpcomingStreams;
-        
-        /// <summary>
         /// title_featured control.
         /// </summary>
         /// <remarks>
@@ -65,6 +47,24 @@ namespace LSKYStreamingVideo {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litFeaturedVideos;
+        
+        /// <summary>
+        /// title_upcoming control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl title_upcoming;
+        
+        /// <summary>
+        /// litUpcomingStreams control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litUpcomingStreams;
         
         /// <summary>
         /// title_newest control.

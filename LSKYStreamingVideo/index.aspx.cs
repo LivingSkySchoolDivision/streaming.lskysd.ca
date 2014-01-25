@@ -47,7 +47,7 @@ namespace LSKYStreamingVideo
             {
                 title_upcoming.Visible = true;
                 litUpcomingStreams.Visible = true;
-                //litUpcomingStreams.Text = 
+                litUpcomingStreams.Text = BuildUpcomingStreamDisplay(UpcomingStreams);
             }
             else
             {
@@ -60,10 +60,13 @@ namespace LSKYStreamingVideo
             if (FeaturedVideos.Count > 0)
             {
                 title_featured.Visible = true;
+                litFeaturedVideos.Visible = true;
+                litFeaturedVideos.Text = BuildFeaturedVideoDisplay(FeaturedVideos);
             }
             else
             {
                 title_featured.Visible = false;
+                litFeaturedVideos.Visible = false;
             }
 
 
@@ -71,15 +74,19 @@ namespace LSKYStreamingVideo
             if (NewestVideos.Count > 0)
             {
                 title_newest.Visible = true;
+                litNewestVideos.Visible = true;
+                litNewestVideos.Text = BuildNewVideosDisplay(NewestVideos);
+                
             }
             else
             {
                 title_newest.Visible = false;
+                litNewestVideos.Visible = false;
             }
         }
 
 
-        private string LiveStreamBox(Stream stream)
+        private string LiveStreamListItem(Stream stream)
         {
             int thumb_width = 300;
             int thumb_height = 225;
@@ -160,7 +167,6 @@ namespace LSKYStreamingVideo
 
             return returnMe.ToString();
         }
-
         private string BuildLiveStreamDisplay(List<Stream> LiveStreams)
         {
             StringBuilder returnMe = new StringBuilder();
@@ -179,16 +185,160 @@ namespace LSKYStreamingVideo
                     if (numDisplayed < LiveStreams.Count)
                     {
                         returnMe.Append("<td valign=\"top\">");
-                        returnMe.Append(LiveStreamBox(LiveStreams[numDisplayed]));
+                        returnMe.Append(LiveStreamListItem(LiveStreams[numDisplayed]));
                         returnMe.Append("</td>");
                         numDisplayed++;
                     }
                 }
                 returnMe.Append("</tr>");
             }
-            returnMe.Append("</table>");
+            returnMe.Append("</table><br/><br/>");
                         
             return returnMe.ToString();
         }
+              
+        private string BuildUpcomingStreamDisplay(List<Stream> UpcomingStreams)
+        {
+            // Only display this many sections
+            int maxDatesToDisplay = 5;
+            
+            StringBuilder returnMe = new StringBuilder();
+
+            // Sort into dates
+            Dictionary<string, List<Stream>> StreamsByDate = new Dictionary<string, List<Stream>>();
+              
+            foreach (Stream stream in UpcomingStreams)
+            {
+                if (!StreamsByDate.ContainsKey(stream.StreamStartTime.ToLongDateString()))
+                {
+                    StreamsByDate.Add(stream.StreamStartTime.ToLongDateString(), new List<Stream>());
+                }
+                StreamsByDate[stream.StreamStartTime.ToLongDateString()].Add(stream);
+            }
+
+            int numDatesDisplayed = 0;
+            foreach (KeyValuePair<string, List<Stream>> dates in StreamsByDate)
+            {
+                numDatesDisplayed++;
+                if (numDatesDisplayed > maxDatesToDisplay)
+                {
+                    break;
+                }
+
+                returnMe.Append("<div class=\"index_date_display\">" + dates.Key + "</div>");
+                returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%;\">");
+                
+                foreach (Stream stream in dates.Value)
+                {
+                    returnMe.Append("<tr>");
+                    returnMe.Append("<td width=\"25%\" valign=\"top\"><div class=\"upcoming_stream_time\"><b>" + stream.StreamStartTime.ToShortTimeString() + "</b></td>");
+                    returnMe.Append("<td valign=\"top\">");
+                    returnMe.Append("<div class=\"upcoming_stream_name\" >" + stream.Name + "</div>");
+                    returnMe.Append("<div class=\"upcoming_stream_info\">Expected duration: " + stream.GetExpectedDuration() + "</div>");
+                    if (!string.IsNullOrEmpty(stream.Location))
+                    {
+                        returnMe.Append("<div class=\"upcoming_stream_info\">Streaming from: " + stream.Location + "</div>");
+                    }
+                    returnMe.Append("</br></td>");
+                    
+                    returnMe.Append("</tr>");
+                }
+
+                returnMe.Append("</table>");
+                returnMe.Append("<br/>");
+               
+            }
+            
+
+            return returnMe.ToString();
+        }
+
+        private string SmallVideoListItem(Video video)
+        {
+            StringBuilder returnMe = new StringBuilder();
+
+            returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%\">");
+            returnMe.Append("<tr>");
+
+            returnMe.Append("<td valign=\"top\" width=\"128\"><div style=\"width: 135px; text-align: right; height: 128px; border: 1px solid black; background-color: white;\"></div></td>");
+
+            returnMe.Append("<td valign=\"top\"><div class=\"video_list_info_container\">");
+            returnMe.Append("<div class=\"video_list_name\">" + video.Name + "</div>");
+            returnMe.Append("<div class=\"video_list_info\">Duration: " + video.GetDurationInEnglish() + "</div>");
+            returnMe.Append("<div class=\"video_list_info\">Submitted by: " + video.Author + "</div>");
+            returnMe.Append("<div class=\"video_list_info\">Recorded at: " + video.Location + "</div>");
+            
+            if (video.ShouldDisplayAirDate)
+            {
+                returnMe.Append("<div class=\"video_list_info\">Original broadcast: " + video.DateAired.ToLongDateString() + "</div>");
+            }
+
+            if (!string.IsNullOrEmpty(video.DownloadURL))
+            {
+                returnMe.Append("<div class=\"video_list_info\">Download available</div>");
+            }
+            returnMe.Append("<br/><div class=\"video_list_description\">" + video.DescriptionSmall + "</div>");
+
+            returnMe.Append("</div></td>");
+
+
+            returnMe.Append("</tr>");
+            returnMe.Append("</table><br/>");
+
+            return returnMe.ToString();
+
+        }
+        private string BuildFeaturedVideoDisplay(List<Video> videos)
+        {
+            int maxFeaturedVideos = 4;
+
+            // Generate a list of featured videos to display
+            // We want these to be randomized, in case the pool of featured videos is larger than the number that we can display here
+
+            List<Video> VideosToDisplay = new List<Video>();
+
+            // Shuffle the list
+            var rnd = new Random(DateTime.Now.Millisecond);
+            List<Video> ShuffledVideos = videos.OrderBy(x => rnd.Next()).ToList();
+
+
+            // Get the top X videos from the list
+            int numAdded = 0;
+            foreach (Video video in ShuffledVideos)
+            {
+                numAdded++;
+                if (numAdded > maxFeaturedVideos)
+                {
+                    break;
+                }
+                VideosToDisplay.Add(video);
+            }
+                      
+            
+            StringBuilder returnMe = new StringBuilder();
+
+
+            foreach (Video video in VideosToDisplay)
+            {
+                returnMe.Append(SmallVideoListItem(video));
+            }
+
+            return returnMe.ToString();
+
+        }
+        private string BuildNewVideosDisplay(List<Video> videos)
+        {
+            StringBuilder returnMe = new StringBuilder();
+
+            foreach (Video video in videos)
+            {
+                returnMe.Append(SmallVideoListItem(video));
+            }
+
+            return returnMe.ToString();
+
+        }
+
+
     }
 }

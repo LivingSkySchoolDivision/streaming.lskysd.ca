@@ -290,6 +290,43 @@ namespace LSKYStreamingCore
 
             return ReturnedVideos;
         }
+
+        public string GetDurationInEnglish()
+        {
+            TimeSpan streamDuration = this.Duration;
+
+            double streamDuration_Minutes = streamDuration.TotalMinutes;
+            if (streamDuration_Minutes == 1)
+            {
+                return "1 minute";
+            }
+            else if (streamDuration_Minutes <= 120)
+            {
+                return Math.Round(streamDuration_Minutes, 0) + " minutes";
+            }
+            else
+            {
+                double streamDuration_Hours = streamDuration.TotalHours;
+                if (streamDuration_Hours == 1)
+                {
+                    return "1 hour";
+                }
+                else
+                {
+                    if ((streamDuration_Hours % 1) == 0)
+                    {
+
+                        return Math.Round(streamDuration_Hours, 0) + " hours";
+                    }
+                    else
+                    {
+
+                        return Math.Round(streamDuration_Hours, 1) + " hours";
+                    }
+                }
+            }
+
+        }
     
 
     }

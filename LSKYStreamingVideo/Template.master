@@ -26,12 +26,26 @@
             </tr>
         </table> 
     </div>
-    <div class="navbar">Navigation bar goes here with links to videos and maybe video categories, maybe an about page with instructions on how to contact us, maybe a help page, maybe a larger list of upcoming streams</div>
-    <div class="alertbar">Alert bar goes here </div>
+    <div runat="server" id="divNavBar_Right" class="navbar">
+        <table border="0" cellpadding="0 cellspacing="0" style="width: 100%">
+            <tr>
+                <td align="left">
+                    <a href="#" class="navbar_link">Front page</a>
+                    <a href="#" class="navbar_link">Videos</a>
+                </td>
+                <td align="right">
+                    <a href="#" class="navbar_link">About</a>
+                    <a href="#" class="navbar_link">Help</a>
+                </td>
+            </tr>
+        </table>
+        
+    </div>
+    <div runat="server" id="divAlertBar" visible="false" class="alertbar">Alert bar goes here </div>
     <div class="fixed_width_page_container"><br />
         <asp:ContentPlaceHolder ID="Body" runat="server"></asp:ContentPlaceHolder>
         <div class="footer">
-        Streaming Site Version 3.0, written by Mark Strendin for Living Sky School Division<br />
+        All content on this site is owned by Living Sky School Division No. 202, unless otherwise specified<br />
         Current server time is <asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label>
         </div>
     </div>

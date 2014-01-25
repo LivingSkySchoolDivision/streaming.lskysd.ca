@@ -47,7 +47,7 @@ namespace LSKYStreamingCore
             this.IsHidden = hidden;
             this.IsPrivate = IsPrivate;
         }
-
+        
         private static Stream dbDataReaderToStream(SqlDataReader dbDataReader)
         {
             return new Stream(
@@ -101,7 +101,7 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE stream_start > @CURRENTDATETIME AND override_times=0 ORDER BY stream_start ASC, name ASC;";
+            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE stream_start > @CURRENTDATETIME AND override_times=0 AND private=0 AND hidden=0 ORDER BY stream_start ASC, name ASC;";
             sqlCommand.Parameters.AddWithValue("@CURRENTDATETIME", DateTime.Now);
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
@@ -144,6 +144,41 @@ namespace LSKYStreamingCore
             return ReturnedStreams;
         }
 
+        public string GetExpectedDuration()
+        {
+            TimeSpan streamDuration = this.StreamEndTime.Subtract(this.StreamStartTime);
 
+            double streamDuration_Minutes = streamDuration.TotalMinutes;
+            if (streamDuration_Minutes == 1)
+            {
+                return "1 minute";
+            }
+            else if (streamDuration_Minutes <= 120)
+            {
+                return Math.Round(streamDuration_Minutes, 0) + " minutes";
+            }
+            else
+            {
+                double streamDuration_Hours = streamDuration.TotalHours;
+                if (streamDuration_Hours == 1)
+                {
+                    return "1 hour";
+                }
+                else
+                {
+                    if ((streamDuration_Hours % 1) == 0)
+                    {
+
+                        return Math.Round(streamDuration_Hours,0) + " hours";
+                    }
+                    else
+                    {
+
+                        return Math.Round(streamDuration_Hours,1) + " hours";
+                    }
+                }
+            }
+
+        }
     }
 }
