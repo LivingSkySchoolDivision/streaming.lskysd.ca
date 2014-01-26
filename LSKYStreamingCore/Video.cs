@@ -21,9 +21,9 @@ namespace LSKYStreamingCore
         public DateTime DateAired { get; set; }
         public int DurationInSeconds { get; set; }
         public string FileURL_ISM { get; set; }
-        public string FileURL_MP4 { get; set; }
-        public string FileURL_OGV { get; set; }
-        public string FileURL_WEBM { get; set; }
+        public string FileURL_H264 { get; set; }
+        public string FileURL_THEORA { get; set; }
+        public string FileURL_VP8 { get; set; }
         public string DownloadURL { get; set; }
         public bool IsAlwaysAvailable { get; set; }
         public bool ShouldDisplayAirDate { get; set; }
@@ -64,11 +64,11 @@ namespace LSKYStreamingCore
             this.ThumbnailURLLarge = thumbnaillarge;
             this.DateAdded = added;
             this.DateAired = aired;
-            this.DurationInSeconds = DurationInSeconds;
+            this.DurationInSeconds = duration;
             this.FileURL_ISM = file_ism;
-            this.FileURL_MP4 = file_mp4;
-            this.FileURL_OGV = file_ogv;
-            this.FileURL_WEBM = file_webm;
+            this.FileURL_H264 = file_mp4;
+            this.FileURL_THEORA = file_ogv;
+            this.FileURL_VP8 = file_webm;
             this.DownloadURL = downloadurl;
             this.ShouldDisplayAirDate = displayairdate;
             this.ShouldDisplayThumbnail = displaythumbnail;
@@ -86,9 +86,9 @@ namespace LSKYStreamingCore
         public bool IsHTML5Available()
         {
             if (
-                (string.IsNullOrEmpty(this.FileURL_MP4)) &&
-                (string.IsNullOrEmpty(this.FileURL_OGV)) &&
-                (string.IsNullOrEmpty(this.FileURL_WEBM)))
+                (string.IsNullOrEmpty(this.FileURL_H264)) &&
+                (string.IsNullOrEmpty(this.FileURL_THEORA)) &&
+                (string.IsNullOrEmpty(this.FileURL_VP8)))
             {
                 return false;
             }
@@ -321,8 +321,8 @@ namespace LSKYStreamingCore
 
         public string GetDurationInEnglish()
         {
-            TimeSpan streamDuration = this.Duration;
-
+            TimeSpan streamDuration = new TimeSpan(0, 0, this.DurationInSeconds);
+            
             double streamDuration_Minutes = streamDuration.TotalMinutes;
             if (streamDuration_Minutes == 1)
             {

@@ -74,17 +74,17 @@ namespace LSKYStreamingVideo.player
             StringBuilder returnMe = new StringBuilder();
 
             returnMe.Append("<video autoplay class=\"html5_player\" width=\"" + video.Width + "\" height=\"" + video.Height + "\" controls poster=\"lsky_stream_poster.png\" >");
-            if (!string.IsNullOrEmpty(video.FileURL_MP4))
+            if (!string.IsNullOrEmpty(video.FileURL_H264))
             {
-                returnMe.Append("<source src=\"/video_files/" + video.FileURL_MP4 + "\" type=\"video/mp4\" />");
+                returnMe.Append("<source src=\"/video_files/" + video.FileURL_H264 + "\" type=\"video/mp4\" />");
             }
-            if (!string.IsNullOrEmpty(video.FileURL_OGV))
+            if (!string.IsNullOrEmpty(video.FileURL_THEORA))
             {
-                returnMe.Append("<source src=\"/video_files/" + video.FileURL_OGV + "\" type=\"video/ogg\" />");
+                returnMe.Append("<source src=\"/video_files/" + video.FileURL_THEORA + "\" type=\"video/ogg\" />");
             }
-            if (!string.IsNullOrEmpty(video.FileURL_WEBM))
+            if (!string.IsNullOrEmpty(video.FileURL_VP8))
             {
-                returnMe.Append("<source src=\"/video_files/" + video.FileURL_WEBM + "\" type=\"video/webm\" />");
+                returnMe.Append("<source src=\"/video_files/" + video.FileURL_VP8 + "\" type=\"video/webm\" />");
             }
             returnMe.Append("<em>Sorry, your browser doesn't support HTML5 video.</em>");
             returnMe.Append("</video>");
@@ -131,10 +131,12 @@ namespace LSKYStreamingVideo.player
 
             if (!string.IsNullOrEmpty(video.DownloadURL))
             {
-                returnMe.Append("<div class=\"video_list_info\"><a href=\"" + video.DownloadURL + "\">Download available</a></div>");
+                returnMe.Append("<div class=\"video_list_info\"><a href=\"/video_files/" + video.DownloadURL + "\">Download available</a></div>");
             }
 
-            returnMe.Append("<br/><div class=\"video_list_description\">" + video.DescriptionLarge + "</div>");            
+            returnMe.Append("<br/><div class=\"video_list_description\">" + video.DescriptionLarge + "</div>");
+
+            returnMe.Append("<br/><br/><div class=\"video_list_info\"><b>Browser compatibility chart for this video:</b> <div style=\"margin-left: 10px;\">" + LSKYCommon.GenerateBrowserCompatibilityChart(video) + "</div></div>");
             return returnMe.ToString();
         }
         
