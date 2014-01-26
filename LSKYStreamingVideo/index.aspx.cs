@@ -268,7 +268,7 @@ namespace LSKYStreamingVideo
             return returnMe.ToString();
         }
 
-        private string SmallVideoListItem(Video video)
+        private string SmallVideoListItem(Video video, bool showThumbnail)
         {
             StringBuilder returnMe = new StringBuilder();
 
@@ -283,11 +283,14 @@ namespace LSKYStreamingVideo
             returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%\">");
             returnMe.Append("<tr>");
 
-            returnMe.Append("<td valign=\"top\" width=\"128\">");
-            returnMe.Append("<a href=\""+playerURL+"\">");
-            returnMe.Append("<div style=\"width: 135px; text-align: right; height: 128px; background-color: white; background-image: url(thumbnails/small/" + thumbnailURL + ");background-size: 128px 128px; background-repeat: no-repeat;\"></div></td>");
-            returnMe.Append("</a>");
-
+            if (showThumbnail)
+            {
+                returnMe.Append("<td valign=\"top\" width=\"128\">");
+                returnMe.Append("<a href=\"" + playerURL + "\">");
+                returnMe.Append("<div style=\"width: 135px; text-align: right; height: 128px; background-color: white; background-image: url(thumbnails/small/" + thumbnailURL + ");background-size: 128px 128px; background-repeat: no-repeat;\"></div>");
+                returnMe.Append("</a>");
+                returnMe.Append("</td>");
+            }
             returnMe.Append("<td valign=\"top\"><div class=\"video_list_info_container\">");
             returnMe.Append("<a style=\"text-decoration: none;\" href=\""+playerURL+"\"><div class=\"video_list_name\">" + video.Name + "</div></a>");
             returnMe.Append("<div class=\"video_list_info\">Duration: " + video.GetDurationInEnglish() + "</div>");
@@ -347,7 +350,7 @@ namespace LSKYStreamingVideo
 
             foreach (Video video in VideosToDisplay)
             {
-                returnMe.Append(SmallVideoListItem(video));
+                returnMe.Append(SmallVideoListItem(video, true));
             }
 
             return returnMe.ToString();
@@ -356,7 +359,7 @@ namespace LSKYStreamingVideo
 
         private string BuildNewVideosDisplay(List<Video> videos)
         {
-            int numColumns = 2;
+            int numColumns = 3;
 
             StringBuilder returnMe = new StringBuilder();
 
@@ -368,7 +371,7 @@ namespace LSKYStreamingVideo
             {
                 numDisplayed++;
                 returnMe.Append("<td>");
-                returnMe.Append(SmallVideoListItem(video));
+                returnMe.Append(SmallVideoListItem(video, false));
                 returnMe.Append("</td>");
                 if (numDisplayed >= numColumns)
                 {

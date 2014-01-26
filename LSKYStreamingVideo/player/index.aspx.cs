@@ -78,6 +78,10 @@ namespace LSKYStreamingVideo.player
 
             if (selectedVideo != null)
             {
+                // Change the browser title                
+                string originalTitle = Page.Header.Title;
+                Page.Header.Title = selectedVideo.Name + " - " + originalTitle;
+
                 // Display player
                 litPlayer.Text = BuildHTML5PlayerHTML(selectedVideo);
                 litVideoInfo.Text = BuildVideoInfoHTML(selectedVideo);

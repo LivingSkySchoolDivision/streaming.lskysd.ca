@@ -23,7 +23,7 @@ namespace LSKYStreamingVideo.live
         private string BuildHTML5Player(Stream stream)
         {
             StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<div style=\"width: " + stream.Width + "; margin-left: auto; margin-right: auto;\">");
+            returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto;\">");
             returnMe.Append("<video class=\"html5_player\" width=\"" + stream.Width + "\" ");
             returnMe.Append("height=\"" + stream.Height + "\" ");
             returnMe.Append("src=\"/isml/" + stream.ISM_URL + "/manifest(format=m3u8-aapl).m3u8\" ");
@@ -31,6 +31,9 @@ namespace LSKYStreamingVideo.live
             returnMe.Append("autoplay=\"true\" ");
             returnMe.Append("style=\"background-color: white;\" ");
             returnMe.Append("controls=\"true\" >Your browser does not appear to support this streaming video format</video>");
+            returnMe.Append("</div>");
+            returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto; font-size: 8pt; color: #444444; text-align: right;\">");
+            returnMe.Append("Problems viewing the stream? <a style=\"font-size:8pt;\" href=\"?i=" + stream.ID + "&silverlight=true\">click here to switch to the Silverlight player</a>, or <a href=\"/help/\">click here for our help page</a> ");
             returnMe.Append("</div>");
             return returnMe.ToString();
 
@@ -55,6 +58,9 @@ namespace LSKYStreamingVideo.live
             returnMe.Append("<img src=\"http://go.microsoft.com/fwlink/?LinkId=161376\" alt=\"Get Microsoft Silverlight\" style=\"border-style:none\"/>");
             returnMe.Append("</a>");
             returnMe.Append("</object>");
+            returnMe.Append("</div>");
+            returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto; font-size: 8pt; color: #444444; text-align: right;\">");
+            returnMe.Append("Problems viewing the stream? <a href=\"?i=" + stream.ID + "&html5=true\">click here to switch to HTML5 player</a>, or <a href=\"/help/\">click here for our help page</a> ");
             returnMe.Append("</div>");
             return returnMe.ToString();
         }
@@ -149,6 +155,9 @@ namespace LSKYStreamingVideo.live
 
             if (selectedStream != null)
             {
+                string originalTitle = Page.Header.Title;
+                Page.Header.Title = selectedStream.Name + " - " + originalTitle;
+
                 // Display player
                 if (selectedStream.IsStreamLive())
                 {
