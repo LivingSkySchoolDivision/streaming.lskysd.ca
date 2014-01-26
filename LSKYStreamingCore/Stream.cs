@@ -14,8 +14,7 @@ namespace LSKYStreamingCore
         public string Location { get; set; }
         public string DescriptionSmall { get; set; }
         public string DescriptionLarge { get; set; }
-        public string ThumbnailURLSmall { get; set; }
-        public string ThumbnailURLLarge { get; set; }
+        public string ThumbnailURL { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public string ISM_URL { get; set; }
@@ -67,7 +66,7 @@ namespace LSKYStreamingCore
             }
         }
         
-        public Stream(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnailSmall, string thumbnailLarge, int width, 
+        public Stream(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnail, int width, 
             int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate, bool forcelive ,string sidebarcontent) 
         {
             this.ID = id;
@@ -75,8 +74,7 @@ namespace LSKYStreamingCore
             this.Location = location;
             this.DescriptionSmall = descriptionSmall;
             this.DescriptionLarge = descriptionLarge;
-            this.ThumbnailURLSmall = thumbnailSmall;
-            this.ThumbnailURLLarge = thumbnailLarge;
+            this.ThumbnailURL = thumbnail;
             this.Width = width;
             this.Height = height;
             this.ISM_URL = ismurl;
@@ -121,8 +119,7 @@ namespace LSKYStreamingCore
                 dbDataReader["location"].ToString(),
                 dbDataReader["description_small"].ToString(),
                 dbDataReader["description_large"].ToString(),
-                dbDataReader["thumbnail_url_small"].ToString(),
-                dbDataReader["thumbnail_url_large"].ToString(),
+                dbDataReader["thumbnail_url"].ToString(),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["Width"].ToString()),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["Height"].ToString()),
                 dbDataReader["isml_url"].ToString(),

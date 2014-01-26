@@ -36,8 +36,7 @@ namespace LSKYStreamingCore
         public string LegacyVideoID { get; set; }
         public DateTime DateAvailable { get; set; }
         public DateTime DateExpires { get; set; }
-        public string ThumbnailURLSmall { get; set; }
-        public string ThumbnailURLLarge { get; set; }
+        public string ThumbnailURL { get; set; }
         public TimeSpan Duration { 
             get {
                 return new TimeSpan(0,0,this.DurationInSeconds);
@@ -48,7 +47,7 @@ namespace LSKYStreamingCore
                 } 
         }
 
-        public Video(string id, string name, string author, string location, string descriptionsmall, string descriptionlarge, int width, int height, string thumbnailsmall, string thumbnaillarge, DateTime added, DateTime aired,
+        public Video(string id, string name, string author, string location, string descriptionsmall, string descriptionlarge, int width, int height, string thumbnail, DateTime added, DateTime aired,
             int duration, string file_ism, string file_mp4, string file_ogv, string file_webm, string downloadurl, bool displayairdate, bool displaythumbnail, bool ishidden, bool isprivate, bool islivestreamrecording, bool allowembed,
             string categoryid, DateTime dateavailable, DateTime dateexpires, bool isalwaysavailable, string legacy_video_id)
         {
@@ -60,8 +59,7 @@ namespace LSKYStreamingCore
             this.DescriptionLarge = descriptionlarge;
             this.Width = width;
             this.Height = height;
-            this.ThumbnailURLSmall = thumbnailsmall;
-            this.ThumbnailURLLarge = thumbnaillarge;
+            this.ThumbnailURL = thumbnail;
             this.DateAdded = added;
             this.DateAired = aired;
             this.DurationInSeconds = duration;
@@ -122,8 +120,7 @@ namespace LSKYStreamingCore
                 dbDataReader["description_large"].ToString(),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["width"].ToString()),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["height"].ToString()),
-                dbDataReader["thumbnail_url_small"].ToString(),
-                dbDataReader["thumbnail_url_large"].ToString(),
+                dbDataReader["thumbnail_url"].ToString(),
                 LSKYCommon.ParseDatabaseDateTime(dbDataReader["date_added"].ToString()),
                 LSKYCommon.ParseDatabaseDateTime(dbDataReader["date_aired"].ToString()),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["duration_in_seconds"].ToString()),

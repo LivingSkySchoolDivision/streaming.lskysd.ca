@@ -92,9 +92,9 @@ namespace LSKYStreamingVideo
             string player_url = "live/?i=" + stream.ID;
 
             string thumbnailURL = "none.png";
-            if (!string.IsNullOrEmpty(stream.ThumbnailURLLarge))
+            if (!string.IsNullOrEmpty(stream.ThumbnailURL))
             {
-                thumbnailURL = stream.ThumbnailURLLarge;
+                thumbnailURL = stream.ThumbnailURL;
             }
             
             TimeSpan time_since_start = DateTime.Now.Subtract(stream.StreamStartTime);
@@ -275,9 +275,9 @@ namespace LSKYStreamingVideo
             string thumbnailURL = "none.png";
             string playerURL = "player/?i=" + video.ID;
 
-            if (!string.IsNullOrEmpty(video.ThumbnailURLSmall))
+            if (!string.IsNullOrEmpty(video.ThumbnailURL))
             {
-                thumbnailURL = video.ThumbnailURLSmall;
+                thumbnailURL = video.ThumbnailURL;
             }
 
             returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%\">");
