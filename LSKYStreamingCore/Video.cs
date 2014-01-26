@@ -83,6 +83,34 @@ namespace LSKYStreamingCore
             this.LegacyVideoID = legacy_video_id;
         }
 
+        public bool IsHTML5Available()
+        {
+            if (
+                (string.IsNullOrEmpty(this.FileURL_MP4)) &&
+                (string.IsNullOrEmpty(this.FileURL_OGV)) &&
+                (string.IsNullOrEmpty(this.FileURL_WEBM)))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool IsSilverlightAvailable()
+        {
+            if (string.IsNullOrEmpty(this.FileURL_ISM))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+
         private static Video dbDataReaderToVideo(SqlDataReader dbDataReader)
         {
             return new Video(

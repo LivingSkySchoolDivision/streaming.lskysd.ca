@@ -20,6 +20,14 @@ namespace LSKYStreamingVideo.live
 
         }
 
+        private string BuildErrorMessage(string message)
+        {
+            StringBuilder returnMe = new StringBuilder();
+            returnMe.Append("<div class=\"large_infobox\" style=\"\">" + message + "</div> ");
+            return returnMe.ToString();
+
+        }
+
         private string BuildHTML5Player(Stream stream)
         {
             StringBuilder returnMe = new StringBuilder();
@@ -41,9 +49,8 @@ namespace LSKYStreamingVideo.live
 
         private string BuildSilverlightPlayer(Stream stream)
         {
-            // The hight here needs to be 20 pixels higher than the video, so that the controls fit
             int width = stream.Width;
-            int height = stream.Height + 20;
+            int height = stream.Height;
 
             string playerXapFile = "LSKYSmoothStreamPlayer_Live.xap";
             
@@ -66,12 +73,7 @@ namespace LSKYStreamingVideo.live
             returnMe.Append("</div>");
             return returnMe.ToString();
         }
-
-        private bool CanClientBrowserSupportSilverlight()
-        {
-            return false;
-        }
-
+       
         enum Player
         {
             Silverlight,
@@ -160,18 +162,25 @@ namespace LSKYStreamingVideo.live
                 string originalTitle = Page.Header.Title;
                 Page.Header.Title = selectedStream.Name + " - " + originalTitle;
 
-                // Display player
-                if (selectedStream.IsStreamLive())
+                if (!Request.IsSecureConnection)
                 {
-                    litPlayer.Text = BuildPlayerHTML(selectedStream, selectedPlayer);
+
+                    // Display player
+                    if (selectedStream.IsStreamLive())
+                    {
+                        litPlayer.Text = BuildPlayerHTML(selectedStream, selectedPlayer);
+                    }
+                    else
+                    {
+                        litPlayer.Text = BuildNotStreamingMessage(selectedStream);
+                    }
+                    litStreamInfo.Text = BuildStreamInfoHTML(selectedStream);
+
                 }
                 else
                 {
-                    litPlayer.Text = BuildNotStreamingMessage(selectedStream);
+                    litPlayer.Text = BuildErrorMessage("Streaming video does not work over secure connections - please use a non-encrypted connection");
                 }
-                litStreamInfo.Text = BuildStreamInfoHTML(selectedStream);
-
-               
                 tblContainer.Visible = true;
                 tblNotFound.Visible = false;
             }
