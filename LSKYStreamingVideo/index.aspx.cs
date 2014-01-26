@@ -84,13 +84,12 @@ namespace LSKYStreamingVideo
                 litNewestVideos.Visible = false;
             }
         }
-
-
+        
         private string LiveStreamListItem(Stream stream)
         {
             int thumb_width = 300;
             int thumb_height = 225;
-            string player_url = "#";
+            string player_url = "live/?i=" + stream.ID;
 
             string thumbnailURL = "none.png";
             if (!string.IsNullOrEmpty(stream.ThumbnailURLLarge))

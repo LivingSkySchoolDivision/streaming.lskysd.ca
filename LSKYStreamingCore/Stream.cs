@@ -21,10 +21,12 @@ namespace LSKYStreamingCore
         public string ISM_URL { get; set; }
         public DateTime StreamStartTime { get; set; }
         public DateTime StreamEndTime { get; set; }
+        public bool ForcedLive { get; set; }
         public bool DisplaySidebar { get; set; }
         public bool DisplayThumbnail { get; set; }
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }
+        public string SidebarContent { get; set; }
 
         public TimeSpan GetTimeUntilStarts()
         {
@@ -67,7 +69,7 @@ namespace LSKYStreamingCore
 
 
         public Stream(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnailSmall, string thumbnailLarge, int width, 
-            int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate) 
+            int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate, bool forcelive ,string sidebarcontent) 
         {
             this.ID = id;
             this.Name = name;
@@ -85,8 +87,33 @@ namespace LSKYStreamingCore
             this.DisplayThumbnail = displayThumbnail;
             this.IsHidden = hidden;
             this.IsPrivate = IsPrivate;
+            this.SidebarContent = sidebarcontent;
+            this.ForcedLive = forcelive;
         }
-        
+
+        public static bool DoesStreamIDExist(SqlConnection connection, string streamID)
+        {
+            bool returnMe = false;
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "SELECT id FROM live_streams WHERE (id=@STREAMID)";
+            sqlCommand.Parameters.AddWithValue("STREAMID", streamID);
+            sqlCommand.Connection.Open();
+            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+            if (dbDataReader.HasRows)
+            {
+                while (dbDataReader.Read())
+                {
+                    returnMe = true;
+                }
+            }
+
+            sqlCommand.Connection.Close();
+            return returnMe;
+        }
+
         private static Stream dbDataReaderToStream(SqlDataReader dbDataReader)
         {
             return new Stream(
@@ -105,7 +132,9 @@ namespace LSKYStreamingCore
                 LSKYCommon.ParseDatabaseBool(dbDataReader["display_sidebar"].ToString(), false),
                 LSKYCommon.ParseDatabaseBool(dbDataReader["display_thumbnail"].ToString(), false),
                 LSKYCommon.ParseDatabaseBool(dbDataReader["hidden"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["private"].ToString(), false)
+                LSKYCommon.ParseDatabaseBool(dbDataReader["private"].ToString(), false),
+                LSKYCommon.ParseDatabaseBool(dbDataReader["force_online"].ToString(), false),
+                dbDataReader["sidebar_content"].ToString()
                 );
         }
 
@@ -140,7 +169,7 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE stream_start > @CURRENTDATETIME AND override_times=0 AND private=0 AND hidden=0 ORDER BY stream_start ASC, name ASC;";
+            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE stream_start > @CURRENTDATETIME AND force_online=0 AND private=0 AND hidden=0 ORDER BY stream_start ASC, name ASC;";
             sqlCommand.Parameters.AddWithValue("@CURRENTDATETIME", DateTime.Now);
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
@@ -165,7 +194,7 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE ((stream_start < @CURRENTDATETIME AND stream_end > @CURRENTDATETIME) OR (override_times=1)) ORDER BY stream_start ASC, name ASC;";
+            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE ((stream_start < @CURRENTDATETIME AND stream_end > @CURRENTDATETIME) OR (force_online=1)) ORDER BY stream_start ASC, name ASC;";
             sqlCommand.Parameters.AddWithValue("@CURRENTDATETIME", DateTime.Now);
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
@@ -181,6 +210,47 @@ namespace LSKYStreamingCore
             sqlCommand.Connection.Close();
 
             return ReturnedStreams;
+        }
+
+        public static Stream LoadThisStream(SqlConnection connection, string streamID)
+        {
+            Stream ReturnedStream = null;
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE id=@STREAMID;";
+            sqlCommand.Parameters.AddWithValue("STREAMID", streamID);
+            sqlCommand.Connection.Open();
+            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+            if (dbDataReader.HasRows)
+            {
+                while (dbDataReader.Read())
+                {
+                    ReturnedStream = dbDataReaderToStream(dbDataReader);
+                }
+            }
+
+            sqlCommand.Connection.Close();
+
+            return ReturnedStream;
+        }
+
+        public bool IsStreamLive()
+        {
+            if ((DateTime.Now > this.StreamStartTime) && (DateTime.Now < this.StreamEndTime))
+            {
+                return true;
+            }
+            else if (this.ForcedLive)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public string GetExpectedDuration()

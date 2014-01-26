@@ -59,6 +59,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="about\index.aspx" />
+    <Content Include="help\index.aspx" />
     <Content Include="icon_3d.gif" />
     <Content Include="icon_doc.gif" />
     <Content Include="icon_file_locked.gif" />
@@ -73,6 +75,7 @@
     <Content Include="icon_xml.gif" />
     <Content Include="icon_zip.gif" />
     <Content Include="index.aspx" />
+    <Content Include="live\index.aspx" />
     <Content Include="live\lsky_stream_poster.png" />
     <Content Include="live\Preview.png" />
     <Content Include="live\StrendinSmoothStreamArchive.xap" />
@@ -84,15 +87,38 @@
     <Content Include="player\lsky_stream_poster.png" />
     <Content Include="player\Preview.png" />
     <Content Include="player\StrendinSmoothStreamArchive.xap" />
+    <Content Include="robots.txt" />
     <Content Include="trans_background.png" />
+    <Content Include="videos\index.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="about\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="about\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="help\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="help\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="live\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="live\index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
     <Compile Include="player\index.aspx.cs">
@@ -109,6 +135,13 @@
     </Compile>
     <Compile Include="Template.master.designer.cs">
       <DependentUpon>Template.master</DependentUpon>
+    </Compile>
+    <Compile Include="videos\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="videos\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

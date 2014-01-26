@@ -16,7 +16,7 @@ namespace LSKYStreamingVideo.player
         {
             StringBuilder returnMe = new StringBuilder();
 
-            returnMe.Append("<video class=\"html_player\" width=\"" + video.Width + "\" height=\"" + video.Height + "\" controls poster=\"lsky_stream_poster.png\" >");
+            returnMe.Append("<video class=\"html5_player\" width=\"" + video.Width + "\" height=\"" + video.Height + "\" controls poster=\"lsky_stream_poster.png\" >");
             if (!string.IsNullOrEmpty(video.FileURL_MP4))
             {
                 returnMe.Append("<source src=\"/video_files/" + video.FileURL_MP4 + "\" type=\"video/mp4\" />");

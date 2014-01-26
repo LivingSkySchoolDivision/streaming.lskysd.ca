@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /live
+Disallow: /player
+
+User-Agent: Googlebot
+Disallow: /live
+Disallow: /player
