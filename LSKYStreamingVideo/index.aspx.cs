@@ -361,16 +361,18 @@ namespace LSKYStreamingVideo
         {
             int numColumns = 3;
 
+            int columnWidthPercent = (int)Math.Round((double)100 / (double)numColumns,0);
+
             StringBuilder returnMe = new StringBuilder();
 
-            returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%\">");
+            returnMe.Append("<table border=0 cellpadding=5 cellspacing=0 style=\"width: 100%\">");
             returnMe.Append("<tr>");
 
             int numDisplayed = 0;
             foreach (Video video in videos)
             {
                 numDisplayed++;
-                returnMe.Append("<td>");
+                returnMe.Append("<td valign=\"top\" width=\"" + columnWidthPercent + "%\">");
                 returnMe.Append(SmallVideoListItem(video, false));
                 returnMe.Append("</td>");
                 if (numDisplayed >= numColumns)

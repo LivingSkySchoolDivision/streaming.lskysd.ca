@@ -66,8 +66,7 @@ namespace LSKYStreamingCore
                 }
             }
         }
-
-
+        
         public Stream(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnailSmall, string thumbnailLarge, int width, 
             int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate, bool forcelive ,string sidebarcontent) 
         {
@@ -194,8 +193,8 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE ((stream_start < @CURRENTDATETIME AND stream_end > @CURRENTDATETIME) OR (force_online=1)) ORDER BY stream_start ASC, name ASC;";
-            sqlCommand.Parameters.AddWithValue("@CURRENTDATETIME", DateTime.Now);
+            sqlCommand.CommandText = "SELECT * FROM live_streams WHERE ((stream_start < @CURRENTDATETIME AND stream_end > @CURRENTDATETIME) OR (force_online=1)) AND hidden=0 AND private=0 ORDER BY stream_start ASC, name ASC;";
+            sqlCommand.Parameters.AddWithValue("@CURRENTDATETIME", DateTime.Now.AddMinutes(10));
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 

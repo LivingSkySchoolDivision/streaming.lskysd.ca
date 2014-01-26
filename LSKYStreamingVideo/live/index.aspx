@@ -55,6 +55,11 @@
                 <asp:Literal ID="litStreamInfo" runat="server"></asp:Literal>
             </asp:TableCell>
         </asp:TableRow>
+        <asp:TableRow>
+            <asp:TableCell><p class="large_infobox" style="margin-left: auto; margin-right: auto; width: 720px; font-size: 8pt; font-weight: normal; padding: 5px; color: #444444;">
+                <b>Miss part of the stream? Experiencing technical difficulties? </b><br />
+                In most cases, any live stream broadcast on this site is made available in the "videos" section of this website within a few days. We make most of our videos available for download at this time as well!</p></asp:TableCell>
+        </asp:TableRow>
     </asp:Table>
 
     <asp:Table ID="tblNotFound" runat="server" HorizontalAlign="Center" Visible="false">
@@ -64,5 +69,6 @@
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>
+       
 
 </asp:Content>

@@ -28,7 +28,7 @@ namespace LSKYStreamingVideo.live
             returnMe.Append("height=\"" + stream.Height + "\" ");
             returnMe.Append("src=\"/isml/" + stream.ISM_URL + "/manifest(format=m3u8-aapl).m3u8\" ");
             returnMe.Append("poster=\"lsky_stream_poster.png\" ");
-            returnMe.Append("autoplay=\"true\" ");
+            returnMe.Append("autoplay ");
             returnMe.Append("style=\"background-color: white;\" ");
             returnMe.Append("controls=\"true\" >Your browser does not appear to support this streaming video format</video>");
             returnMe.Append("</div>");

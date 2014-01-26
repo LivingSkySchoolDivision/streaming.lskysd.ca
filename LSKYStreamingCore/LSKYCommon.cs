@@ -22,12 +22,12 @@ namespace LSKYStreamingCore
         /// <returns></returns>
         
         const string BaseUrlChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        public static string getNewID(int characters)
+        public static string getNewID(int number_of_characters)
         {
             int maxNumber = BaseUrlChars.Length;
             List<int> numList = new List<int>();
 
-            for (int x = 0; x < characters; x++)
+            for (int x = 0; x < number_of_characters; x++)
             {
                 numList.Add(random.Next(maxNumber));
             }

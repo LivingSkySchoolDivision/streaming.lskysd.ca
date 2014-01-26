@@ -273,7 +273,7 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT TOP 10 * FROM videos WHERE hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) ORDER BY date_added;";
+            sqlCommand.CommandText = "SELECT TOP 25 * FROM videos WHERE hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) ORDER BY date_added DESC;";
             sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
             sqlCommand.Connection.Open();            
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
