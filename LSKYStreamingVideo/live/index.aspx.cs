@@ -44,16 +44,18 @@ namespace LSKYStreamingVideo.live
             // The hight here needs to be 20 pixels higher than the video, so that the controls fit
             int width = stream.Width;
             int height = stream.Height + 20;
+
+            string playerXapFile = "LSKYSmoothStreamPlayer_Live.xap";
             
             StringBuilder returnMe = new StringBuilder();
             returnMe.Append("<div style=\"border: 0px solid black; width: " + width + "px; height: " + height + "px;\">");
             returnMe.Append("<object data=\"data:application/x-silverlight-2,\" type=\"application/x-silverlight-2\" width=\"" + width + "\" height=\"" + height + "\">");
-            returnMe.Append("<param name=\"source\" value=\"StrendinSmoothStream.xap\"/>");
+            returnMe.Append("<param name=\"source\" value=\"" + playerXapFile + "\"/>");
             returnMe.Append("<param name=\"onError\" value=\"onSilverlightError\" />");
             returnMe.Append("<param name=\"background\" value=\"white\" />");
             returnMe.Append("<param name=\"minRuntimeVersion\" value=\"4.0.50826.0\" />");
             returnMe.Append("<param name=\"autoUpgrade\" value=\"true\" />");
-            returnMe.Append("<param name=\"initParams\" value=\"streamuri=/isml/" + stream.ISM_URL + "/Manifest\" />");
+            returnMe.Append("<param name=\"initParams\" value=\"streamuri=/isml/" + stream.ISM_URL + "/Manifest,width="+width+",height="+height+"\" />");
             returnMe.Append("<a href=\"http://go.microsoft.com/fwlink/?LinkID=149156&v=4.0.50826.0\" style=\"text-decoration:none\">");
             returnMe.Append("<img src=\"http://go.microsoft.com/fwlink/?LinkId=161376\" alt=\"Get Microsoft Silverlight\" style=\"border-style:none\"/>");
             returnMe.Append("</a>");
