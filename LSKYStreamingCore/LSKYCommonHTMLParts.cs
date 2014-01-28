@@ -13,7 +13,7 @@ namespace LSKYStreamingCore
             StringBuilder returnMe = new StringBuilder();
 
             string thumbnailURL = "none.png";
-            string playerURL = "player/?i=" + video.ID;
+            string playerURL = "/player/?i=" + video.ID;
 
             if (!string.IsNullOrEmpty(video.ThumbnailURL))
             {
@@ -65,7 +65,7 @@ namespace LSKYStreamingCore
             StringBuilder returnMe = new StringBuilder();
 
             string thumbnailURL = "none.png";
-            string playerURL = "player/?i=" + video.ID;
+            string playerURL = "/player/?i=" + video.ID;
 
             if (!string.IsNullOrEmpty(video.ThumbnailURL))
             {
