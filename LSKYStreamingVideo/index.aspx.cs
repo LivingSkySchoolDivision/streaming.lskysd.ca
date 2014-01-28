@@ -267,74 +267,17 @@ namespace LSKYStreamingVideo
 
             return returnMe.ToString();
         }
-
-        private string SmallVideoListItem(Video video, bool showThumbnail)
-        {
-            StringBuilder returnMe = new StringBuilder();
-
-            string thumbnailURL = "none.png";
-            string playerURL = "player/?i=" + video.ID;
-
-            if (!string.IsNullOrEmpty(video.ThumbnailURL))
-            {
-                thumbnailURL = video.ThumbnailURL;
-            }
-
-            returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%\">");
-            returnMe.Append("<tr>");
-
-            if (showThumbnail)
-            {
-                returnMe.Append("<td valign=\"top\" width=\"128\">");
-                returnMe.Append("<a href=\"" + playerURL + "\">");
-                returnMe.Append("<div style=\"width: 128px; text-align: right; height: 128px; background-color: white; background-image: url(thumbnails/small/" + thumbnailURL + ");background-size: 128px 128px; background-repeat: no-repeat;\"></div>");
-                returnMe.Append("</a>");
-                returnMe.Append("</td>");
-            }
-            returnMe.Append("<td valign=\"top\"><div class=\"video_list_info_container\">");
-            returnMe.Append("<a style=\"text-decoration: none;\" href=\""+playerURL+"\"><div class=\"video_list_name\">" + video.Name + "</div></a>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Duration:</b> " + video.GetDurationInEnglish() + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div>");
-            
-            if (video.ShouldDisplayAirDate)
-            {
-                returnMe.Append("<div class=\"video_list_info\"><b>Original broadcast:</b> " + video.DateAired.ToLongDateString() + "</div>");
-            }
-
-            if (!string.IsNullOrEmpty(video.DownloadURL))
-            {
-                returnMe.Append("<div class=\"video_list_info\">Download available</div>");
-            }
-            returnMe.Append("<br/><div class=\"video_list_description\">" + video.DescriptionSmall + "</div>");
-
-            returnMe.Append("</div></td>");
-
-
-            returnMe.Append("</tr>");
-            returnMe.Append("</table><br/>");
-
-            return returnMe.ToString();
-
-        }
-
+       
         private string BuildFeaturedVideoDisplay(List<Video> videos)
         {
             int maxFeaturedVideos = 4;
 
             // Generate a list of featured videos to display
-            // We want these to be randomized, in case the pool of featured videos is larger than the number that we can display here
-
             List<Video> VideosToDisplay = new List<Video>();
-
-            // Shuffle the list
-            var rnd = new Random(DateTime.Now.Millisecond);
-            List<Video> ShuffledVideos = videos.OrderBy(x => rnd.Next()).ToList();
-
 
             // Get the top X videos from the list
             int numAdded = 0;
-            foreach (Video video in ShuffledVideos)
+            foreach (Video video in videos)
             {
                 numAdded++;
                 if (numAdded > maxFeaturedVideos)
@@ -350,7 +293,7 @@ namespace LSKYStreamingVideo
 
             foreach (Video video in VideosToDisplay)
             {
-                returnMe.Append(SmallVideoListItem(video, true));
+                returnMe.Append(LSKYCommonHTMLParts.SmallVideoListItem(video, true));
             }
 
             return returnMe.ToString();
@@ -373,7 +316,7 @@ namespace LSKYStreamingVideo
             {
                 numDisplayed++;
                 returnMe.Append("<td valign=\"top\" width=\"" + columnWidthPercent + "%\">");
-                returnMe.Append(SmallVideoListItem(video, false));
+                returnMe.Append(LSKYCommonHTMLParts.SmallVideoListItem(video, false));
                 returnMe.Append("</td>");
                 if (numDisplayed >= numColumns)
                 {

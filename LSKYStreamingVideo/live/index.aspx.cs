@@ -36,7 +36,7 @@ namespace LSKYStreamingVideo.live
             returnMe.Append("height=\"" + stream.Height + "\" ");
             returnMe.Append("src=\"/isml/" + stream.ISM_URL + "/manifest(format=m3u8-aapl).m3u8\" ");
             returnMe.Append("poster=\"lsky_stream_poster.png\" ");
-            returnMe.Append("autoplay ");
+            returnMe.Append("autoplay=\"true\" ");
             returnMe.Append("style=\"background-color: white;\" ");
             returnMe.Append("controls=\"true\" >Your browser does not appear to support this streaming video format</video>");
             returnMe.Append("</div>");
@@ -67,7 +67,7 @@ namespace LSKYStreamingVideo.live
             returnMe.Append("<img src=\"http://go.microsoft.com/fwlink/?LinkId=161376\" alt=\"Get Microsoft Silverlight\" style=\"border-style:none\"/>");
             returnMe.Append("</a>");
             returnMe.Append("</object>");
-            returnMe.Append("</div>");
+            returnMe.Append("</div>");         
             returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto; font-size: 8pt; color: #444444; text-align: right;\">");
             returnMe.Append("Problems viewing the stream? <a href=\"?i=" + stream.ID + "&html5=true\">click here to switch to HTML5 player</a>, or <a href=\"/help/\">click here for our help page</a> ");
             returnMe.Append("</div>");
@@ -89,6 +89,21 @@ namespace LSKYStreamingVideo.live
             if ((browser.Browser == "IE") || (browser.Browser == "InternetExplorer"))
                 rv = (float)(browser.MajorVersion + browser.MinorVersion);            
             return rv;
+        }
+
+        private bool isClientWindows()
+        {
+            System.Web.HttpBrowserCapabilities browser = Request.Browser;
+
+            if ((browser.Platform.ToLower() == "winnt"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
         }
 
         private string BuildStreamInfoHTML(Stream stream)
@@ -125,13 +140,18 @@ namespace LSKYStreamingVideo.live
             Player selectedPlayer = Player.HTML5;
 
             // Check to see which player we should be using based on the client's browser
-            if ((getInternetExplorerVersion() < 10) && (getInternetExplorerVersion() != -1))
+            //if ((getInternetExplorerVersion() < 10) && (getInternetExplorerVersion() != -1))
+            if (isClientWindows())
             {
                 selectedPlayer = Player.Silverlight;
             }
+            else
+            {
+                selectedPlayer = Player.HTML5;
+            }
 
             // Check to see if the user has specified a player to use
-            if (!string.IsNullOrEmpty(Request.QueryString["html"]))
+            if (!string.IsNullOrEmpty(Request.QueryString["html5"]))
             {
                 selectedPlayer = Player.HTML5;
             }

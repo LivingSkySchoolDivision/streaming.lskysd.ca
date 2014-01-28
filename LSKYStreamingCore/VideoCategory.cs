@@ -14,6 +14,7 @@ namespace LSKYStreamingCore
         public string ParentCategory { get; set; }
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }
+        public List<Video> Videos { get; set; }
 
         public VideoCategory(string id, string name, string parentcategory, bool hidden, bool isprivate)
         {

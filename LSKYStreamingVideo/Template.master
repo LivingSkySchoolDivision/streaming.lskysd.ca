@@ -34,8 +34,8 @@
                     <a href="/LSKYStreamingVideo/videos" class="navbar_link">Videos</a>
                 </td>
                 <td align="right">
-                    <a href="/LSKYStreamingVideo/about" class="navbar_link">About</a>
-                    <a href="/LSKYStreamingVideo/help" class="navbar_link">Help</a>
+                    <!-- <a href="/LSKYStreamingVideo/about" class="navbar_link">About</a>
+                    <a href="/LSKYStreamingVideo/help" class="navbar_link">Help</a> -->
                 </td>
             </tr>
         </table>

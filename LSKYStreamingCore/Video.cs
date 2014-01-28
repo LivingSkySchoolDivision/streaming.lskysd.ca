@@ -32,11 +32,13 @@ namespace LSKYStreamingCore
         public bool IsPrivate { get; set; }
         public bool IsLiveStreamRecording { get; set; }
         public bool AllowEmbedding { get; set; }
-        public string CategoryID { get; set; }
+        public string Tags { get; set; }
         public string LegacyVideoID { get; set; }
         public DateTime DateAvailable { get; set; }
         public DateTime DateExpires { get; set; }
         public string ThumbnailURL { get; set; }
+        public string CategoryID { get; set; }
+        public VideoCategory Category { get; set; }
         public TimeSpan Duration { 
             get {
                 return new TimeSpan(0,0,this.DurationInSeconds);
@@ -49,7 +51,7 @@ namespace LSKYStreamingCore
 
         public Video(string id, string name, string author, string location, string descriptionsmall, string descriptionlarge, int width, int height, string thumbnail, DateTime added, DateTime aired,
             int duration, string file_ism, string file_mp4, string file_ogv, string file_webm, string downloadurl, bool displayairdate, bool displaythumbnail, bool ishidden, bool isprivate, bool islivestreamrecording, bool allowembed,
-            string categoryid, DateTime dateavailable, DateTime dateexpires, bool isalwaysavailable, string legacy_video_id)
+            string tags, DateTime dateavailable, DateTime dateexpires, bool isalwaysavailable, string legacy_video_id, string category_id)
         {
             this.ID = id;
             this.Name = name;
@@ -74,11 +76,12 @@ namespace LSKYStreamingCore
             this.IsPrivate = isprivate;
             this.IsLiveStreamRecording = islivestreamrecording;
             this.AllowEmbedding = allowembed;
-            this.CategoryID = categoryid;
+            this.Tags = tags;
             this.DateAvailable = dateavailable;
             this.DateExpires = dateexpires;
             this.IsAlwaysAvailable = isalwaysavailable;
             this.LegacyVideoID = legacy_video_id;
+            this.CategoryID = category_id;
         }
 
         public bool IsHTML5Available()
@@ -135,11 +138,12 @@ namespace LSKYStreamingCore
                 LSKYCommon.ParseDatabaseBool(dbDataReader["private"].ToString(), false),
                 LSKYCommon.ParseDatabaseBool(dbDataReader["was_originally_live_stream"].ToString(), false),
                 LSKYCommon.ParseDatabaseBool(dbDataReader["allow_embed"].ToString(), false),
-                dbDataReader["category_id"].ToString(),
+                dbDataReader["tags"].ToString(),
                 LSKYCommon.ParseDatabaseDateTime(dbDataReader["available_from"].ToString()),
                 LSKYCommon.ParseDatabaseDateTime(dbDataReader["available_to"].ToString()),
                 LSKYCommon.ParseDatabaseBool(dbDataReader["always_available"].ToString(), false),
-                dbDataReader["legacy_video_id"].ToString()
+                dbDataReader["legacy_video_id"].ToString(),
+                dbDataReader["category_id"].ToString()
                 );
         }
 
@@ -216,15 +220,30 @@ namespace LSKYStreamingCore
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadVideosFromCategory(SqlConnection connection, string category_id)
+        public static List<Video> SearchVideos(SqlConnection connection, string searchTerms)
         {
             List<Video> ReturnedVideos = new List<Video>();
+
+            // Sanitize the input string
+            string sanitizedSearchString = LSKYCommon.SanitizeSearchString(searchTerms.Trim()).ToLower().Trim();
+            
+            // Build an SQL query
+            StringBuilder sqlQuery = new StringBuilder();
+            sqlQuery.Append("SELECT TOP 25 * FROM videos WHERE hidden=0 AND private=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) AND (");
+            sqlQuery.Append("name like '%" + sanitizedSearchString + "%' OR ");
+            sqlQuery.Append("author like '%" + sanitizedSearchString + "%' OR ");
+            sqlQuery.Append("location like '%" + sanitizedSearchString + "%' OR ");
+            sqlQuery.Append("description_small like '%" + sanitizedSearchString + "%' OR ");
+            sqlQuery.Append("description_large like '%" + sanitizedSearchString + "%' OR ");
+            sqlQuery.Append("tags like '%" + sanitizedSearchString + "%')");
+            sqlQuery.Append(" ORDER BY date_added DESC;");
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM videos WHERE category_id=@CATID;";
-            sqlCommand.Parameters.AddWithValue("CATID", category_id);
+            sqlCommand.CommandText = sqlQuery.ToString();
+            sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
+            sqlCommand.Parameters.AddWithValue("SEARCHTERM", sanitizedSearchString);
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
@@ -232,6 +251,7 @@ namespace LSKYStreamingCore
             {
                 while (dbDataReader.Read())
                 {
+
                     ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
                 }
             }
@@ -248,7 +268,7 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM vFeatured_videos WHERE hidden=0 AND FeaturedFrom  < @CURRENTDATETIME AND FeaturedTo > @CURRENTDATETIME;";
+            sqlCommand.CommandText = "SELECT * FROM vFeatured_videos WHERE hidden=0 AND FeaturedFrom  < @CURRENTDATETIME AND FeaturedTo > @CURRENTDATETIME ORDER BY date_added DESC;";
             sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();

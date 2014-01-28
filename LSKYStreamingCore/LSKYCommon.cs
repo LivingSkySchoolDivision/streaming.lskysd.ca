@@ -175,7 +175,7 @@ namespace LSKYStreamingCore
 
         public static string SanitizeQueryStringID(string dirtyString)
         {
-            int max_size = 10;            
+            int max_size = 10;
 
             StringBuilder returnMe = new StringBuilder();
 
@@ -195,7 +195,36 @@ namespace LSKYStreamingCore
                 {
                     returnMe.Append(c);
                 }
-            }            
+            }
+
+            return returnMe.ToString();
+
+        }
+
+        const string AllowedSearchCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz !@&-=_+:;";
+        public static string SanitizeSearchString(string dirtyString)
+        {
+            int max_size = 250;
+
+            StringBuilder returnMe = new StringBuilder();
+
+            string working = string.Empty;
+            if (dirtyString.Length <= max_size)
+            {
+                working = dirtyString;
+            }
+            else
+            {
+                working = dirtyString.Substring(0, max_size);
+            }
+
+            foreach (char c in working)
+            {
+                if (AllowedSearchCharacters.Contains(c))
+                {
+                    returnMe.Append(c);
+                }
+            }
 
             return returnMe.ToString();
 
@@ -349,6 +378,8 @@ namespace LSKYStreamingCore
 
             return returnMe.ToString();
         }
+
+
 
     }
 }
