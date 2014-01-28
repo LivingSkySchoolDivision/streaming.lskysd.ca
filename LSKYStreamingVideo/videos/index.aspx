@@ -12,7 +12,9 @@
     <asp:Literal ID="litSearchResults" runat="server" Visible="false"></asp:Literal>
     </div>
     <h2>Video Categories</h2>
-    <asp:Literal ID="litCategories" runat="server"></asp:Literal>
+    <div style="margin-left: 10px;">
+        <asp:Literal ID="litCategories" runat="server"></asp:Literal>
+    </div>
     
 
 </asp:Content>

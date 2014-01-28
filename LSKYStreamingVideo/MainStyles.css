@@ -479,3 +479,34 @@ h1 {
     font-weight: bold;
     font-size: 12pt;
 }
+
+.video_thumbnail_list_item_container {
+    font-size: 8pt;
+    text-align: left;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.video_thumbnail_list_item_container_link {
+    font-size: 8pt;
+}
+
+.video_thumbnail_list_item_container_info {
+    font-size: 8pt;
+    color: #444444;
+    text-align: left;
+}
+
+.video_thumbnail_list_item_container_image {
+    margin-left: auto; 
+    margin-right: auto; 
+    width: 128px; 
+    text-align: right; 
+    height: 128px; 
+    background-color: white; 
+    background-size: 128px 128px; 
+    background-repeat: no-repeat;
+}
+

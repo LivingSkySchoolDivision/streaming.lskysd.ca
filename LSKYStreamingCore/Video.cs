@@ -220,6 +220,30 @@ namespace LSKYStreamingCore
             return ReturnedVideos;
         }
 
+        public static List<Video> LoadVideosFromCategory(SqlConnection connection, VideoCategory category, int maxVideos)
+        {
+            List<Video> ReturnedVideos = new List<Video>();
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "SELECT TOP " + maxVideos + " * FROM videos WHERE category_id='" + category.ID + "';";
+            sqlCommand.Connection.Open();
+            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+            if (dbDataReader.HasRows)
+            {
+                while (dbDataReader.Read())
+                {
+                    ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
+                }
+            }
+
+            sqlCommand.Connection.Close();
+
+            return ReturnedVideos;
+        }
+
         public static List<Video> SearchVideos(SqlConnection connection, string searchTerms)
         {
             List<Video> ReturnedVideos = new List<Video>();

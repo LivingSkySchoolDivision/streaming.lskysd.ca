@@ -18,6 +18,7 @@ namespace LSKYStreamingCore
 
         public VideoCategory(string id, string name, string parentcategory, bool hidden, bool isprivate)
         {
+            this.Videos = new List<Video>();
             this.ID = id;
             this.Name = name;
             this.ParentCategory = parentcategory;
@@ -31,7 +32,7 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM video_categories;";
+            sqlCommand.CommandText = "SELECT * FROM video_categories ORDER BY name ASC;";
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
