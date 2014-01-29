@@ -1,0 +1,53 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Template.master.cs" Inherits="LSKYStreamingManager.Template" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>LSKYSD Streaming Video Manager</title>
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <META NAME="ROBOTS" CONTENT="NONE"> 
+    <META NAME="GOOGLEBOT" CONTENT="NOARCHIVE"> 
+    <link rel="stylesheet" href="MainStyles.css" />  
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="Form1" runat="server">
+    <div class="header_container">
+        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-left: auto; margin-right: auto;">
+            <tr>
+                <td style="border: 0;" width="35px"><img id="LSKYLogo" src="/Logo_Circle_Notext_Trans.png" /></td>
+                <td style="border: 0;">                    
+                    <div id="PageTitle">LSKYSD:</div> <div id="PageTitle_Specific">Streaming Video Manager</div>                     
+                </td>
+                <td width="350">
+                    <asp:Table ID="tblLoggedInUserBanner" runat="server" Width="100%" Visible="false">
+                        <asp:TableRow>
+                            <asp:TableCell>
+                                <div id="LoggedInUserInfo">
+                                    Logged in as <b><asp:Label ID="lblLoggedInUser_Username" runat="server" Text="------"></asp:Label></b>
+                                    <br />
+                                    Session expires: <asp:Label ID="lblLoggedInUser_SessionEnds" runat="server" Text="------"></asp:Label>
+                                    <br />
+                                </div>
+                            </asp:TableCell>
+                            <asp:TableCell Width="100" HorizontalAlign="Center">
+                                    <a href="?logout=true" id="LogOutLink">LOG OUT</a>
+                            </asp:TableCell>
+                        </asp:TableRow>                        
+                    </asp:Table>
+                </td>
+            </tr>
+        </table> 
+    </div>
+    <a id="HomeLink" class="noPrint" href="/"><< Main Menu</a>
+    <div class="fixed_width_page_container"><br />        
+        <asp:ContentPlaceHolder ID="Body" runat="server"></asp:ContentPlaceHolder>
+        <div class="footer">
+        Current server time is <asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

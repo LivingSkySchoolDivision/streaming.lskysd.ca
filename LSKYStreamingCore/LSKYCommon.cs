@@ -14,7 +14,6 @@ namespace LSKYStreamingCore
 
         // Database connection strings
         public static string dbConnectionString_ReadOnly = ConfigurationManager.ConnectionStrings["StreamingDatabaseReadOnly"].ConnectionString;
-        public static string dbConnectionString_ReadWrite = ConfigurationManager.ConnectionStrings["StreamingDatabaseReadWrite"].ConnectionString;
 
         /// <summary>
         /// Returns a new ID string for use in the database

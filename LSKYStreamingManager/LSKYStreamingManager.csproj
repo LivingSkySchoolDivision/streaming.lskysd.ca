@@ -43,6 +43,9 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -59,12 +62,76 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icon_3d.gif" />
+    <Content Include="icon_doc.gif" />
+    <Content Include="icon_file_locked.gif" />
+    <Content Include="icon_file_warning.gif" />
+    <Content Include="icon_generic.gif" />
+    <Content Include="icon_html.gif" />
+    <Content Include="icon_link.gif" />
+    <Content Include="icon_markup.gif" />
+    <Content Include="icon_pdf.gif" />
+    <Content Include="icon_txt.gif" />
+    <Content Include="icon_xls.gif" />
+    <Content Include="icon_xml.gif" />
+    <Content Include="icon_zip.gif" />
+    <Content Include="index.aspx" />
+    <Content Include="lock.png" />
+    <Content Include="Login\index.aspx" />
+    <Content Include="Logo_Circle_Notext_Trans.png" />
+    <Content Include="lsky_logo_text.png" />
+    <Content Include="lsky_logo_watermark.png" />
+    <Content Include="MainStyles.css" />
+    <Content Include="robots.txt" />
+    <Content Include="SiteAccess\AccessLog.aspx" />
+    <Content Include="SiteAccess\SessionManager.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logging.cs" />
+    <Compile Include="LoginAttempt.cs" />
+    <Compile Include="LoginSession.cs" />
+    <Compile Include="Login\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LSKYStreamingManagerCommon.cs" />
+    <Compile Include="NavMenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiteAccess\AccessLog.aspx.cs">
+      <DependentUpon>AccessLog.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SiteAccess\AccessLog.aspx.designer.cs">
+      <DependentUpon>AccessLog.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SiteAccess\SessionManager.aspx.cs">
+      <DependentUpon>SessionManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SiteAccess\SessionManager.aspx.designer.cs">
+      <DependentUpon>SessionManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Template.Master.cs">
+      <DependentUpon>Template.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Template.Master.designer.cs">
+      <DependentUpon>Template.Master</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Template.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -77,6 +144,11 @@
       <Project>{6f5afb54-3729-4575-acfc-e88ba87762b2}</Project>
       <Name>LSKYStreamingCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Streams\" />
+    <Folder Include="VideoCategories\" />
+    <Folder Include="Videos\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
