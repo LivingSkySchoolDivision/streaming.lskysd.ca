@@ -227,7 +227,7 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT TOP " + maxVideos + " * FROM videos WHERE category_id='" + category.ID + "';";
+            sqlCommand.CommandText = "SELECT TOP " + maxVideos + " * FROM videos WHERE category_id='" + category.ID + "' ORDER BY date_added DESC;";
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
