@@ -19,67 +19,7 @@ namespace LSKYStreamingVideo.live
             return returnMe.ToString();
 
         }
-
-        private string BuildErrorMessage(string message)
-        {
-            StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<div class=\"large_infobox\" style=\"\">" + message + "</div> ");
-            return returnMe.ToString();
-
-        }
-
-        private string BuildHTML5Player(Stream stream)
-        {
-            StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto;\">");
-            returnMe.Append("<video class=\"html5_player\" width=\"" + stream.Width + "\" ");
-            returnMe.Append("height=\"" + stream.Height + "\" ");
-            returnMe.Append("src=\"/isml/" + stream.ISM_URL + "/manifest(format=m3u8-aapl).m3u8\" ");
-            returnMe.Append("poster=\"lsky_stream_poster.png\" ");
-            returnMe.Append("autoplay=\"true\" ");
-            returnMe.Append("style=\"background-color: white;\" ");
-            returnMe.Append("controls=\"true\" >Your browser does not appear to support this streaming video format</video>");
-            returnMe.Append("</div>");
-            returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto; font-size: 8pt; color: #444444; text-align: right;\">");
-            returnMe.Append("Problems viewing the stream? <a style=\"font-size:8pt;\" href=\"?i=" + stream.ID + "&silverlight=true\">click here to switch to the Silverlight player</a>, or <a href=\"/help/\">click here for our help page</a> ");
-            returnMe.Append("</div>");
-            return returnMe.ToString();
-
-        }
-
-        private string BuildSilverlightPlayer(Stream stream)
-        {
-            int width = stream.Width;
-            int height = stream.Height;
-
-            string playerXapFile = "LSKYSmoothStreamPlayer_Live.xap";
-            
-            StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<div style=\"border: 0px solid black; width: " + width + "px; height: " + height + "px;\">");
-            returnMe.Append("<object data=\"data:application/x-silverlight-2,\" type=\"application/x-silverlight-2\" width=\"" + width + "\" height=\"" + height + "\">");
-            returnMe.Append("<param name=\"source\" value=\"" + playerXapFile + "\"/>");
-            returnMe.Append("<param name=\"onError\" value=\"onSilverlightError\" />");
-            returnMe.Append("<param name=\"background\" value=\"white\" />");
-            returnMe.Append("<param name=\"minRuntimeVersion\" value=\"4.0.50826.0\" />");
-            returnMe.Append("<param name=\"autoUpgrade\" value=\"true\" />");
-            returnMe.Append("<param name=\"initParams\" value=\"streamuri=/isml/" + stream.ISM_URL + "/Manifest,width="+width+",height="+height+"\" />");
-            returnMe.Append("<a href=\"http://go.microsoft.com/fwlink/?LinkID=149156&v=4.0.50826.0\" style=\"text-decoration:none\">");
-            returnMe.Append("<img src=\"http://go.microsoft.com/fwlink/?LinkId=161376\" alt=\"Get Microsoft Silverlight\" style=\"border-style:none\"/>");
-            returnMe.Append("</a>");
-            returnMe.Append("</object>");
-            returnMe.Append("</div>");         
-            returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto; font-size: 8pt; color: #444444; text-align: right;\">");
-            returnMe.Append("Problems viewing the stream? <a href=\"?i=" + stream.ID + "&html5=true\">click here to switch to HTML5 player</a>, or <a href=\"/help/\">click here for our help page</a> ");
-            returnMe.Append("</div>");
-            return returnMe.ToString();
-        }
-       
-        enum Player
-        {
-            Silverlight,
-            HTML5
-        }
-
+        
         private float getInternetExplorerVersion()
         {
             // Returns the version of Internet Explorer or a -1
@@ -120,16 +60,16 @@ namespace LSKYStreamingVideo.live
             return returnMe.ToString();
         }
         
-        private string BuildPlayerHTML(Stream stream, Player player)
+        private string BuildPlayerHTML(Stream stream, LSKYStreamingCore.LSKYCommonHTMLParts.Player player)
         {
-            if (player == Player.HTML5)
+            if (player == LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5)
             {
-                return BuildHTML5Player(stream);
+                return LSKYCommonHTMLParts.BuildHTML5LiveStreamPlayer(stream);
             }
 
-            if (player == Player.Silverlight)
+            if (player == LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight)
             {
-                return BuildSilverlightPlayer(stream);
+                return LSKYCommonHTMLParts.BuildSilverlightLiveStreamPlayer(stream);
             }
             return string.Empty;
         }
@@ -137,28 +77,28 @@ namespace LSKYStreamingVideo.live
         protected void Page_Load(object sender, EventArgs e)
         {
             Stream selectedStream = null;
-            Player selectedPlayer = Player.HTML5;
+            LSKYStreamingCore.LSKYCommonHTMLParts.Player selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
 
             // Check to see which player we should be using based on the client's browser
             //if ((getInternetExplorerVersion() < 10) && (getInternetExplorerVersion() != -1))
             if (isClientWindows())
             {
-                selectedPlayer = Player.Silverlight;
+                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight;
             }
             else
             {
-                selectedPlayer = Player.HTML5;
+                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
             }
 
             // Check to see if the user has specified a player to use
             if (!string.IsNullOrEmpty(Request.QueryString["html5"]))
             {
-                selectedPlayer = Player.HTML5;
+                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
             }
 
             if (!string.IsNullOrEmpty(Request.QueryString["silverlight"]))
             {
-                selectedPlayer = Player.Silverlight;
+                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight;
             }
 
 
@@ -199,7 +139,7 @@ namespace LSKYStreamingVideo.live
                 }
                 else
                 {
-                    litPlayer.Text = BuildErrorMessage("Streaming video does not work over secure connections - please use a non-encrypted connection");
+                    litPlayer.Text = LSKYCommonHTMLParts.BuildErrorMessage("Streaming video does not work over secure connections - please use a non-encrypted connection");
                 }
                 tblContainer.Visible = true;
                 tblNotFound.Visible = false;
