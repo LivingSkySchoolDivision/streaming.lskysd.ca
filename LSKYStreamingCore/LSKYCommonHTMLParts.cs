@@ -148,6 +148,8 @@ namespace LSKYStreamingCore
 
             string playerXapFile = "LSKYSmoothStreamPlayer_Live.xap";
 
+            playerXapFile = playerXapFile + "?" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond;
+
             StringBuilder returnMe = new StringBuilder();
             returnMe.Append("<div style=\"border: 0px solid black; width: " + width + "px; height: " + height + "px;\">");
             returnMe.Append("<object data=\"data:application/x-silverlight-2,\" type=\"application/x-silverlight-2\" width=\"" + width + "\" height=\"" + height + "\">");
@@ -208,6 +210,8 @@ namespace LSKYStreamingCore
                 int height = video.Height;
 
                 string playerXapFile = "LSKYSmoothStreamPlayer_PreRecorded.xap";
+
+                playerXapFile = playerXapFile + "?" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond;
 
                 StringBuilder returnMe = new StringBuilder();
                 returnMe.Append("<div style=\"border: 0px solid black; width: " + width + "px; height: " + height + "px;\">");
