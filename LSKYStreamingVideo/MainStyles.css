@@ -238,21 +238,6 @@ h1 {
   margin: 0; 
 }
 
-.alertbar {
-    background-color: red;
-    color: white;
-    border: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    width: 1024px; 
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0;
-    padding-top: 5px;
-    padding-left: 25px;
-    padding-right: 25px;
-    padding-bottom: 5px;
-}
-
 .navbar {
     background-color: #689AD3;
     text-align: right;
@@ -419,8 +404,8 @@ h1 {
 }
 
 .small_thumbnail {
-    width: 128px;
-    height: 128px;
+    width: 200px;
+    height: 130px;
     border: 1px solid black;
 }
 
@@ -502,11 +487,47 @@ h1 {
 .video_thumbnail_list_item_container_image {
     margin-left: auto; 
     margin-right: auto; 
-    width: 128px; 
+    width: 200px; 
     text-align: right; 
-    height: 128px; 
+    height: 130px; 
     background-color: white; 
     background-size: 128px 128px; 
     background-repeat: no-repeat;
 }
 
+.alertbar_normal {
+    background-color: #AEF100;
+    color: black;
+    border: 0;
+    border-bottom: 2px solid #719D00;
+    border-top: 2px solid #719D00;
+    width: 1024px; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+}
+.alertbar_high {
+    background-color: red;
+    color: white;
+    border: 0;
+    border-bottom: 2px solid rgba(200,0,0,1);
+    border-top: 2px solid rgba(200,0,0,1);
+    width: 1024px; 
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 10px;
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+}

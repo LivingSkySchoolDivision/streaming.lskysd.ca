@@ -46,10 +46,11 @@ namespace LSKYStreamingManager
             List<NavMenuItem> MainMenu = new List<NavMenuItem>();
             //MainMenu.Add(new NavMenuItem(0, "#", "Title", "Description", "Category"));
             MainMenu.Add(new NavMenuItem(0, "#", "Add a new video", "Adds a new video to the site", "Videos"));
-            MainMenu.Add(new NavMenuItem(0, "#", "Modify a video", "Edit an existing video record", "Videos"));
-            MainMenu.Add(new NavMenuItem(0, "#", "Add a new category", "Adds a category to put videos in", "Videos"));
-            MainMenu.Add(new NavMenuItem(0, "#", "Schedule a broadcast", "Create a new live stream record", "Live Broadcasts"));
-            MainMenu.Add(new NavMenuItem(0, "#", "Modify a broadcast", "Edit an existing live stream record", "Live Broadcasts"));
+            MainMenu.Add(new NavMenuItem(0, "#", "Modify a video", "Manage videos", "Videos"));
+            MainMenu.Add(new NavMenuItem(0, "#", "Add a new category", "Manage video categories", "Videos"));
+            MainMenu.Add(new NavMenuItem(0, "#", "Schedule a broadcast", "Create a new live broadcast", "Live Broadcasts"));
+            MainMenu.Add(new NavMenuItem(0, "#", "Modify a broadcast", "Manage live broadcasts", "Live Broadcasts"));            
+            MainMenu.Add(new NavMenuItem(0, "Alerts/AlertManager.aspx", "Manage alerts", "Modify a colored bar at the top of each page that displays a message", "Alerts"));
             MainMenu.Add(new NavMenuItem(0, "SiteAccess/SessionManager.aspx", "Current login sessions", "View current login sessions on this website", "Site Administration"));
             MainMenu.Add(new NavMenuItem(0, "SiteAccess/AccessLog.aspx", "Access log", "View login success and failure logs", "Site Administration"));
 

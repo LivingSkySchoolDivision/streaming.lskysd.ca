@@ -111,7 +111,6 @@ namespace LSKYStreamingCore
             }
         }
 
-
         private static Video dbDataReaderToVideo(SqlDataReader dbDataReader)
         {
             return new Video(

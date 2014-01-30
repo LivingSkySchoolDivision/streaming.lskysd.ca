@@ -41,7 +41,7 @@
         </table>
         
     </div>
-    <div runat="server" id="divAlertBar" visible="false" class="alertbar">Alert bar goes here </div>
+    <asp:Literal ID="litAlertContainer" runat="server"></asp:Literal>
     <div class="fixed_width_page_container"><br />
         <asp:ContentPlaceHolder ID="Body" runat="server"></asp:ContentPlaceHolder>
         <div class="footer">

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alert.cs" />
     <Compile Include="LSKYCommon.cs" />
     <Compile Include="LSKYCommonHTMLParts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
