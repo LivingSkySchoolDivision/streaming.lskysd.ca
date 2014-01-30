@@ -11,7 +11,7 @@
         <tr>
             <td valign="top">
                 <div runat="server" id="title_featured" class="front_page_heading" visible="false">Featured videos</div>
-                <div style="margin-left: 5px;">
+                <div style="margin-left: 5px;margin-right: 5px;">
                     <asp:Literal ID="litFeaturedVideos" Visible="false" runat="server"></asp:Literal>
                 </div>
                 <br /><br />

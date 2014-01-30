@@ -50,4 +50,11 @@
             <asp:TableCell>Delete</asp:TableCell>
         </asp:TableHeaderRow>                
     </asp:Table>
+
+    <br /><br />
+    
+    <div class="alertbar_high">High importance alerts look like this bar</div>
+    <br /></br>
+    
+    <div class="alertbar_normal">Normal alerts look like this bar</div>
 </asp:Content>
