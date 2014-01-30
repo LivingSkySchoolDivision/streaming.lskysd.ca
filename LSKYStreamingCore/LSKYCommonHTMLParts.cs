@@ -156,7 +156,7 @@ namespace LSKYStreamingCore
             returnMe.Append("<param name=\"background\" value=\"white\" />");
             returnMe.Append("<param name=\"minRuntimeVersion\" value=\"4.0.50826.0\" />");
             returnMe.Append("<param name=\"autoUpgrade\" value=\"true\" />");
-            returnMe.Append("<param name=\"initParams\" value=\"streamuri=/isml/" + stream.ISM_URL + "/Manifest,width=" + width + ",height=" + height + "\" />");
+            returnMe.Append("<param name=\"initParams\" value=\"streamuri=http://streaming.lskysd.ca/isml/" + stream.ISM_URL + "/Manifest,width=" + width + ",height=" + height + "\" />");
             returnMe.Append("<a href=\"http://go.microsoft.com/fwlink/?LinkID=149156&v=4.0.50826.0\" style=\"text-decoration:none\">");
             returnMe.Append("<img src=\"http://go.microsoft.com/fwlink/?LinkId=161376\" alt=\"Get Microsoft Silverlight\" style=\"border-style:none\"/>");
             returnMe.Append("</a>");

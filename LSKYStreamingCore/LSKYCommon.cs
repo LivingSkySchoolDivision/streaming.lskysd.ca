@@ -200,7 +200,7 @@ namespace LSKYStreamingCore
 
         }
 
-        const string AllowedSearchCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz !@&-=_+:;";
+        const string AllowedSearchCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz !@&-=_+:;.,";
         public static string SanitizeSearchString(string dirtyString)
         {
             int max_size = 250;
