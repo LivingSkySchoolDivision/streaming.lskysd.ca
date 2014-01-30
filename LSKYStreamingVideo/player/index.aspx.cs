@@ -11,44 +11,7 @@ using System.Web.UI.WebControls;
 namespace LSKYStreamingVideo.player
 {
     public partial class index : System.Web.UI.Page
-    {
-        private string BuildPlayerHTML(Video video, LSKYStreamingCore.LSKYCommonHTMLParts.Player player)
-        {
-            if (player == LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5)
-            {
-                return LSKYCommonHTMLParts.BuildHTML5VideoPlayerHTML(video);
-            }
-
-            if (player == LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight)
-            {
-                return LSKYCommonHTMLParts.BuildSilverlightVideoPlayer(video);
-            }
-            return string.Empty;
-        }
-
-        private string BuildVideoInfoHTML(Video video)
-        {
-            StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<div class=\"video_list_name\">" + video.Name + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Duration:</b> " + video.GetDurationInEnglish() + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div>");
-            if (video.ShouldDisplayAirDate)
-            {
-                returnMe.Append("<div class=\"video_list_info\"><b>Original broadcast:</b> " + video.DateAired.ToLongDateString() + "</div>");
-            }
-
-            if (!string.IsNullOrEmpty(video.DownloadURL))
-            {
-                returnMe.Append("<div class=\"video_list_info\"><a href=\"/video_files/" + video.DownloadURL + "\">Download available</a></div>");
-            }
-
-            returnMe.Append("<br/><div class=\"video_list_description\">" + video.DescriptionLarge + "</div>");
-
-            returnMe.Append("<br/><br/><div class=\"video_list_info\"><b>Browser compatibility chart for this video:</b> <div style=\"margin-left: 10px;\">" + LSKYCommon.GenerateBrowserCompatibilityChart(video) + "</div></div>");
-            return returnMe.ToString();
-        }
-        
+    {        
         protected void Page_Load(object sender, EventArgs e)
         {
             Video selectedVideo = null;
@@ -93,8 +56,8 @@ namespace LSKYStreamingVideo.player
                     Page.Header.Title = selectedVideo.Name + " - " + originalTitle;
 
                     // Display player
-                    litPlayer.Text = BuildPlayerHTML(selectedVideo, selectedPlayer);
-                    litVideoInfo.Text = BuildVideoInfoHTML(selectedVideo);
+                    litPlayer.Text = LSKYCommonHTMLParts.BuildVideoPlayerHTML(selectedVideo, selectedPlayer);
+                    litVideoInfo.Text = LSKYCommonHTMLParts.BuildVideoInfoHTML(selectedVideo);
                     tblContainer.Visible = true;
                     tblNotFound.Visible = false;
                 }

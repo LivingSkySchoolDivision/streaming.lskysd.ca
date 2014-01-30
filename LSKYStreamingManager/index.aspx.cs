@@ -50,7 +50,7 @@ namespace LSKYStreamingManager
             MainMenu.Add(new NavMenuItem(0, "#", "Add a new category", "Adds a category to put videos in", "Videos"));
             MainMenu.Add(new NavMenuItem(0, "#", "Schedule a broadcast", "Create a new live stream record", "Live Broadcasts"));
             MainMenu.Add(new NavMenuItem(0, "#", "Modify a broadcast", "Edit an existing live stream record", "Live Broadcasts"));
-            MainMenu.Add(new NavMenuItem(0, "#", "ISML Viewer", "Test an ISML file to see if the stream is working", "Live Broadcasts"));
+            MainMenu.Add(new NavMenuItem(0, "Streams/ISMLViewer.aspx", "ISML Viewer", "Test an ISML file to see if the stream is working", "Live Broadcasts"));
             MainMenu.Add(new NavMenuItem(0, "SiteAccess/SessionManager.aspx", "Current login sessions", "View current login sessions on this website", "Site Administration"));
             MainMenu.Add(new NavMenuItem(0, "SiteAccess/AccessLog.aspx", "Access log", "View login success and failure logs", "Site Administration"));
 

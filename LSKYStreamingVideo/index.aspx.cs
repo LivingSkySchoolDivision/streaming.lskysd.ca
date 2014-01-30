@@ -16,15 +16,15 @@ namespace LSKYStreamingVideo
         {
             List<Video> NewestVideos = new List<Video>();
             List<Video> FeaturedVideos = new List<Video>();
-            List<Stream> UpcomingStreams = new List<Stream>();
-            List<Stream> CurrentlyLiveStreams = new List<Stream>();
+            List<LiveBroadcast> UpcomingStreams = new List<LiveBroadcast>();
+            List<LiveBroadcast> CurrentlyLiveStreams = new List<LiveBroadcast>();
             
             using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
             {
                 NewestVideos = Video.LoadNewestVideos(connection);
                 FeaturedVideos = Video.LoadFeaturedVideos(connection);
-                UpcomingStreams = Stream.LoadUpcomingStreams(connection);
-                CurrentlyLiveStreams = Stream.LoadCurrentlyBroadcasting(connection);
+                UpcomingStreams = LiveBroadcast.LoadUpcomingStreams(connection);
+                CurrentlyLiveStreams = LiveBroadcast.LoadCurrentlyBroadcasting(connection);
 
             }
 
@@ -85,7 +85,7 @@ namespace LSKYStreamingVideo
             }
         }
         
-        private string LiveStreamListItem(Stream stream)
+        private string LiveStreamListItem(LiveBroadcast stream)
         {
             int thumb_width = 300;
             int thumb_height = 225;
@@ -174,7 +174,7 @@ namespace LSKYStreamingVideo
             return returnMe.ToString();
         }
 
-        private string BuildLiveStreamDisplay(List<Stream> LiveStreams)
+        private string BuildLiveStreamDisplay(List<LiveBroadcast> LiveStreams)
         {
             StringBuilder returnMe = new StringBuilder();
 
@@ -204,7 +204,7 @@ namespace LSKYStreamingVideo
             return returnMe.ToString();
         }
               
-        private string BuildUpcomingStreamDisplay(List<Stream> UpcomingStreams)
+        private string BuildUpcomingStreamDisplay(List<LiveBroadcast> UpcomingStreams)
         {
             // Only display this many sections
             int maxDatesToDisplay = 5;
@@ -212,19 +212,19 @@ namespace LSKYStreamingVideo
             StringBuilder returnMe = new StringBuilder();
 
             // Sort into dates
-            Dictionary<string, List<Stream>> StreamsByDate = new Dictionary<string, List<Stream>>();
+            Dictionary<string, List<LiveBroadcast>> StreamsByDate = new Dictionary<string, List<LiveBroadcast>>();
               
-            foreach (Stream stream in UpcomingStreams)
+            foreach (LiveBroadcast stream in UpcomingStreams)
             {
                 if (!StreamsByDate.ContainsKey(stream.StreamStartTime.ToLongDateString()))
                 {
-                    StreamsByDate.Add(stream.StreamStartTime.ToLongDateString(), new List<Stream>());
+                    StreamsByDate.Add(stream.StreamStartTime.ToLongDateString(), new List<LiveBroadcast>());
                 }
                 StreamsByDate[stream.StreamStartTime.ToLongDateString()].Add(stream);
             }
 
             int numDatesDisplayed = 0;
-            foreach (KeyValuePair<string, List<Stream>> dates in StreamsByDate)
+            foreach (KeyValuePair<string, List<LiveBroadcast>> dates in StreamsByDate)
             {
                 numDatesDisplayed++;
                 if (numDatesDisplayed > maxDatesToDisplay)
@@ -235,7 +235,7 @@ namespace LSKYStreamingVideo
                 returnMe.Append("<div class=\"index_date_display\">" + dates.Key + "</div>");
                 returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%;\">");
                 
-                foreach (Stream stream in dates.Value)
+                foreach (LiveBroadcast stream in dates.Value)
                 {
                     returnMe.Append("<tr>");
                     returnMe.Append("<td width=\"25%\" valign=\"top\">");

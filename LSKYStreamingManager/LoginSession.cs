@@ -201,24 +201,9 @@ namespace LSKYStreamingManager
                 {
                     // Generate a session ID
                     string newSessionID = generateNewSessionID(username + remoteIP + useragent);
-
-                    // Determine a timespan for this session based on the current time of day
-                    // If logging in during the work day, make a session last 8 hours
-                    // If logging in after hours, make the session only last 2 hours
-                    TimeSpan workDayStart = new TimeSpan(7, 30, 0);
-                    TimeSpan workDayEnd = new TimeSpan(15, 00, 0);
-                    TimeSpan now = DateTime.Now.TimeOfDay;
-                    TimeSpan sessionDuration;
-                    if ((now >= workDayStart) && (now <= workDayEnd))
-                    {
-                        sessionDuration = new TimeSpan(8, 0, 0);
-                    }
-                    else
-                    {
-                        sessionDuration = new TimeSpan(2, 0, 0);
-                    }
-
-
+                                        
+                    TimeSpan sessionDuration = new TimeSpan(2,0,0);
+                    
                     // Create a session in the database 
                     // Also while we are querying the database, clear out expired sessions that are lingering, and clear any existing sessions for
                     // this user, limiting the site to one session per user (per site code)

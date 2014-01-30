@@ -125,6 +125,7 @@
     </Compile>
     <Compile Include="Streams\ISMLViewer.aspx.cs">
       <DependentUpon>ISMLViewer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Streams\ISMLViewer.aspx.designer.cs">
       <DependentUpon>ISMLViewer.aspx</DependentUpon>

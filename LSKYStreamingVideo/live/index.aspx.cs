@@ -12,23 +12,12 @@ namespace LSKYStreamingVideo.live
 {
     public partial class index : System.Web.UI.Page
     {
-        private string BuildNotStreamingMessage(Stream stream)
+        private string BuildNotStreamingMessage(LiveBroadcast stream)
         {
             StringBuilder returnMe = new StringBuilder();
             returnMe.Append("<div class=\"large_infobox\" style=\"\">Stream not currently broadcasting</div> ");
             return returnMe.ToString();
 
-        }
-        
-        private float getInternetExplorerVersion()
-        {
-            // Returns the version of Internet Explorer or a -1
-            // (indicating the use of another browser).
-            float rv = -1;
-            System.Web.HttpBrowserCapabilities browser = Request.Browser;
-            if ((browser.Browser == "IE") || (browser.Browser == "InternetExplorer"))
-                rv = (float)(browser.MajorVersion + browser.MinorVersion);            
-            return rv;
         }
 
         private bool isClientWindows()
@@ -46,37 +35,9 @@ namespace LSKYStreamingVideo.live
             
         }
 
-        private string BuildStreamInfoHTML(Stream stream)
-        {
-            int container_width = stream.Width;
-            StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<div style=\"max-width: " + container_width + "px; margin-left: auto; margin-right: auto;\">");
-            returnMe.Append("<div class=\"video_list_name\">" + stream.Name + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Broadcasting from:</b> " + stream.Location + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled start:</b> " + stream.StreamStartTime.ToLongDateString() + " " + stream.StreamStartTime.ToLongTimeString() + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled end:</b> " + stream.StreamEndTime.ToLongDateString() + " " + stream.StreamEndTime.ToLongTimeString() + "</div>");
-            returnMe.Append("<br/><div class=\"video_list_description\">" + stream.DescriptionLarge + "</div>");
-            returnMe.Append("</div>");
-            return returnMe.ToString();
-        }
-        
-        private string BuildPlayerHTML(Stream stream, LSKYStreamingCore.LSKYCommonHTMLParts.Player player)
-        {
-            if (player == LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5)
-            {
-                return LSKYCommonHTMLParts.BuildHTML5LiveStreamPlayer(stream);
-            }
-
-            if (player == LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight)
-            {
-                return LSKYCommonHTMLParts.BuildSilverlightLiveStreamPlayer(stream);
-            }
-            return string.Empty;
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            Stream selectedStream = null;
+            LiveBroadcast selectedStream = null;
             LSKYStreamingCore.LSKYCommonHTMLParts.Player selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
 
             // Check to see which player we should be using based on the client's browser
@@ -110,9 +71,9 @@ namespace LSKYStreamingVideo.live
                 // See if this video exists
                 using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
                 {
-                    if (Stream.DoesStreamIDExist(connection, requestedID))
+                    if (LiveBroadcast.DoesStreamIDExist(connection, requestedID))
                     {
-                        selectedStream = Stream.LoadThisStream(connection, requestedID);
+                        selectedStream = LiveBroadcast.LoadThisStream(connection, requestedID);
                     }
                 }
             }
@@ -128,13 +89,13 @@ namespace LSKYStreamingVideo.live
                     // Display player
                     if (selectedStream.IsStreamLive())
                     {
-                        litPlayer.Text = BuildPlayerHTML(selectedStream, selectedPlayer);
+                        litPlayer.Text = LSKYCommonHTMLParts.BuildLiveStreamPlayerHTML(selectedStream, selectedPlayer);
                     }
                     else
                     {
                         litPlayer.Text = BuildNotStreamingMessage(selectedStream);
                     }
-                    litStreamInfo.Text = BuildStreamInfoHTML(selectedStream);
+                    litStreamInfo.Text = LSKYCommonHTMLParts.BuildLiveStreamInfoHTML(selectedStream);
 
                 }
                 else

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace LSKYStreamingCore
 {
-    public class Stream
+    public class LiveBroadcast
     {
         public string ID { get; set; }
         public string Name { get; set; }
@@ -66,7 +66,7 @@ namespace LSKYStreamingCore
             }
         }
         
-        public Stream(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnail, int width, 
+        public LiveBroadcast(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnail, int width, 
             int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate, bool forcelive ,string sidebarcontent) 
         {
             this.ID = id;
@@ -111,9 +111,9 @@ namespace LSKYStreamingCore
             return returnMe;
         }
 
-        private static Stream dbDataReaderToStream(SqlDataReader dbDataReader)
+        private static LiveBroadcast dbDataReaderToStream(SqlDataReader dbDataReader)
         {
-            return new Stream(
+            return new LiveBroadcast(
                 dbDataReader["id"].ToString(),
                 dbDataReader["name"].ToString(),
                 dbDataReader["location"].ToString(),
@@ -134,9 +134,9 @@ namespace LSKYStreamingCore
                 );
         }
 
-        public static List<Stream> LoadAllStreams(SqlConnection connection)
+        public static List<LiveBroadcast> LoadAllStreams(SqlConnection connection)
         {
-            List<Stream> ReturnedStreams = new List<Stream>();
+            List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
@@ -158,9 +158,9 @@ namespace LSKYStreamingCore
             return ReturnedStreams;
         }
 
-        public static List<Stream> LoadUpcomingStreams(SqlConnection connection)
+        public static List<LiveBroadcast> LoadUpcomingStreams(SqlConnection connection)
         {
-            List<Stream> ReturnedStreams = new List<Stream>();
+            List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
@@ -183,9 +183,9 @@ namespace LSKYStreamingCore
             return ReturnedStreams;
         }
 
-        public static List<Stream> LoadCurrentlyBroadcasting(SqlConnection connection)
+        public static List<LiveBroadcast> LoadCurrentlyBroadcasting(SqlConnection connection)
         {
-            List<Stream> ReturnedStreams = new List<Stream>();
+            List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
@@ -208,9 +208,9 @@ namespace LSKYStreamingCore
             return ReturnedStreams;
         }
 
-        public static Stream LoadThisStream(SqlConnection connection, string streamID)
+        public static LiveBroadcast LoadThisStream(SqlConnection connection, string streamID)
         {
-            Stream ReturnedStream = null;
+            LiveBroadcast ReturnedStream = null;
 
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
