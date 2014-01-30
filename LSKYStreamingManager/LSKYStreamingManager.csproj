@@ -85,7 +85,6 @@
     <Content Include="robots.txt" />
     <Content Include="SiteAccess\AccessLog.aspx" />
     <Content Include="SiteAccess\SessionManager.aspx" />
-    <Content Include="Streams\ISMLViewer.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -123,13 +122,6 @@
     <Compile Include="SiteAccess\SessionManager.aspx.designer.cs">
       <DependentUpon>SessionManager.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Streams\ISMLViewer.aspx.cs">
-      <DependentUpon>ISMLViewer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Streams\ISMLViewer.aspx.designer.cs">
-      <DependentUpon>ISMLViewer.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Template.Master.cs">
       <DependentUpon>Template.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -154,6 +146,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Streams\" />
     <Folder Include="VideoCategories\" />
     <Folder Include="Videos\" />
   </ItemGroup>
