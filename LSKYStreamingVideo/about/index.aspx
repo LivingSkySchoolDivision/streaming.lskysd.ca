@@ -22,7 +22,7 @@
     <h2>Manpower</h2>
     <img src="uchs_j20_logo_small.png" style="float: right;"/>
     <p>
-        Our streaming equipment can be operated with as little as one staff member, however we try to involve students as much as possible. Most of our live broadcast events have students running the streaming equipment on site, updating titles and scoreboards, handling camera work, conducting interviews, and more.
+        Our streaming equipment can be operated with as few as one staff member, however we try to involve students whenever we can. Most of our live broadcast events have students running the streaming equipment on site, updating titles and scoreboards, handling camera work, conducting interviews, and more.
     </p>
     <p>
         Out TriCaster allows us to capture live video wirelessly from iPads and wireless enabled cameras, allowing students to conduct interviews on the sidelines of events, and broadcast that footage in real time to our streaming equipment.
