@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Alerts\AlertManager.aspx" />
+    <Content Include="GenerateIDs.aspx" />
     <Content Include="icon_3d.gif" />
     <Content Include="icon_doc.gif" />
     <Content Include="icon_file_locked.gif" />
@@ -95,6 +96,13 @@
     </Compile>
     <Compile Include="Alerts\AlertManager.aspx.designer.cs">
       <DependentUpon>AlertManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateIDs.aspx.cs">
+      <DependentUpon>GenerateIDs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerateIDs.aspx.designer.cs">
+      <DependentUpon>GenerateIDs.aspx</DependentUpon>
     </Compile>
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
