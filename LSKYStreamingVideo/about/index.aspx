@@ -52,7 +52,7 @@
         This is a standard Dell workstation with Microsoft Expression Encoder 4 Pro software installed on it. This computer is responsible for taking the video and audio output from the TriCaster, and streaming it from the event location to our main streaming video servers in our datacenter.
     </p>
     <p>
-        The computer we use for an encoding station uses an Intel Core 2 Duo 3.34GHz processor, has 6GB of RAM, has an ATI Radeon HD 5450 graphics card and a <a href="http://www.hauppauge.com/">Hauppauge WinTV HVR-1255 capture card</a>, and Windows 7 Professional 64-bit.
+        The computer use for a title station is a Dell Optiplex 390 workstation with an Intel Core i5 3.3GHz processor, 4GB of RAM, Windows 7 Professional 64-bit, and an <a href="http://www.avermedia-usa.com/AVerTV/product/ProductDetail.aspx?Id=482&">AVerTV HD DVR capture card</a>
     </p>
     <p>
         We often do two simultaneous streams for school sporting events (where two simultaneous games in the same gym is common), and so we have several of these encoding stations ready for different situations. Each live broadcast requires one encoding station, so two simultanous streams requires two encoding stations.
@@ -69,7 +69,16 @@
         We primarily use our camera's built-in microphones or various USB microphones, but are looking to expand our audio equipment in the future.
     </p>
 
-    <h3>Green Screen</h3>
+    <h3>Other Equipment</h3>
+    <p>
+        We also use a variety of miscellaneous equipment that doesn't fit into the above categories, including:
+        <ul>
+            <li>Several tripods</li>
+            <li>A portable green screen</li>
+            <li>Wireless HDMI transmitters and receivers</li>
+            <li>Gigabit switches</li>
+        </ul>
+    </p>
     
     <br />
     <h2>Software</h2>    
