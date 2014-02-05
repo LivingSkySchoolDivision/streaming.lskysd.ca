@@ -53,6 +53,7 @@ namespace LSKYStreamingManager
             MainMenu.Add(new NavMenuItem(0, "Alerts/AlertManager.aspx", "Manage alerts", "Modify a colored bar at the top of each page that displays a message", "Alerts"));
             MainMenu.Add(new NavMenuItem(0, "SiteAccess/SessionManager.aspx", "Current login sessions", "View current login sessions on this website", "Site Administration"));
             MainMenu.Add(new NavMenuItem(0, "SiteAccess/AccessLog.aspx", "Access log", "View login success and failure logs", "Site Administration"));
+            MainMenu.Add(new NavMenuItem(0, "/GenerateIDs.aspx", "ID Generator", "Generate random ID numbers for manually adding things into the database", "Site Administration"));
 
 
             // Get the current user
