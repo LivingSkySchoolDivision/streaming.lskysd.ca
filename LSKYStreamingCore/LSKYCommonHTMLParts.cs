@@ -367,8 +367,8 @@ namespace LSKYStreamingCore
             returnMe.Append("<div style=\"max-width: " + container_width + "px; margin-left: auto; margin-right: auto;\">");
             returnMe.Append("<div class=\"video_list_name\">" + stream.Name + "</div>");
             returnMe.Append("<div class=\"video_list_info\"><b>Broadcasting from:</b> " + stream.Location + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled start:</b> " + stream.StreamStartTime.ToLongDateString() + " " + stream.StreamStartTime.ToLongTimeString() + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled end:</b> " + stream.StreamEndTime.ToLongDateString() + " " + stream.StreamEndTime.ToLongTimeString() + "</div>");
+            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled start:</b> " + stream.StartTime.ToLongDateString() + " " + stream.StartTime.ToLongTimeString() + "</div>");
+            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled end:</b> " + stream.EndTime.ToLongDateString() + " " + stream.EndTime.ToLongTimeString() + "</div>");
             returnMe.Append("<br/><div class=\"video_list_description\">" + stream.DescriptionLarge + "</div>");
             returnMe.Append("</div>");
             return returnMe.ToString();

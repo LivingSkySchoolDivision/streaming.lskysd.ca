@@ -553,3 +553,9 @@ h1 {
     font-weight: bold;
     text-align: center;
 }
+
+.thumbnail_editor {
+    width: 200px;
+    height: 130px;
+    background: url(/trans_background.png);
+}

@@ -18,8 +18,8 @@ namespace LSKYStreamingCore
         public int Width { get; set; }
         public int Height { get; set; }
         public string ISM_URL { get; set; }
-        public DateTime StreamStartTime { get; set; }
-        public DateTime StreamEndTime { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public bool ForcedLive { get; set; }
         public bool DisplaySidebar { get; set; }
         public bool DisplayThumbnail { get; set; }
@@ -29,7 +29,7 @@ namespace LSKYStreamingCore
 
         public TimeSpan GetTimeUntilStarts()
         {
-            return this.StreamStartTime.Subtract(DateTime.Now);
+            return this.StartTime.Subtract(DateTime.Now);
         }
 
         public string GetTimeUntilStartsInEnglish()
@@ -78,8 +78,8 @@ namespace LSKYStreamingCore
             this.Width = width;
             this.Height = height;
             this.ISM_URL = ismurl;
-            this.StreamStartTime = starts;
-            this.StreamEndTime = ends;
+            this.StartTime = starts;
+            this.EndTime = ends;
             this.DisplaySidebar = displaySidebar;
             this.DisplayThumbnail = displayThumbnail;
             this.IsHidden = hidden;
@@ -88,7 +88,7 @@ namespace LSKYStreamingCore
             this.ForcedLive = forcelive;
         }
 
-        public static bool DoesStreamIDExist(SqlConnection connection, string streamID)
+        public static bool DoesIDExist(SqlConnection connection, string streamID)
         {
             bool returnMe = false;
 
@@ -134,7 +134,7 @@ namespace LSKYStreamingCore
                 );
         }
 
-        public static List<LiveBroadcast> LoadAllStreams(SqlConnection connection)
+        public static List<LiveBroadcast> LoadAll(SqlConnection connection)
         {
             List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
 
@@ -158,7 +158,7 @@ namespace LSKYStreamingCore
             return ReturnedStreams;
         }
 
-        public static List<LiveBroadcast> LoadUpcomingStreams(SqlConnection connection)
+        public static List<LiveBroadcast> LoadUpcoming(SqlConnection connection)
         {
             List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
 
@@ -183,7 +183,7 @@ namespace LSKYStreamingCore
             return ReturnedStreams;
         }
 
-        public static List<LiveBroadcast> LoadCurrentlyBroadcasting(SqlConnection connection)
+        public static List<LiveBroadcast> LoadCurrentlyBroadcasting(SqlConnection connection, int minutesAhead)
         {
             List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
 
@@ -191,7 +191,7 @@ namespace LSKYStreamingCore
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
             sqlCommand.CommandText = "SELECT * FROM live_streams WHERE ((stream_start < @CURRENTDATETIME AND stream_end > @CURRENTDATETIME) OR (force_online=1)) AND hidden=0 AND private=0 ORDER BY stream_start ASC, name ASC;";
-            sqlCommand.Parameters.AddWithValue("@CURRENTDATETIME", DateTime.Now.AddMinutes(10));
+            sqlCommand.Parameters.AddWithValue("@CURRENTDATETIME", DateTime.Now.AddMinutes(minutesAhead));
             sqlCommand.Connection.Open();
             SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
@@ -208,7 +208,7 @@ namespace LSKYStreamingCore
             return ReturnedStreams;
         }
 
-        public static LiveBroadcast LoadThisStream(SqlConnection connection, string streamID)
+        public static LiveBroadcast LoadThisBroadcast(SqlConnection connection, string streamID)
         {
             LiveBroadcast ReturnedStream = null;
 
@@ -233,9 +233,110 @@ namespace LSKYStreamingCore
             return ReturnedStream;
         }
 
-        public bool IsStreamLive()
+        public static bool InsertNewBroadcast(SqlConnection connection, LiveBroadcast newBroadcast)
         {
-            if ((DateTime.Now > this.StreamStartTime) && (DateTime.Now < this.StreamEndTime))
+            bool returnMe = false;
+
+            List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "INSERT INTO live_streams(id,name,location,description_small,description_large,thumbnail_url,width,height,isml_url,stream_start,stream_end,display_sidebar,display_thumbnail,hidden,private,force_online,sidebar_content)"
+                                    + "VALUES(@ID,@NAME,@LOC,@DESCSMALL,@DESCLARGE,@THUMB,@WIDTH,@HEIGHT,@ISML,@STARTS,@ENDS,@SHOWSIDEBAR,@SHOWTHUMB,@ISHIDDEN,@ISPRIVATE,@FORCEONLINE,@SIDEBAR)";
+            sqlCommand.Parameters.AddWithValue("ID", newBroadcast.ID);
+            sqlCommand.Parameters.AddWithValue("NAME", newBroadcast.Name);
+            sqlCommand.Parameters.AddWithValue("LOC", newBroadcast.Location);
+            sqlCommand.Parameters.AddWithValue("DESCSMALL", newBroadcast.DescriptionSmall);
+            sqlCommand.Parameters.AddWithValue("DESCLARGE", newBroadcast.DescriptionLarge);
+            sqlCommand.Parameters.AddWithValue("THUMB", newBroadcast.ThumbnailURL);
+            sqlCommand.Parameters.AddWithValue("WIDTH", newBroadcast.Width);
+            sqlCommand.Parameters.AddWithValue("HEIGHT", newBroadcast.Height);
+            sqlCommand.Parameters.AddWithValue("ISML", newBroadcast.ISM_URL);
+            sqlCommand.Parameters.AddWithValue("STARTS", newBroadcast.StartTime);
+            sqlCommand.Parameters.AddWithValue("ENDS", newBroadcast.EndTime);
+            sqlCommand.Parameters.AddWithValue("SHOWSIDEBAR", newBroadcast.DisplaySidebar);
+            sqlCommand.Parameters.AddWithValue("SHOWTHUMB", newBroadcast.DisplayThumbnail);
+            sqlCommand.Parameters.AddWithValue("ISHIDDEN", newBroadcast.IsHidden);
+            sqlCommand.Parameters.AddWithValue("ISPRIVATE", newBroadcast.IsPrivate);
+            sqlCommand.Parameters.AddWithValue("FORCEONLINE", newBroadcast.ForcedLive);
+            sqlCommand.Parameters.AddWithValue("SIDEBAR", newBroadcast.SidebarContent);
+            sqlCommand.Connection.Open();
+            if (sqlCommand.ExecuteNonQuery() > 0)
+            {
+                returnMe = true;
+            }
+            else
+            {
+                returnMe = false;
+            }
+            sqlCommand.Connection.Close();
+
+            return returnMe;
+        }
+
+        public static bool UpdateBroadcast(SqlConnection connection, LiveBroadcast newBroadcast)
+        {
+            bool returnMe = false;
+
+            List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "UPDATE live_streams SET name=@NAME, location=@LOC, description_small=@DESCSMALL, description_large=@DESCLARGE, thumbnail_url=@THUMB, width=@WIDTH, height=@HEIGHT,"
+                                        + " isml_url=@ISML, stream_start=@STARTS, stream_end=@ENDS, display_sidebar=@SHOWSIDEBAR, display_thumbnail=@SHOWTHUMB, hidden=@ISHIDDEN, private=@ISPRIVATE, force_online=@FORCEONLINE, sidebar_content=@SIDEBAR"
+                                        + " WHERE id=@ID";
+            sqlCommand.Parameters.AddWithValue("ID", newBroadcast.ID);
+            sqlCommand.Parameters.AddWithValue("NAME", newBroadcast.Name);
+            sqlCommand.Parameters.AddWithValue("LOC", newBroadcast.Location);
+            sqlCommand.Parameters.AddWithValue("DESCSMALL", newBroadcast.DescriptionSmall);
+            sqlCommand.Parameters.AddWithValue("DESCLARGE", newBroadcast.DescriptionLarge);
+            sqlCommand.Parameters.AddWithValue("THUMB", newBroadcast.ThumbnailURL);
+            sqlCommand.Parameters.AddWithValue("WIDTH", newBroadcast.Width);
+            sqlCommand.Parameters.AddWithValue("HEIGHT", newBroadcast.Height);
+            sqlCommand.Parameters.AddWithValue("ISML", newBroadcast.ISM_URL);
+            sqlCommand.Parameters.AddWithValue("STARTS", newBroadcast.StartTime);
+            sqlCommand.Parameters.AddWithValue("ENDS", newBroadcast.EndTime);
+            sqlCommand.Parameters.AddWithValue("SHOWSIDEBAR", newBroadcast.DisplaySidebar);
+            sqlCommand.Parameters.AddWithValue("SHOWTHUMB", newBroadcast.DisplayThumbnail);
+            sqlCommand.Parameters.AddWithValue("ISHIDDEN", newBroadcast.IsHidden);
+            sqlCommand.Parameters.AddWithValue("ISPRIVATE", newBroadcast.IsPrivate);
+            sqlCommand.Parameters.AddWithValue("FORCEONLINE", newBroadcast.ForcedLive);
+            sqlCommand.Parameters.AddWithValue("SIDEBAR", newBroadcast.SidebarContent);
+            sqlCommand.Connection.Open();
+            if (sqlCommand.ExecuteNonQuery() > 0)
+            {
+                returnMe = true;
+            }
+            else
+            {
+                returnMe = false;
+            }
+            sqlCommand.Connection.Close();
+
+            return returnMe;
+        }
+
+        public bool IsLive()
+        {
+            if ((DateTime.Now > this.StartTime) && (DateTime.Now < this.EndTime))
+            {
+                return true;
+            }
+            else if (this.ForcedLive)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsLiveWithinThisManyMinutes(int minutes)
+        {
+            if ((DateTime.Now.AddMinutes(minutes) > this.StartTime) && (DateTime.Now < this.EndTime))
             {
                 return true;
             }
@@ -251,7 +352,7 @@ namespace LSKYStreamingCore
 
         public string GetExpectedDuration()
         {
-            TimeSpan streamDuration = this.StreamEndTime.Subtract(this.StreamStartTime);
+            TimeSpan streamDuration = this.EndTime.Subtract(this.StartTime);
 
             double streamDuration_Minutes = streamDuration.TotalMinutes;
             if (streamDuration_Minutes == 1)

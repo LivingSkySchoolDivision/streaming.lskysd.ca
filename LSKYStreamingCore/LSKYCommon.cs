@@ -228,6 +228,35 @@ namespace LSKYStreamingCore
             return returnMe.ToString();
 
         }
+        
+        const string AllowedGeneralCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ~!@#$%^&*()_+-=/?|";
+        public static string SanitizeGeneralInputString(string dirtyString)
+        {
+            int max_size = 50000;
+
+            StringBuilder returnMe = new StringBuilder();
+
+            string working = string.Empty;
+            if (dirtyString.Length <= max_size)
+            {
+                working = dirtyString;
+            }
+            else
+            {
+                working = dirtyString.Substring(0, max_size);
+            }
+
+            foreach (char c in working)
+            {
+                if (AllowedGeneralCharacters.Contains(c))
+                {
+                    returnMe.Append(c);
+                }
+            }
+
+            return returnMe.ToString();
+
+        }
 
         public static string GenerateBrowserCompatibilityChart(Video video)
         {

@@ -87,6 +87,10 @@
     <Content Include="robots.txt" />
     <Content Include="SiteAccess\AccessLog.aspx" />
     <Content Include="SiteAccess\SessionManager.aspx" />
+    <Content Include="Streams\EditStream.aspx" />
+    <Content Include="Streams\index.aspx" />
+    <Content Include="Streams\NewStream.aspx" />
+    <Content Include="trans_background.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +142,27 @@
     <Compile Include="SiteAccess\SessionManager.aspx.designer.cs">
       <DependentUpon>SessionManager.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Streams\EditStream.aspx.cs">
+      <DependentUpon>EditStream.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Streams\EditStream.aspx.designer.cs">
+      <DependentUpon>EditStream.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Streams\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Streams\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Streams\NewStream.aspx.cs">
+      <DependentUpon>NewStream.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Streams\NewStream.aspx.designer.cs">
+      <DependentUpon>NewStream.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Template.Master.cs">
       <DependentUpon>Template.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -162,7 +187,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Streams\" />
     <Folder Include="VideoCategories\" />
     <Folder Include="Videos\" />
   </ItemGroup>

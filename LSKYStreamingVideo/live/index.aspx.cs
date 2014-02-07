@@ -71,9 +71,9 @@ namespace LSKYStreamingVideo.live
                 // See if this video exists
                 using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
                 {
-                    if (LiveBroadcast.DoesStreamIDExist(connection, requestedID))
+                    if (LiveBroadcast.DoesIDExist(connection, requestedID))
                     {
-                        selectedStream = LiveBroadcast.LoadThisStream(connection, requestedID);
+                        selectedStream = LiveBroadcast.LoadThisBroadcast(connection, requestedID);
                     }
                 }
             }
@@ -87,7 +87,7 @@ namespace LSKYStreamingVideo.live
                 {
 
                     // Display player
-                    if (selectedStream.IsStreamLive())
+                    if (selectedStream.IsLive())
                     {
                         litPlayer.Text = LSKYCommonHTMLParts.BuildLiveStreamPlayerHTML(selectedStream, selectedPlayer);
                     }

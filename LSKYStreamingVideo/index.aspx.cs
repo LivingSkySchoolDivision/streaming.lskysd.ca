@@ -23,8 +23,8 @@ namespace LSKYStreamingVideo
             {
                 NewestVideos = Video.LoadNewestVideos(connection);
                 FeaturedVideos = Video.LoadFeaturedVideos(connection);
-                UpcomingStreams = LiveBroadcast.LoadUpcomingStreams(connection);
-                CurrentlyLiveStreams = LiveBroadcast.LoadCurrentlyBroadcasting(connection);
+                UpcomingStreams = LiveBroadcast.LoadUpcoming(connection);
+                CurrentlyLiveStreams = LiveBroadcast.LoadCurrentlyBroadcasting(connection, 20);
 
             }
 
@@ -87,8 +87,8 @@ namespace LSKYStreamingVideo
         
         private string LiveStreamListItem(LiveBroadcast stream)
         {
-            int thumb_width = 300;
-            int thumb_height = 225;
+            int thumb_width = 360;
+            int thumb_height = 240;
             string player_url = "live/?i=" + stream.ID;
 
             string thumbnailURL = "none.png";
@@ -97,9 +97,9 @@ namespace LSKYStreamingVideo
                 thumbnailURL = stream.ThumbnailURL;
             }
             
-            TimeSpan time_since_start = DateTime.Now.Subtract(stream.StreamStartTime);
-            TimeSpan expected_duration = stream.StreamEndTime.Subtract(stream.StreamStartTime);
-            TimeSpan time_until_finish = stream.StreamEndTime.Subtract(DateTime.Now);
+            TimeSpan time_since_start = DateTime.Now.Subtract(stream.StartTime);
+            TimeSpan expected_duration = stream.EndTime.Subtract(stream.StartTime);
+            TimeSpan time_until_finish = stream.EndTime.Subtract(DateTime.Now);
             
             int minutes_since_start = (int)Math.Round(time_since_start.TotalMinutes);
             int hours_since_start = (int)Math.Round(time_since_start.TotalHours);
@@ -114,8 +114,12 @@ namespace LSKYStreamingVideo
             returnMe.Append("<tr>");
 
             returnMe.Append("<td align=\"left\" valign=\"top\" width=\"" + thumb_width + "\">");
-            returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + player_url + "\">");
-            returnMe.Append("<div style=\"background-image: url('thumbnails/large/" + thumbnailURL + "'); background-size: " + thumb_width +"px " + thumb_height + "px; background-repeat: no-repeat; width: " + thumb_width + "px; height: " + thumb_height + "px; border: 0;\">");
+
+            if (stream.IsLive())
+            {
+                returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + player_url + "\">");
+            }
+            returnMe.Append("<img src=\"/thumbnails/largewide/" + thumbnailURL + "\" width=\"" + thumb_width + "\" height=\"" + thumb_height + "\">");
             returnMe.Append("</div>");
             returnMe.Append("</a>");
             returnMe.Append("</td>");
@@ -125,7 +129,14 @@ namespace LSKYStreamingVideo
 
 
             returnMe.Append("<td align=\"left\" valign=\"top\">");
-            returnMe.Append("<div class=\"stream_title\"><a style=\"text-decoration: none;\" href=\"" + player_url + "\">" + stream.Name + "</a> <div class=\"live_indicator\">LIVE</div></div>");
+            if (stream.IsLive())
+            {
+                returnMe.Append("<div class=\"stream_title\"><a style=\"text-decoration: none;\" href=\"" + player_url + "\">" + stream.Name + "</a> <div class=\"live_indicator\">LIVE</div></div>");
+            }
+            else
+            {
+                returnMe.Append("<div class=\"stream_title\">" + stream.Name + "</div><div class=\"upcoming_indicator\">Starts in " + stream.GetTimeUntilStartsInEnglish() + "</div>");
+            }
             if (!string.IsNullOrEmpty(stream.Location))
             {
                 returnMe.Append("<div class=\"stream_info\">Location: " + stream.Location + "</div>");
@@ -150,20 +161,24 @@ namespace LSKYStreamingVideo
             }
             
             returnMe.Append("<div class=\"stream_info\">Expected duration: " + Math.Round(expected_duration.TotalMinutes).ToString() + " minutes");
-            if (minutes_until_finish > 0)
+
+            if (stream.IsLive())
             {
-                if (minutes_until_finish > 120)
+                if (minutes_until_finish > 0)
                 {
-                    returnMe.Append(" (" + hours_until_finish + " hours to go)");
-                }
-                else
-                {
-                    returnMe.Append(" (" + minutes_until_finish + " minutes to go)");
+                    if (minutes_until_finish > 120)
+                    {
+                        returnMe.Append(" (" + hours_until_finish + " hours to go)");
+                    }
+                    else
+                    {
+                        returnMe.Append(" (" + minutes_until_finish + " minutes to go)");
+                    }
                 }
             }
             returnMe.Append("</div>");
             
-            returnMe.Append("<br/><div class=\"stream_description\">" + stream.DescriptionSmall + "</div>");
+            //returnMe.Append("<br/><div class=\"stream_description\">" + stream.DescriptionSmall + "</div>");
             returnMe.Append("</td>");
 
 
@@ -216,11 +231,11 @@ namespace LSKYStreamingVideo
               
             foreach (LiveBroadcast stream in UpcomingStreams)
             {
-                if (!StreamsByDate.ContainsKey(stream.StreamStartTime.ToLongDateString()))
+                if (!StreamsByDate.ContainsKey(stream.StartTime.ToLongDateString()))
                 {
-                    StreamsByDate.Add(stream.StreamStartTime.ToLongDateString(), new List<LiveBroadcast>());
+                    StreamsByDate.Add(stream.StartTime.ToLongDateString(), new List<LiveBroadcast>());
                 }
-                StreamsByDate[stream.StreamStartTime.ToLongDateString()].Add(stream);
+                StreamsByDate[stream.StartTime.ToLongDateString()].Add(stream);
             }
 
             int numDatesDisplayed = 0;
@@ -239,7 +254,7 @@ namespace LSKYStreamingVideo
                 {
                     returnMe.Append("<tr>");
                     returnMe.Append("<td width=\"25%\" valign=\"top\">");
-                    returnMe.Append("<div class=\"upcoming_stream_time\"><b>" + stream.StreamStartTime.ToShortTimeString() + "</b>");
+                    returnMe.Append("<div class=\"upcoming_stream_time\"><b>" + stream.StartTime.ToShortTimeString() + "</b>");
                     if (stream.GetTimeUntilStarts().TotalMinutes <= 120)
                     {
                         // If the stream is about to start, draw attention to it

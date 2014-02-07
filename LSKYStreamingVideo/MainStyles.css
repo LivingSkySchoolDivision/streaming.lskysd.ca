@@ -377,6 +377,19 @@ h1 {
     border-radius: 4px;
     }
 
+.upcoming_indicator {
+    display: inline;
+    font-size: 10pt;
+    color: #000000;
+    background-color: #FFA873;
+    border: 1px solid #FF6200;
+    padding: 0px;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    }
+
 .index_date_display {
   font-family: Arial;
   padding: 5px;
