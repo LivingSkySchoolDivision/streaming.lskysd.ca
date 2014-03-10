@@ -34,8 +34,8 @@
                     <a href="/videos" class="navbar_link">Videos</a>
                 </td>
                 <td align="right">
-                    <!-- <a href="/about" class="navbar_link">About</a>
-                    <a href="/help" class="navbar_link">Help</a> -->
+                    <a href="/about" class="navbar_link">About</a>
+                    <!-- <a href="/help" class="navbar_link">Help</a> -->
                 </td>
             </tr>
         </table>
