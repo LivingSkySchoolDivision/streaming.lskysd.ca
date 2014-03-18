@@ -66,9 +66,15 @@ namespace LSKYStreamingManager
             // If the cookie exists, and the ID contained in it corresponds to a valid session, "loggedInUser" will not be null.
             if (loggedInUser == null)
             {
+                string CurrentURL = Request.Url.AbsoluteUri;
+                string LoginURL = Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + LSKYStreamingManagerCommon.loginURL;
+                // If the application is running in the root, we dont need to include the application path
+                if (HttpContext.Current.Request.ApplicationPath == "/")
+                {
+                    LoginURL = Request.Url.GetLeftPart(UriPartial.Authority) + LSKYStreamingManagerCommon.loginURL;
+                }
                 if (!
-                    (Request.Url.AbsoluteUri).ToLower().Equals(
-                    (Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + LSKYStreamingManagerCommon.loginURL.ToLower()))
+                    (CurrentURL.ToLower().Equals(LoginURL.ToLower()))
                     )
                 {
                     redirectToLogin();

@@ -18,13 +18,13 @@ namespace LSKYStreamingManager
         public static string logonCookieName = "LSKYStreamManager";
         
         // URL to the login page. If not logged in, users are redirected here
-        public static string loginURL = "Login/index.aspx";
+        public static string loginURL = "/Login/index.aspx";
 
         // URL to the index page - this is where users get sent when they log in
-        public static string indexURL = "index.aspx";
+        public static string indexURL = "/index.aspx";
 
         // URL to a page explaining that the site can only be accessed within a specific network
-        public static string outsideErrorMessage = "Login/outside.html";
+        public static string outsideErrorMessage = "/Login/outside.html";
 
         // Only IP addresses starting with this are allowed to access the site        
         public static string localNetworkChunk = "10.177.";
