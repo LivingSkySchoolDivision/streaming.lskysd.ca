@@ -19,31 +19,34 @@ namespace LSKYStreamingManager.Login
             HttpCookie newCookie = new HttpCookie(LSKYStreamingManagerCommon.logonCookieName);
             newCookie.Value = sessionID;
             newCookie.Expires = DateTime.Now.AddHours(8);
-            newCookie.Domain = LSKYStreamingManagerCommon.getServerName(Request);
+            newCookie.Domain = Request.Url.Host;
             newCookie.Secure = true;
             Response.Cookies.Add(newCookie);
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Check to see if a user is already logged in and display an appropriate message
-            LoginSession currentUser = null;
-            string userSessionID = LSKYStreamingManagerCommon.getSessionIDFromCookies(LSKYStreamingManagerCommon.logonCookieName, Request);
-
-            // Load the current user to get a listof allowed schools
-            if (!string.IsNullOrEmpty(userSessionID))
+            if (!IsPostBack)
             {
-                using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+                // Check to see if a user is already logged in and display an appropriate message
+                LoginSession currentUser = null;
+                string userSessionID = LSKYStreamingManagerCommon.getSessionIDFromCookies(LSKYStreamingManagerCommon.logonCookieName, Request);
+
+                // Load the current user to get a listof allowed schools
+                if (!string.IsNullOrEmpty(userSessionID))
                 {
-                    currentUser = LoginSession.loadThisSession(connection, userSessionID, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
+                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+                    {
+                        currentUser = LoginSession.loadThisSession(connection, userSessionID, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
+                    }
                 }
-            }
 
-            if (currentUser != null)
-            {
-                tblAlreadyLoggedIn.Visible = true;
-                tblLoginform.Visible = false;
-                lblUsername.Text = currentUser.username;
+                if (currentUser != null)
+                {
+                    tblAlreadyLoggedIn.Visible = true;
+                    tblLoginform.Visible = false;
+                    lblUsername.Text = currentUser.username;
+                }
             }
         }
 
@@ -117,8 +120,14 @@ namespace LSKYStreamingManager.Login
         /// </summary>
         public void redirectToIndex()
         {
-            //Response.Write("Redirect to: " + LSKYStreamingManagerCommon.indexURL);
-            Response.Redirect(LSKYStreamingManagerCommon.indexURL);
+            string IndexURL = Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + LSKYStreamingManagerCommon.indexURL;
+
+            Response.Clear();
+            Response.Write("<html>");
+            Response.Write("<meta http-equiv=\"refresh\" content=\"2; url=" + IndexURL +"\">");
+            Response.Write("<div style=\"padding: 5px; text-align: center; font-size: 10pt; font-family: sans-serif;\">Redirecting... <a href=\"" + IndexURL + "\">Click here if you are not redirected automatically</a></div>");
+            Response.Write("</html>");
+            Response.End();
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)
@@ -149,6 +158,9 @@ namespace LSKYStreamingManager.Login
 
                             // Redirect to the front page
                             Logging.logLoginAttempt(username, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"], "SUCCESS", "Successful login");
+                            tblAlreadyLoggedIn.Visible = true;
+                            tblLoginform.Visible = false;
+                            lblUsername.Text = username;
                             redirectToIndex();
                         }
                         else

@@ -45,7 +45,7 @@ namespace LSKYStreamingManager
             {
                 if (!Request.ServerVariables["REMOTE_ADDR"].StartsWith(LSKYStreamingManagerCommon.localNetworkChunk))
                 {
-                    Response.Redirect(LSKYStreamingManagerCommon.outsideErrorMessage);
+                    Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + LSKYStreamingManagerCommon.outsideErrorMessage);
                     Response.End();
                 }
             }
@@ -66,7 +66,10 @@ namespace LSKYStreamingManager
             // If the cookie exists, and the ID contained in it corresponds to a valid session, "loggedInUser" will not be null.
             if (loggedInUser == null)
             {
-                if (!Request.ServerVariables["SCRIPT_NAME"].ToLower().Equals(LSKYStreamingManagerCommon.loginURL.ToLower()))
+                if (!
+                    (Request.Url.AbsoluteUri).ToLower().Equals(
+                    (Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + LSKYStreamingManagerCommon.loginURL.ToLower()))
+                    )
                 {
                     redirectToLogin();
                 }
@@ -88,7 +91,7 @@ namespace LSKYStreamingManager
                 HttpCookie newCookie = new HttpCookie(LSKYStreamingManagerCommon.logonCookieName);
                 newCookie.Value = "NOTHING TO SEE HERE";
                 newCookie.Expires = DateTime.Now.AddDays(-1D);
-                newCookie.Domain = LSKYStreamingManagerCommon.getServerName(Request);
+                newCookie.Domain = Request.Url.Host;
                 newCookie.Secure = true;
                 Response.Cookies.Add(newCookie);
             }
@@ -98,12 +101,12 @@ namespace LSKYStreamingManager
         /// <summary>
         /// Stops the processing of the current page, and redirects to the login page (URL is specified in a string at the top of this file)
         /// </summary>
-        public void redirectToLogin()
+        private void redirectToLogin()
         {
             Response.Clear();
             Response.ClearContent();
             Response.ClearHeaders();
-            Response.Redirect(LSKYStreamingManagerCommon.loginURL);
+            Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + LSKYStreamingManagerCommon.loginURL);
             Response.OutputStream.Flush();
             Response.OutputStream.Close();
             Response.End();

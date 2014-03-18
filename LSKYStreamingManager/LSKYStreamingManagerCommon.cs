@@ -16,32 +16,19 @@ namespace LSKYStreamingManager
         
         // What to call the login session cookie on the end user's computer
         public static string logonCookieName = "LSKYStreamManager";
-
-        // Application name for use in links, etc
-        public static string applicationName = string.Empty;
-
+        
         // URL to the login page. If not logged in, users are redirected here
-        public static string loginURL = applicationName + "/Login/index.aspx";
+        public static string loginURL = "Login/index.aspx";
 
         // URL to the index page - this is where users get sent when they log in
-        public static string indexURL = applicationName + "/index.aspx";
+        public static string indexURL = "index.aspx";
 
         // URL to a page explaining that the site can only be accessed within a specific network
-        public static string outsideErrorMessage = applicationName + "/Login/outside.html";
+        public static string outsideErrorMessage = "Login/outside.html";
 
         // Only IP addresses starting with this are allowed to access the site        
         public static string localNetworkChunk = "10.177.";
         
-        /// <summary>
-        /// Returns the name of the server
-        /// </summary>
-        /// <param name="Request"></param>
-        /// <returns></returns>
-        public static string getServerName(HttpRequest Request)
-        {
-            return Request.ServerVariables["SERVER_NAME"].ToString().Trim();
-        }
-
         /// <summary>
         /// Returns a List of members of the specified group (in lower case)
         /// </summary>
