@@ -112,10 +112,10 @@
         Our streaming video website was developed in-house, and was originally only designed to display our live broadcasts. The site has since evolved to support playing back recorded live streams, and is now capable of playing back any video file we add to it (student projects, for example).
     </p>
     <p>
-        Streaming video is delivered to viewers using a custom Smooth Streaming player, developed in Microsoft Silverlight in-house. There are two silverlight players - one for pre-recorded video, and one for live broadcasts. Source code for our silverlight players is available on <a href="https://bitbucket.org/livingskyschooldivision/lskysmoothstreamplayer">Bitbucket</a>.
+        Live streaming video is delivered to viewers using a custom Smooth Streaming player, developed in Microsoft Silverlight in-house. There are two silverlight players - one for pre-recorded video, and one for live broadcasts. Source code for our silverlight players is available on <a href="https://bitbucket.org/livingskyschooldivision/lskysmoothstreamplayer">Bitbucket</a>.
     </p>
     <p>
-        We are also able to deliver a stream in HTML5, however due to the encoding that MS Smooth Streaming uses, it does not work properly on many popular browsers. Our live HTML5 player is primarily for Apple users (on MacOS or iOS devices), where Silverlight is not an option. Our pre-recorded video is available using HTML5, and should work on any popular web browser on any platform. It is our goal to exclusively use HTML5 video on this website in the future.
+        We are also able to deliver a live broadcast in HTML5, however due to the encoding that MS Smooth Streaming uses, it does not work properly on many popular browsers. Our live HTML5 player is primarily for Apple users (on MacOS or iOS devices), where Silverlight is not an option. Our pre-recorded video is available using HTML5, and should work on any popular web browser on any platform. It is our goal to exclusively use HTML5 video on this website in the future.
     </p>
     <br /><br /><br /><br />
     <br /><br /><br /><br />
