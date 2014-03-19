@@ -104,6 +104,11 @@ namespace LSKYStreamingManager.Streams
 
         }
 
+        private void RedirectToStreamList(string newStreamID)
+        {
+            Response.Redirect(Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "/Streams/?highlight=" + newStreamID);
+        }
+
         private void displayError(string errorText)
         {
             lblError.Text = errorText;
@@ -234,6 +239,7 @@ namespace LSKYStreamingManager.Streams
                             );
 
                         LiveBroadcast.InsertNewBroadcast(connection, newBroadcast);
+                        RedirectToStreamList(newStreamID);
                     }
                 }
                 else

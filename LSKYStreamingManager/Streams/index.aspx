@@ -6,6 +6,7 @@
     <a href="NewStream.aspx">Create new live broadcast</a><br /><br />
     <asp:Table ID="tblStreams" runat="server" CssClass="datatable" CellPadding="5" Width="100%">
         <asp:TableHeaderRow CssClass="datatable_header">
+            <asp:TableHeaderCell>View</asp:TableHeaderCell>
             <asp:TableHeaderCell>Edit</asp:TableHeaderCell>
             <asp:TableHeaderCell>Name</asp:TableHeaderCell>
             <asp:TableHeaderCell>Location</asp:TableHeaderCell>

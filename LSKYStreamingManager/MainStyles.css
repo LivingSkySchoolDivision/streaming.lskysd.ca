@@ -559,3 +559,15 @@ h1 {
     height: 130px;
     background: url(/trans_background.png);
 }
+
+.highlight_row {    
+    font-weight: bold;
+}
+
+.stream_list_live {    
+    background-color: rgba(0, 255, 0, 0.1) !important;
+}
+
+.stream_list_complete {    
+    background-color: rgba(255,0 , 0, 0.1);
+}

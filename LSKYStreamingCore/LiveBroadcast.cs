@@ -155,7 +155,31 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
-            return ReturnedStreams;
+            return ReturnedStreams.OrderByDescending(c => c.StartTime).ThenByDescending(c => c.EndTime).ToList<LiveBroadcast>();
+        }
+
+        public static List<LiveBroadcast> LoadAll(SqlConnection connection, int Max)
+        {
+            List<LiveBroadcast> ReturnedStreams = new List<LiveBroadcast>();
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "SELECT TOP " + Max + " * FROM live_streams ORDER BY stream_start DESC, stream_end DESC;";
+            sqlCommand.Connection.Open();
+            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+            if (dbDataReader.HasRows)
+            {
+                while (dbDataReader.Read())
+                {
+                    ReturnedStreams.Add(dbDataReaderToStream(dbDataReader));
+                }
+            }
+
+            sqlCommand.Connection.Close();
+
+            return ReturnedStreams.OrderByDescending(c => c.StartTime).ThenByDescending(c => c.EndTime).ToList<LiveBroadcast>();
         }
 
         public static List<LiveBroadcast> LoadUpcoming(SqlConnection connection)
@@ -341,6 +365,18 @@ namespace LSKYStreamingCore
                 return true;
             }
             else if (this.ForcedLive)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsComplete()
+        {
+            if (DateTime.Now > this.EndTime)
             {
                 return true;
             }
