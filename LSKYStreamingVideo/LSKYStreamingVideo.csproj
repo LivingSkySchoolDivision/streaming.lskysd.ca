@@ -90,6 +90,7 @@
     <Content Include="lsky_logo_text.png" />
     <Content Include="lsky_logo_watermark.png" />
     <Content Include="MainStyles.css" />
+    <Content Include="Normalize.css" />
     <Content Include="player\index.aspx" />
     <Content Include="player\lsky_stream_poster.png" />
     <Content Include="player\Preview.png" />
@@ -166,7 +167,9 @@
       <Name>LSKYStreamingCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

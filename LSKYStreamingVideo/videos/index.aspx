@@ -4,7 +4,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">    
     <div class="searchBox">
         <div class="searchTitle">Search Videos</div>
-        <asp:TextBox CssClass="searchTextBox" ID="txtSearchTerms" runat="server"></asp:TextBox>
+        <asp:TextBox CssClass="searchTextBox" ID="txtSearchTerms" runat="server" AutoPostBack="true" OnTextChanged="btnSearch_Click"></asp:TextBox>
         <asp:Button CssClass="searchButton" ID="btnSearch" runat="server" Text="Search" OnClick="btnSearch_Click" />
     </div>
     <h2 runat="server" id="searchResultsTitle" visible="false">Search Results</h2>

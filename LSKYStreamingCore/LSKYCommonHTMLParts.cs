@@ -34,7 +34,7 @@ namespace LSKYStreamingCore
                 thumbnailURL = video.ThumbnailURL;
             }
 
-            returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%\">");
+            returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%; padding-bottom: 10px;\">");
             returnMe.Append("<tr>");
 
             if (showThumbnail)
@@ -42,7 +42,7 @@ namespace LSKYStreamingCore
                 returnMe.Append("<td valign=\"top\" width=\"128\">");
                 returnMe.Append("<a href=\"" + playerURL + "\">");
                 returnMe.Append("<div style=\"width: 200px;\">");
-                returnMe.Append("<img src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+                returnMe.Append("<img border=\"0\" src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
                 returnMe.Append("</a></div>");
                 returnMe.Append("</td>");
             }
@@ -92,7 +92,7 @@ namespace LSKYStreamingCore
 
             returnMe.Append("<div class=\"video_thumbnail_list_item_container\">");
             returnMe.Append("<a href=\"" + playerURL + "\">");
-            returnMe.Append("<img src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+            returnMe.Append("<img border=\"0\" src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
             returnMe.Append("<div class=\"video_thumbnail_list_item_container_link\" style=\"text-decoration: none;\">" + video.Name + "</div>");
             returnMe.Append("</a>");
             if (!string.IsNullOrEmpty(video.Author))
