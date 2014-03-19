@@ -229,7 +229,7 @@ namespace LSKYStreamingCore
 
         }
         
-        const string AllowedGeneralCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ~!@#$%^&*()_+-=/?|";
+        const string AllowedGeneralCharacters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ~!@#$%^&*()_+-=/?|.,'\"";
         public static string SanitizeGeneralInputString(string dirtyString)
         {
             int max_size = 50000;
@@ -405,6 +405,43 @@ namespace LSKYStreamingCore
             returnMe.Append("</table>");
 
             return returnMe.ToString();
+        }
+
+        public static DateTime? ParseDateFromUser(string year, string month, string day, string hour, string minute, string second)
+        {
+            int ParsedYear = LSKYCommon.ParseDatabaseInt(year);
+            int ParsedMonth = LSKYCommon.ParseDatabaseInt(month);
+            int ParsedDay = LSKYCommon.ParseDatabaseInt(day);
+            int ParsedHour = LSKYCommon.ParseDatabaseInt(hour);
+            int ParsedMinute = LSKYCommon.ParseDatabaseInt(minute);
+            int ParsedSecond = LSKYCommon.ParseDatabaseInt(second);
+
+            // Validate
+
+            // Days in month            
+
+            if ((ParsedYear > 0) && (ParsedYear < 9999))
+            {
+                if ((ParsedMonth >= 1) && (ParsedMonth <= 12))
+                {
+                    int DaysThisMonth = DateTime.DaysInMonth(ParsedYear, ParsedMonth);
+                    if ((ParsedDay > 0) && (ParsedDay <= DaysThisMonth))
+                    {
+                        if ((ParsedHour >= 0) && (ParsedHour <= 24))
+                        {
+                            if ((ParsedMinute >= 0) && (ParsedMinute <= 60))
+                            {
+                                if ((ParsedSecond >= 0) && (ParsedSecond <= 60))
+                                {
+                                    return new DateTime(ParsedYear, ParsedMonth, ParsedDay, ParsedHour, ParsedMinute, ParsedSecond);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
         
     }

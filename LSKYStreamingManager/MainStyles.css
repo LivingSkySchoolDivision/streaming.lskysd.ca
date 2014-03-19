@@ -555,8 +555,8 @@ h1 {
 }
 
 .thumbnail_editor {
-    width: 200px;
-    height: 130px;
+    width: 360px;
+    height: 240px;
     background: url(/trans_background.png);
 }
 

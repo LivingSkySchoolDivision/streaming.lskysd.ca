@@ -12,8 +12,7 @@ namespace LSKYStreamingCore
         public string ID { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
-        public string DescriptionSmall { get; set; }
-        public string DescriptionLarge { get; set; }
+        public string Description { get; set; }
         public string ThumbnailURL { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
@@ -66,14 +65,13 @@ namespace LSKYStreamingCore
             }
         }
         
-        public LiveBroadcast(string id, string name, string location, string descriptionSmall, string descriptionLarge, string thumbnail, int width, 
+        public LiveBroadcast(string id, string name, string location, string description, string thumbnail, int width, 
             int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate, bool forcelive ,string sidebarcontent) 
         {
             this.ID = id;
             this.Name = name;
             this.Location = location;
-            this.DescriptionSmall = descriptionSmall;
-            this.DescriptionLarge = descriptionLarge;
+            this.Description = description;
             this.ThumbnailURL = thumbnail;
             this.Width = width;
             this.Height = height;
@@ -83,7 +81,7 @@ namespace LSKYStreamingCore
             this.DisplaySidebar = displaySidebar;
             this.DisplayThumbnail = displayThumbnail;
             this.IsHidden = hidden;
-            this.IsPrivate = IsPrivate;
+            this.IsPrivate = isprivate;
             this.SidebarContent = sidebarcontent;
             this.ForcedLive = forcelive;
         }
@@ -117,8 +115,7 @@ namespace LSKYStreamingCore
                 dbDataReader["id"].ToString(),
                 dbDataReader["name"].ToString(),
                 dbDataReader["location"].ToString(),
-                dbDataReader["description_small"].ToString(),
-                dbDataReader["description_large"].ToString(),
+                dbDataReader["description"].ToString(),
                 dbDataReader["thumbnail_url"].ToString(),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["Width"].ToString()),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["Height"].ToString()),
@@ -266,13 +263,12 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "INSERT INTO live_streams(id,name,location,description_small,description_large,thumbnail_url,width,height,isml_url,stream_start,stream_end,display_sidebar,display_thumbnail,hidden,private,force_online,sidebar_content)"
-                                    + "VALUES(@ID,@NAME,@LOC,@DESCSMALL,@DESCLARGE,@THUMB,@WIDTH,@HEIGHT,@ISML,@STARTS,@ENDS,@SHOWSIDEBAR,@SHOWTHUMB,@ISHIDDEN,@ISPRIVATE,@FORCEONLINE,@SIDEBAR)";
+            sqlCommand.CommandText = "INSERT INTO live_streams(id,name,location,description,thumbnail_url,width,height,isml_url,stream_start,stream_end,display_sidebar,display_thumbnail,hidden,private,force_online,sidebar_content)"
+                                    + "VALUES(@ID,@NAME,@LOC,@DESC,@THUMB,@WIDTH,@HEIGHT,@ISML,@STARTS,@ENDS,@SHOWSIDEBAR,@SHOWTHUMB,@ISHIDDEN,@ISPRIVATE,@FORCEONLINE,@SIDEBAR)";
             sqlCommand.Parameters.AddWithValue("ID", newBroadcast.ID);
             sqlCommand.Parameters.AddWithValue("NAME", newBroadcast.Name);
             sqlCommand.Parameters.AddWithValue("LOC", newBroadcast.Location);
-            sqlCommand.Parameters.AddWithValue("DESCSMALL", newBroadcast.DescriptionSmall);
-            sqlCommand.Parameters.AddWithValue("DESCLARGE", newBroadcast.DescriptionLarge);
+            sqlCommand.Parameters.AddWithValue("DESC", newBroadcast.Description);
             sqlCommand.Parameters.AddWithValue("THUMB", newBroadcast.ThumbnailURL);
             sqlCommand.Parameters.AddWithValue("WIDTH", newBroadcast.Width);
             sqlCommand.Parameters.AddWithValue("HEIGHT", newBroadcast.Height);
@@ -308,14 +304,13 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "UPDATE live_streams SET name=@NAME, location=@LOC, description_small=@DESCSMALL, description_large=@DESCLARGE, thumbnail_url=@THUMB, width=@WIDTH, height=@HEIGHT,"
+            sqlCommand.CommandText = "UPDATE live_streams SET name=@NAME, location=@LOC, description=@DESC, thumbnail_url=@THUMB, width=@WIDTH, height=@HEIGHT,"
                                         + " isml_url=@ISML, stream_start=@STARTS, stream_end=@ENDS, display_sidebar=@SHOWSIDEBAR, display_thumbnail=@SHOWTHUMB, hidden=@ISHIDDEN, private=@ISPRIVATE, force_online=@FORCEONLINE, sidebar_content=@SIDEBAR"
                                         + " WHERE id=@ID";
             sqlCommand.Parameters.AddWithValue("ID", newBroadcast.ID);
             sqlCommand.Parameters.AddWithValue("NAME", newBroadcast.Name);
             sqlCommand.Parameters.AddWithValue("LOC", newBroadcast.Location);
-            sqlCommand.Parameters.AddWithValue("DESCSMALL", newBroadcast.DescriptionSmall);
-            sqlCommand.Parameters.AddWithValue("DESCLARGE", newBroadcast.DescriptionLarge);
+            sqlCommand.Parameters.AddWithValue("DESC", newBroadcast.Description);
             sqlCommand.Parameters.AddWithValue("THUMB", newBroadcast.ThumbnailURL);
             sqlCommand.Parameters.AddWithValue("WIDTH", newBroadcast.Width);
             sqlCommand.Parameters.AddWithValue("HEIGHT", newBroadcast.Height);

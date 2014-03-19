@@ -203,6 +203,10 @@ namespace LSKYStreamingManager
                     string newSessionID = generateNewSessionID(username + remoteIP + useragent);
                                         
                     TimeSpan sessionDuration = new TimeSpan(2,0,0);
+                    if ((DateTime.Now.Hour > 7) && (DateTime.Now.Hour < 13))
+                    {
+                        sessionDuration = new TimeSpan(6, 0, 0);
+                    }
                     
                     // Create a session in the database 
                     // Also while we are querying the database, clear out expired sessions that are lingering, and clear any existing sessions for

@@ -52,7 +52,7 @@
                 <b>Thumbnail</b>
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
-                <asp:Image ID="imgThumbnail" ImageUrl="/thumbnails/small/blank.png" CssClass="thumbnail_editor" runat="server" /><br />
+                <asp:Image ID="imgThumbnail" ImageUrl="/thumbnails/broadcasts/blank.png" CssClass="thumbnail_editor" runat="server" /><br />
                 <asp:DropDownList ID="drpThumbnail" runat="server" AutoPostBack="true" OnSelectedIndexChanged="drpThumbnail_SelectedIndexChanged"></asp:DropDownList>
             </asp:TableCell>
         </asp:TableRow>

@@ -119,7 +119,7 @@ namespace LSKYStreamingVideo
             {
                 returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + player_url + "\">");
             }
-            returnMe.Append("<img src=\"/thumbnails/largewide/" + thumbnailURL + "\" width=\"" + thumb_width + "\" height=\"" + thumb_height + "\">");
+            returnMe.Append("<img src=\"/thumbnails/broadcasts/" + thumbnailURL + "\" width=\"" + thumb_width + "\" height=\"" + thumb_height + "\">");
             returnMe.Append("</div>");
             returnMe.Append("</a>");
             returnMe.Append("</td>");

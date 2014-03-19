@@ -42,7 +42,7 @@ namespace LSKYStreamingCore
                 returnMe.Append("<td valign=\"top\" width=\"128\">");
                 returnMe.Append("<a href=\"" + playerURL + "\">");
                 returnMe.Append("<div style=\"width: 200px;\">");
-                returnMe.Append("<img src=\"/thumbnails/small/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+                returnMe.Append("<img src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
                 returnMe.Append("</a></div>");
                 returnMe.Append("</td>");
             }
@@ -92,7 +92,7 @@ namespace LSKYStreamingCore
 
             returnMe.Append("<div class=\"video_thumbnail_list_item_container\">");
             returnMe.Append("<a href=\"" + playerURL + "\">");
-            returnMe.Append("<img src=\"/thumbnails/small/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+            returnMe.Append("<img src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
             returnMe.Append("<div class=\"video_thumbnail_list_item_container_link\" style=\"text-decoration: none;\">" + video.Name + "</div>");
             returnMe.Append("</a>");
             if (!string.IsNullOrEmpty(video.Author))
@@ -369,7 +369,7 @@ namespace LSKYStreamingCore
             returnMe.Append("<div class=\"video_list_info\"><b>Broadcasting from:</b> " + stream.Location + "</div>");
             returnMe.Append("<div class=\"video_list_info\"><b>Scheduled start:</b> " + stream.StartTime.ToLongDateString() + " " + stream.StartTime.ToLongTimeString() + "</div>");
             returnMe.Append("<div class=\"video_list_info\"><b>Scheduled end:</b> " + stream.EndTime.ToLongDateString() + " " + stream.EndTime.ToLongTimeString() + "</div>");
-            returnMe.Append("<br/><div class=\"video_list_description\">" + stream.DescriptionLarge + "</div>");
+            returnMe.Append("<br/><div class=\"video_list_description\">" + stream.Description + "</div>");
             returnMe.Append("</div>");
             return returnMe.ToString();
         }
