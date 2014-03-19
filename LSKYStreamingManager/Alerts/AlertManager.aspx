@@ -3,7 +3,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
     <h2>Alerts</h2>
-
+    <p style="background-color: rgba(255,255,0,0.2);">
+        Note: Alerts are displayed as part of the header, on ALL pages on the streaming site. You should use alerts for things like scheduled maintenance or downtime, and not for anything specifically relating to only one stream or video.
+    </p>
+    <br />
     <h3>Create new alert</h3>
     <asp:Table ID="tblNewAlert" runat="server" Width="950" CellPadding="4" CssClass="datatable" HorizontalAlign="Center">
         <asp:TableHeaderRow CssClass="datatable_header">

@@ -25,7 +25,6 @@ namespace LSKYStreamingVideo
             
             if (ActiveAlerts.Count > 0)
             {
-                Response.Write("<!-- Alerts: " + ActiveAlerts.Count + " -->");
                 StringBuilder AlertBarContent = new StringBuilder();
 
                 foreach (Alert alert in ActiveAlerts)
