@@ -61,7 +61,7 @@ namespace LSKYStreamingCore
             {
                 returnMe.Append("<div class=\"video_list_info\">Download available</div>");
             }
-            returnMe.Append("<br/><div class=\"video_list_description\">" + video.DescriptionSmall + "</div>");
+            returnMe.Append("<br/><div class=\"video_list_description\">" + video.Description + "</div>");
 
             returnMe.Append("</div></td>");
 
@@ -349,7 +349,7 @@ namespace LSKYStreamingCore
                 returnMe.Append("<div class=\"video_list_info\"><a href=\"/video_files/" + video.DownloadURL + "\">Download available</a></div>");
             }
 
-            returnMe.Append("<br/><div class=\"video_list_description\">" + video.DescriptionLarge + "</div>");
+            returnMe.Append("<br/><div class=\"video_list_description\">" + video.Description + "</div>");
 
             returnMe.Append("<br/><br/><div class=\"video_list_info\"><b>Browser compatibility chart for this video:</b> <div style=\"margin-left: 10px;\">" + LSKYCommon.GenerateBrowserCompatibilityChart(video) + "</div></div>");
             return returnMe.ToString();

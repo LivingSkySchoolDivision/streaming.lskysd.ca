@@ -13,8 +13,7 @@ namespace LSKYStreamingCore
         public string Name { get; set; }
         public string Author { get; set; }
         public string Location { get; set; }
-        public string DescriptionSmall { get; set; }
-        public string DescriptionLarge { get; set; }
+        public string Description { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public DateTime DateAdded { get; set; }
@@ -49,7 +48,7 @@ namespace LSKYStreamingCore
                 } 
         }
 
-        public Video(string id, string name, string author, string location, string descriptionsmall, string descriptionlarge, int width, int height, string thumbnail, DateTime added, DateTime aired,
+        public Video(string id, string name, string author, string location, string description, int width, int height, string thumbnail, DateTime added, DateTime aired,
             int duration, string file_ism, string file_mp4, string file_ogv, string file_webm, string downloadurl, bool displayairdate, bool displaythumbnail, bool ishidden, bool isprivate, bool islivestreamrecording, bool allowembed,
             string tags, DateTime dateavailable, DateTime dateexpires, bool isalwaysavailable, string legacy_video_id, string category_id)
         {
@@ -57,8 +56,7 @@ namespace LSKYStreamingCore
             this.Name = name;
             this.Author = author;
             this.Location = location;
-            this.DescriptionSmall = descriptionsmall;
-            this.DescriptionLarge = descriptionlarge;
+            this.Description = description;
             this.Width = width;
             this.Height = height;
             this.ThumbnailURL = thumbnail;
@@ -118,8 +116,7 @@ namespace LSKYStreamingCore
                 dbDataReader["name"].ToString(),
                 dbDataReader["author"].ToString(),
                 dbDataReader["location"].ToString(),
-                dbDataReader["description_small"].ToString(),
-                dbDataReader["description_large"].ToString(),
+                dbDataReader["description"].ToString(),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["width"].ToString()),
                 LSKYCommon.ParseDatabaseInt(dbDataReader["height"].ToString()),
                 dbDataReader["thumbnail_url"].ToString(),
@@ -396,6 +393,111 @@ namespace LSKYStreamingCore
 
         }
 
+        public static bool InsertNewVideo(SqlConnection connection, Video video)
+        {
+            bool returnMe = false;
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "INSERT INTO videos(id, name, author, location, description, width, height, thumbnail_url, date_added, date_aired, duration_in_seconds, file_ism, file_mp4, file_ogv, file_webm, display_airdate, download_url, display_thumbnail, hidden, private, was_originally_live_stream, allow_embed, tags, available_From, available_to, always_available, legacy_video_id, category_id)"
+                                    + "VALUES(@ID, @NAME, @AUTHOR, @LOCATION, @DESCRIPTION, @WIDTH, @HEIGHT, @THUMB, @DATEADD, @DATEAIRED, @DURATION, @ISM, @MP4, @OGV, @WEBM, @DISPLAYAIRDATE, @DOWNLOADURL, @DISPLAYTHUMB, @HIDDEN, @PRIVATE, @ORIGINALLYLIVE, @ALLOWEMBED, @TAGS, @AVAILFROM, @AVAILTO, @ALWAYSAVAIL, @LEGACYID, @CATEGORY)";
+
+            sqlCommand.Parameters.AddWithValue("ID", video.ID);
+            sqlCommand.Parameters.AddWithValue("NAME", video.Name);
+            sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
+            sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
+            sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
+            sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
+            sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
+            sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
+            sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
+            sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
+            sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
+            sqlCommand.Parameters.AddWithValue("ISM", video.FileURL_ISM);
+            sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
+            sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
+            sqlCommand.Parameters.AddWithValue("WEBM", video.FileURL_VP8);
+            sqlCommand.Parameters.AddWithValue("DISPLAYAIRDATE", video.ShouldDisplayAirDate);
+            sqlCommand.Parameters.AddWithValue("DOWNLOADURL", video.DownloadURL);
+            sqlCommand.Parameters.AddWithValue("DISPLAYTHUMB", video.ShouldDisplayThumbnail);
+            sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
+            sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
+            sqlCommand.Parameters.AddWithValue("ORIGINALLYLIVE", video.IsLiveStreamRecording);
+            sqlCommand.Parameters.AddWithValue("ALLOWEMBED", video.AllowEmbedding);
+            sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
+            sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
+            sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
+            sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
+            sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
+            sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
+
+            sqlCommand.Connection.Open();
+            if (sqlCommand.ExecuteNonQuery() > 0)
+            {
+                returnMe = true;
+            }
+            else
+            {
+                returnMe = false;
+            }
+            sqlCommand.Connection.Close();
+
+            return returnMe;
+        }
+
+        public static bool UpdateVideo(SqlConnection connection, Video video)
+        {
+            bool returnMe = false;
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "UPDATE videos SET name=@NAME, author=@AUTHOR, location=@LOCATION, description=@DESCRIPTION, width=@WIDTH, height=@HEIGHT, thumbnail_url=@THUMB, date_added=@DATEADD, date_aired=@DATEAIRED, duration_in_seconds=@DURATION, file_ism=@ISM, file_mp4=@MP4, file_ogv=@OGV, file_webm=@WEBM, display_airdate=@DISPLAYAIRDATE, download_url=@DOWNLOADURL, display_thumbnail=@DISPLAYTHUMB, hidden=@HIDDEN, private=@PRIVATE, was_originally_live_stream=@ORIGINALLYLIVE, allow_embed=@ALLOWEMBED, tags=@TAGS, available_From=@AVAILFROM, available_to=@AVAILTO, always_available=@ALWAYSAVAIL, legacy_video_id=@LEGACYID, category_id=@CATEGORY WHERE id=@ID";
+
+            sqlCommand.Parameters.AddWithValue("ID", video.ID);
+            sqlCommand.Parameters.AddWithValue("NAME", video.Name);
+            sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
+            sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
+            sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
+            sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
+            sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
+            sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
+            sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
+            sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
+            sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
+            sqlCommand.Parameters.AddWithValue("ISM", video.FileURL_ISM);
+            sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
+            sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
+            sqlCommand.Parameters.AddWithValue("WEBM", video.FileURL_VP8);
+            sqlCommand.Parameters.AddWithValue("DISPLAYAIRDATE", video.ShouldDisplayAirDate);
+            sqlCommand.Parameters.AddWithValue("DOWNLOADURL", video.DownloadURL);
+            sqlCommand.Parameters.AddWithValue("DISPLAYTHUMB", video.ShouldDisplayThumbnail);
+            sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
+            sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
+            sqlCommand.Parameters.AddWithValue("ORIGINALLYLIVE", video.IsLiveStreamRecording);
+            sqlCommand.Parameters.AddWithValue("ALLOWEMBED", video.AllowEmbedding);
+            sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
+            sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
+            sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
+            sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
+            sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
+            sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
+
+            sqlCommand.Connection.Open();
+            if (sqlCommand.ExecuteNonQuery() > 0)
+            {
+                returnMe = true;
+            }
+            else
+            {
+                returnMe = false;
+            }
+            sqlCommand.Connection.Close();
+
+            return returnMe;
+
+        }
 
     }
 }
