@@ -57,9 +57,64 @@ namespace LSKYStreamingCore
             return ReturnedCategories;
         }
 
+        public static bool InsertNewCategory(SqlConnection connection, VideoCategory category) 
+        {
+            bool returnMe = false;
 
-        
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "INSERT INTO video_categories(name, hidden, private, id, parent)"
+                                    + "VALUES(@NAME, @HIDDEN, @PRIVATE, @ID, @PARENT)";
 
+            sqlCommand.Parameters.AddWithValue("ID", category.ID);
+            sqlCommand.Parameters.AddWithValue("NAME", category.Name);
+            sqlCommand.Parameters.AddWithValue("HIDDEN", category.IsHidden);
+            sqlCommand.Parameters.AddWithValue("PRIVATE", category.IsPrivate);
+            sqlCommand.Parameters.AddWithValue("PARENT", category.ParentCategory);
+
+            sqlCommand.Connection.Open();
+            if (sqlCommand.ExecuteNonQuery() > 0)
+            {
+                returnMe = true;
+            }
+            else
+            {
+                returnMe = false;
+            }
+            sqlCommand.Connection.Close();
+
+            return returnMe;
+        }
+
+        public static bool UpdateCategory(SqlConnection connection, VideoCategory category) 
+        {
+            bool returnMe = false;
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "UPDATE video_categories SET name=@NAME, hidden=@HIDDEN, private=@PRIVATE, parent=@PARENT WHERE id=@ID";
+
+            sqlCommand.Parameters.AddWithValue("ID", category.ID);
+            sqlCommand.Parameters.AddWithValue("NAME", category.Name);
+            sqlCommand.Parameters.AddWithValue("HIDDEN", category.IsHidden);
+            sqlCommand.Parameters.AddWithValue("PRIVATE", category.IsPrivate);
+            sqlCommand.Parameters.AddWithValue("PARENT", category.ParentCategory);
+
+            sqlCommand.Connection.Open();
+            if (sqlCommand.ExecuteNonQuery() > 0)
+            {
+                returnMe = true;
+            }
+            else
+            {
+                returnMe = false;
+            }
+            sqlCommand.Connection.Close();
+
+            return returnMe;
+        }
 
     }
 }
