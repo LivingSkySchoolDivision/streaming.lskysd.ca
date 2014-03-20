@@ -91,6 +91,7 @@
     <Content Include="Streams\index.aspx" />
     <Content Include="Streams\NewStream.aspx" />
     <Content Include="trans_background.png" />
+    <Content Include="VideoCategories\index.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +171,13 @@
     <Compile Include="Template.Master.designer.cs">
       <DependentUpon>Template.Master</DependentUpon>
     </Compile>
+    <Compile Include="VideoCategories\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VideoCategories\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Template.Master" />
@@ -187,7 +195,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="VideoCategories\" />
     <Folder Include="Videos\" />
   </ItemGroup>
   <PropertyGroup>

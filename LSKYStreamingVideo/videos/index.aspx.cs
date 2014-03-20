@@ -21,7 +21,7 @@ namespace LSKYStreamingVideo.videos
 
             using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
             {
-                VideoCategories = VideoCategory.LoadAllCategories(connection);
+                VideoCategories = VideoCategory.LoadAll(connection);
 
                 foreach (VideoCategory category in VideoCategories)
                 {

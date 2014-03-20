@@ -23,9 +23,33 @@ namespace LSKYStreamingCore
             this.Name = name;
             this.ParentCategory = parentcategory;
             this.IsHidden = hidden;
+            this.IsPrivate = isprivate;
         }
 
-        public static List<VideoCategory> LoadAllCategories(SqlConnection connection)
+        public static bool DoesIDExist(SqlConnection connection, string categoryID)
+        {
+            bool returnMe = false;
+
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "SELECT id FROM video_categories WHERE (id=@ID)";
+            sqlCommand.Parameters.AddWithValue("ID", categoryID);
+            sqlCommand.Connection.Open();
+            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+            if (dbDataReader.HasRows)
+            {
+                while (dbDataReader.Read())
+                {
+                    returnMe = true;
+                }
+            }
+
+            sqlCommand.Connection.Close();
+            return returnMe;
+        }
+
+        public static List<VideoCategory> LoadAll(SqlConnection connection)
         {
             List<VideoCategory> ReturnedCategories = new List<VideoCategory>();
 
@@ -57,7 +81,7 @@ namespace LSKYStreamingCore
             return ReturnedCategories;
         }
 
-        public static bool InsertNewCategory(SqlConnection connection, VideoCategory category) 
+        public static bool InsertNew(SqlConnection connection, VideoCategory category) 
         {
             bool returnMe = false;
 
@@ -87,7 +111,7 @@ namespace LSKYStreamingCore
             return returnMe;
         }
 
-        public static bool UpdateCategory(SqlConnection connection, VideoCategory category) 
+        public static bool Update(SqlConnection connection, VideoCategory category) 
         {
             bool returnMe = false;
 
