@@ -1,4 +1,4 @@
-﻿@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);
+﻿/*@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);*/
 
 @media print 
 {
@@ -13,19 +13,55 @@
 }
 
 @font-face {
-    font-family: 'Clear Sans'; 
-    src:    url('/Fonts/ClearSans-Regular.svg') format('svg'),
-            url('/Fonts/ClearSans-Regular.woff') format('woff'),
-            url('/Fonts/ClearSans-Regular.ttf') format('truetype');
+    font-family: "ArchivoNarrow";
+    font-style: normal;
+    font-weight: 200;
+    src:    url("/Fonts/ArchivoNarrow-Bold.otf") format('opentype');
 }
 
+@font-face {
+    font-family: "RobotoRegular";
+    font-style: normal;
+    font-weight: 200;
+    src:    url("/Fonts/Roboto-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "RobotoThin";
+    font-style: normal;
+    font-weight: 200;
+    src:    url("/Fonts/Roboto-Thin.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "RobotoMedium";
+    src:    url("/Fonts/Roboto-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "RobotoBold";
+    font-style: normal;
+    font-weight: bold;
+    src:    url("/Fonts/Roboto-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "ClearSans";
+    font-style: normal;
+    font-weight: bold;
+    src:    url("/Fonts/ClearSans-Regular.svg") format("svg"), 
+            url("/Fonts/ClearSans-Regular.ttf") format("truetype"), 
+            url("/Fonts/ClearSans-Regular.woff") format("woff");
+}
 
 html {
     height: 101%;
     background:  #F0F0F0 url('/bg.png');
     background-position: center;
     background-repeat: repeat-y;
-    font-family: sans-serif;
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
+    
 }
 
 .flat_button_green {
@@ -78,6 +114,8 @@ ul, ol {
 
 p {
     line-height: 1.5;
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #343434;
 }
 
 .fixed_width_page_container {
@@ -108,8 +146,19 @@ p {
     color: white;
 }
 
-h1 {    
-    font-family: 'Clear Sans'
+h1 {            
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
+}
+
+h2 {
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
+}
+
+h3 {    
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
 }
 
 .Centered {
@@ -232,7 +281,7 @@ h1 {
     font-size: 20pt;
     padding-left: 7px;
     color: rgba(255,255,255,0.9);
-    font-family: 'Roboto', sans-serif;
+    font-family: 'RobotoBold', sans-serif;
     font-weight: bold;
     display: inline;    
 }
@@ -241,7 +290,7 @@ h1 {
     padding: 5px; 
     font-size: 20pt;
     color: rgba(255,255,255,0.9);
-    font-family: 'Roboto', sans-serif;
+    font-family: 'RobotoRegular', sans-serif;
     display: inline;
 }
 
@@ -371,6 +420,7 @@ h1 {
     font-family: Roboto;
     border: 0;
     margin-bottom: 10px;
+    font-family: 'RobotoBold', sans-serif;
 
 }
 
