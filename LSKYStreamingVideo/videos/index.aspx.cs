@@ -12,66 +12,52 @@ namespace LSKYStreamingVideo.videos
 {
     public partial class index : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
+        private string ListCategoryWithChildren(VideoCategory cat)
         {
-            int videos_to_load_for_each_category = 4;
+            StringBuilder returnMe = new StringBuilder();
 
-            // Load categories list, and the top videos 
+            returnMe.Append("<li>" + cat.Name + " (" + cat.VideoCount + ") <small>(" + cat.Children.Count + ")</small></li>");
+            if (cat.HasChildren())
+            {
+                returnMe.Append("<ul>");
+                foreach (VideoCategory child in cat.Children)
+                {
+                    returnMe.Append(ListCategoryWithChildren(child));
+                }
+                returnMe.Append("</ul>");
+            }
+
+            return returnMe.ToString();
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {         
+            // If the user hasn't selected a category, display a list of categories
+            // If the user has selected a category, display all videos in that category
+            
+            // Always list categories 
             List<VideoCategory> VideoCategories = new List<VideoCategory>();
-
             using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
             {
                 VideoCategories = VideoCategory.LoadAll(connection);
-
-                foreach (VideoCategory category in VideoCategories)
-                {
-                    category.Videos = Video.LoadVideosFromCategory(connection, category, videos_to_load_for_each_category);
-                }
             }
 
-            int column_width = 100;
-
-            if (videos_to_load_for_each_category > 0)
-            {
-                column_width = 100 / videos_to_load_for_each_category;
-            }
-
-            litCategories.Text += "";
             StringBuilder CategoryListHTML = new StringBuilder();
-                     
+
+            CategoryListHTML.Append("<ul>");
+
+            
             foreach (VideoCategory category in VideoCategories)
             {
-                if (category.Videos.Count > 0)
+                if ((!category.IsHidden) && (!category.IsPrivate))
                 {
-                    CategoryListHTML.Append("<h3>" + category.Name + " (" + category.Videos.Count + ")</h3>");
-
-                    // Videos go here
-                    CategoryListHTML.Append("<div style=\"margin-left :10px;\">");
-                    CategoryListHTML.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%;\">");
-                    CategoryListHTML.Append("<tr>");
-                    
-                    for (int x = 0; x < videos_to_load_for_each_category; x++)
-                    {
-                        if (category.Videos.Count > x)
-                        {
-                            CategoryListHTML.Append("<td width=\"" + column_width + "%\" valign=\"top\">" + LSKYCommonHTMLParts.VideoThumbnailListItem(category.Videos[x]) + "</td>");
-                        }
-                        else
-                        {
-                            CategoryListHTML.Append("<td width=\"" + column_width + "%\" valign=\"top\">&nbsp;</td>");
-                        }
-                    } 
-                    
-                    CategoryListHTML.Append("</tr>");
-                    CategoryListHTML.Append("</table></div><br/><br/>");
-
+                    CategoryListHTML.Append(ListCategoryWithChildren(category));
                 }
             }
 
+            CategoryListHTML.Append("</ul>");
             litCategories.Text = CategoryListHTML.ToString();
-
-
-            // Don't display empty categories
+            
         }
 
         protected void btnSearch_Click(object sender, EventArgs e)
@@ -102,6 +88,9 @@ namespace LSKYStreamingVideo.videos
             {
                 litSearchResults.Text = "No videos found matching the term '" + SanitizedInputString + "'";
             }
+
+            litCategories.Visible = false;
+            litVideos.Visible = false;
 
         }
     }

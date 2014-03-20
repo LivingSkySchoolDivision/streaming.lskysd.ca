@@ -216,6 +216,11 @@ namespace LSKYStreamingCore
             return ReturnedVideos;
         }
 
+        public static List<Video> LoadVideosFromCategory(SqlConnection connection, VideoCategory category)
+        {
+            return LoadVideosFromCategory(connection, category, 10000);
+        }
+        
         public static List<Video> LoadVideosFromCategory(SqlConnection connection, VideoCategory category, int maxVideos)
         {
             List<Video> ReturnedVideos = new List<Video>();

@@ -32,7 +32,7 @@ namespace LSKYStreamingManager.VideoCategories
             returnMe.Cells.Add(Cell_ID);
 
             TableCell Cell_Parent = new TableCell();
-            Cell_Parent.Text = category.ParentCategory;
+            Cell_Parent.Text = category.ParentCategoryID;
             returnMe.Cells.Add(Cell_Parent);
 
             return returnMe;
@@ -97,7 +97,7 @@ namespace LSKYStreamingManager.VideoCategories
                         newCatID = LSKYCommon.getNewID(5);
                     } while (LiveBroadcast.DoesIDExist(connection, newCatID));
                     
-                    VideoCategory NewCategory = new VideoCategory(newCatID, CatName, Parent, Hidden, Private);
+                    VideoCategory NewCategory = new VideoCategory(newCatID, CatName, Parent, Hidden, Private, 0);
                     VideoCategory.InsertNew(connection, NewCategory);
 
                     drpParent.Items.Add(new ListItem(NewCategory.Name, NewCategory.ID));
