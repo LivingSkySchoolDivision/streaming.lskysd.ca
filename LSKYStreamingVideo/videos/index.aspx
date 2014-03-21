@@ -4,10 +4,22 @@
         ul {
             list-style: none;
             margin: 0;
-            margin-left: 15px;
+            margin-left: 5px;
             padding: 0;
-            font-size: 16pt;
+            font-size: 10pt;
         }
+
+        .video_category_meta {
+            font-size: 10pt;
+            color: #666666;
+            display: inline;
+        }
+
+        .sidebar {
+            padding: 5px;
+            height: 100%;
+        }
+
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">    
@@ -20,10 +32,17 @@
     <div style="margin-left: 10px;">
     <asp:Literal ID="litSearchResults" runat="server" Visible="false"></asp:Literal>
     </div>
+    <br /><br /><br />
     <div style="margin-left: 10px;">
-        <h2>Video Categories</h2>
-        <asp:Literal ID="litCategories" runat="server"></asp:Literal>
-        <asp:Literal ID="litVideos" runat="server"></asp:Literal>       
+
+        <table border="0" width="100%">
+            <tr>
+                <td width="30%" style="vertical-align: top;"><div class="sidebar"><asp:Literal ID="litCategories" runat="server"></asp:Literal></div></td>
+                <td width="70%" style="vertical-align: top;"><div class="content"><asp:Literal ID="litVideos" runat="server"></asp:Literal></div></td>
+            </tr>
+        </table>
+            
+              
         
     </div>
     

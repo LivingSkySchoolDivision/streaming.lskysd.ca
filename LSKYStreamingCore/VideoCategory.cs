@@ -95,54 +95,67 @@ namespace LSKYStreamingCore
             }
 
             sqlCommand.Connection.Close();
-            
+
             // Sort into nested categories
             List<VideoCategory> TopLevelCategories = new List<VideoCategory>();
-            List<VideoCategory> OrphanedCategories = new List<VideoCategory>();
 
+            // Set parents and children
+            foreach (VideoCategory Parent in ReturnedCategories)
+            {
+                foreach (VideoCategory Child in ReturnedCategories)
+                {
+                    if (Child.ParentCategoryID == Parent.ID)
+                    {
+                        Parent.Children.Add(Child);
+                        Child.ParentCategory = Parent;
+                    }
+                }
+            }
+
+            // Only return top level categories
             foreach (VideoCategory cat in ReturnedCategories)
             {
                 if (string.IsNullOrEmpty(cat.ParentCategoryID))
                 {
                     TopLevelCategories.Add(cat);
-                } 
-                else 
-                {
-                    OrphanedCategories.Add(cat);
                 }
             }
-            
-            if (TopLevelCategories.Count > 0) {
-                for (int x = 0; x < TopLevelCategories.Count; x++)
-                {
-                    if (OrphanedCategories.Count > 0)
-                    {
-                        for (int y = 0; y < OrphanedCategories.Count; y++)
-                        {
-                            TopLevelCategories[x].AssociateChildRecursively(OrphanedCategories[y]);
-                        }
-                    }
-                }
-            }
+
             return TopLevelCategories;
         }
 
-        private void AssociateChildRecursively(VideoCategory orphan)
+        public static VideoCategory Load(SqlConnection connection, string categoryID)
         {
-            if (this.ID == orphan.ParentCategoryID)
-            {
-                this.Children.Add(orphan);
-            }
+            VideoCategory ReturnedCategories = null;
 
-            if (this.HasChildren())
+            SqlCommand sqlCommand = new SqlCommand();
+            sqlCommand.Connection = connection;
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.CommandText = "SELECT * FROM vCategoriesWithCount WHERE id=@ID;";
+            sqlCommand.Parameters.AddWithValue("ID", categoryID);
+            sqlCommand.Connection.Open();
+            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+            if (dbDataReader.HasRows)
             {
-                for (int x = 0; x < this.Children.Count; x++)
+                while (dbDataReader.Read())
                 {
-                    this.Children[x].AssociateChildRecursively(orphan);
+                    ReturnedCategories = new VideoCategory(
+                            dbDataReader["id"].ToString(),
+                            dbDataReader["name"].ToString(),
+                            dbDataReader["parent"].ToString(),
+                            LSKYCommon.ParseDatabaseBool(dbDataReader["hidden"].ToString(), false),
+                            LSKYCommon.ParseDatabaseBool(dbDataReader["private"].ToString(), false),
+                            LSKYCommon.ParseDatabaseInt(dbDataReader["count"].ToString())
+                            );
                 }
             }
-        }
 
+            sqlCommand.Connection.Close();
+            
+            return ReturnedCategories;
+        }
+        
         public List<VideoCategory> GetAllChildrenRecursively()
         {
             List<VideoCategory> returnMe = new List<VideoCategory>();

@@ -15,8 +15,12 @@ namespace LSKYStreamingVideo.videos
         private string ListCategoryWithChildren(VideoCategory cat)
         {
             StringBuilder returnMe = new StringBuilder();
-
-            returnMe.Append("<li>" + cat.Name + " (" + cat.VideoCount + ") <small>(" + cat.Children.Count + ")</small></li>");
+            returnMe.Append("<li><a href=\"/Videos/?category=" + cat.ID + "\">" + cat.Name + "</a>");
+            if (cat.VideoCount > 0)
+            {
+                returnMe.Append(" <div class=\"video_category_meta\">(" + cat.VideoCount + " videos)</div>");
+            }
+            returnMe.Append("</li>");
             if (cat.HasChildren())
             {
                 returnMe.Append("<ul>");
@@ -26,7 +30,7 @@ namespace LSKYStreamingVideo.videos
                 }
                 returnMe.Append("</ul>");
             }
-
+            
             return returnMe.ToString();
         }
 
@@ -44,9 +48,7 @@ namespace LSKYStreamingVideo.videos
 
             StringBuilder CategoryListHTML = new StringBuilder();
 
-            CategoryListHTML.Append("<ul>");
-
-            
+            CategoryListHTML.Append("<ul>");            
             foreach (VideoCategory category in VideoCategories)
             {
                 if ((!category.IsHidden) && (!category.IsPrivate))
@@ -54,9 +56,35 @@ namespace LSKYStreamingVideo.videos
                     CategoryListHTML.Append(ListCategoryWithChildren(category));
                 }
             }
-
             CategoryListHTML.Append("</ul>");
             litCategories.Text = CategoryListHTML.ToString();
+
+            // If given a category ID, display all videos from that category
+            if (Request.QueryString["category"] != null)
+            {
+                string parsedCatID = LSKYCommon.SanitizeGeneralInputString(Request.QueryString["category"].ToString().Trim());
+
+                if (!string.IsNullOrEmpty(parsedCatID))
+                {
+                    VideoCategory SelectedCategory = null;
+                    List<Video> CategoryVideos = new List<Video>();
+                    using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+                    {
+                        SelectedCategory = VideoCategory.Load(connection, parsedCatID);
+                        if (SelectedCategory != null)
+                        {
+                            CategoryVideos = Video.LoadVideosFromCategory(connection, SelectedCategory);
+                        }
+                    }
+
+                    StringBuilder VideoListHTML = new StringBuilder();
+                    foreach (Video video in CategoryVideos)
+                    {
+                        VideoListHTML.Append(LSKYCommonHTMLParts.SmallVideoListItem(video, true));
+                    }
+                    litVideos.Text = VideoListHTML.ToString();
+                }
+            }
             
         }
 
