@@ -18,6 +18,13 @@ namespace LSKYStreamingCore
         public int VideoCount { get; set; }
         public List<VideoCategory> Children { get; set; }
         public VideoCategory ParentCategory { get; set; }
+        public string FullName
+        {
+            get
+            {
+                return this.GetFullName();
+            }
+        }
 
         public VideoCategory(string id, string name, string parentcategory, bool hidden, bool isprivate, int count)
         {
@@ -43,6 +50,32 @@ namespace LSKYStreamingCore
             }
         }
 
+        public bool HasParent()
+        {
+            if (this.ParentCategory == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public string GetFullName()
+        {
+            StringBuilder CategoryName = new StringBuilder();
+
+            if (this.HasParent())
+            {
+                CategoryName.Append(this.ParentCategory.GetFullName());
+                CategoryName.Append("/");                    
+            }
+
+            CategoryName.Append(this.Name);
+            return CategoryName.ToString();
+        }
+
         public static bool DoesIDExist(SqlConnection connection, string categoryID)
         {
             bool returnMe = false;
@@ -66,7 +99,7 @@ namespace LSKYStreamingCore
             return returnMe;
         }
 
-        public static List<VideoCategory> LoadAll(SqlConnection connection)
+        public static List<VideoCategory> LoadAll(SqlConnection connection, bool Tree)
         {
             List<VideoCategory> ReturnedCategories = new List<VideoCategory>();
 
@@ -96,6 +129,7 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            
             // Sort into nested categories
             List<VideoCategory> TopLevelCategories = new List<VideoCategory>();
 
@@ -112,16 +146,21 @@ namespace LSKYStreamingCore
                 }
             }
 
-            // Only return top level categories
-            foreach (VideoCategory cat in ReturnedCategories)
+            if (Tree)
             {
-                if (string.IsNullOrEmpty(cat.ParentCategoryID))
+                foreach (VideoCategory cat in ReturnedCategories)
                 {
-                    TopLevelCategories.Add(cat);
+                    if (string.IsNullOrEmpty(cat.ParentCategoryID))
+                    {
+                        TopLevelCategories.Add(cat);
+                    }
                 }
+                return TopLevelCategories;
             }
-
-            return TopLevelCategories;
+            else
+            {
+                return ReturnedCategories;
+            }
         }
 
         public static VideoCategory Load(SqlConnection connection, string categoryID)

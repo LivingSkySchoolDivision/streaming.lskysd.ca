@@ -560,6 +560,12 @@ h1 {
     background: url(/trans_background.png);
 }
 
+.thumbnail_editor_video {
+    width: 200px;
+    height: 130px;
+    background: url(/trans_background.png);
+}
+
 .highlight_row {    
     font-weight: bold;
 }

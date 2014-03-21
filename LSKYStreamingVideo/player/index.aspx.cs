@@ -34,7 +34,7 @@ namespace LSKYStreamingVideo.player
                 {
                     if (Video.DoesVideoIDExist(connection, requestedID))
                     {
-                        selectedVideo = Video.LoadThisVideo(connection, requestedID);
+                        selectedVideo = Video.Load(connection, requestedID);
                     }
                 }
             }

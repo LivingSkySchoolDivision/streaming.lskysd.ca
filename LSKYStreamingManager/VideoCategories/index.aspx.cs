@@ -32,7 +32,14 @@ namespace LSKYStreamingManager.VideoCategories
             returnMe.Cells.Add(Cell_ID);
 
             TableCell Cell_Parent = new TableCell();
-            Cell_Parent.Text = category.ParentCategoryID;
+            if (category.HasParent())
+            {
+                Cell_Parent.Text = "/" + category.ParentCategory.FullName;
+            }
+            else
+            {
+                Cell_Parent.Text = "/";
+            }
             returnMe.Cells.Add(Cell_Parent);
 
             return returnMe;
@@ -45,7 +52,7 @@ namespace LSKYStreamingManager.VideoCategories
 
             using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
             {
-                AllCategories = VideoCategory.LoadAll(connection);
+                AllCategories = VideoCategory.LoadAll(connection, false);
             }
 
             //drpParent.Items.Clear();
@@ -53,14 +60,14 @@ namespace LSKYStreamingManager.VideoCategories
             {
                 drpParent.Items.Add(new ListItem(" - No Parent Category -", string.Empty));
             }
-            foreach (VideoCategory cat in AllCategories)
+            foreach (VideoCategory cat in AllCategories.OrderBy(c => c.FullName).ToList<VideoCategory>())
             {
                 tblCategories.Rows.Add(AddVideoCategoryTableRow(cat, false));
 
                 // Add categories to the dropdown list
                 if (!IsPostBack)
                 {
-                    ListItem newCategoryItem = new ListItem(cat.Name, cat.ID);
+                    ListItem newCategoryItem = new ListItem(cat.GetFullName(), cat.ID);
                     drpParent.Items.Add(newCategoryItem);
                 }
 

@@ -45,9 +45,8 @@ namespace LSKYStreamingManager
         {
             List<NavMenuItem> MainMenu = new List<NavMenuItem>();
             //MainMenu.Add(new NavMenuItem(0, "#", "Title", "Description", "Category"));
-            //MainMenu.Add(new NavMenuItem(0, "#", "Add a new video", "Adds a new video to the site", "Videos"));
-            //MainMenu.Add(new NavMenuItem(0, "#", "Modify a video", "Manage videos", "Videos"));
-            //MainMenu.Add(new NavMenuItem(0, "#", "Add a new category", "Manage video categories", "Videos"));
+            MainMenu.Add(new NavMenuItem(0, "/Videos/NewVideo.aspx", "Add a new video", "Adds a new video to the site", "Videos"));
+            MainMenu.Add(new NavMenuItem(0, "/Videos/", "Manage Videos", "Manage videos", "Videos"));            
             MainMenu.Add(new NavMenuItem(0, "/VideoCategories/", "Manage Video Categories", "Manage video categories", "Video Categories"));
             MainMenu.Add(new NavMenuItem(0, "/streams/NewStream.aspx", "Schedule a broadcast", "Create a new live broadcast", "Live Broadcasts"));
             MainMenu.Add(new NavMenuItem(0, "/streams/index.aspx", "Modify a broadcast", "Manage live broadcasts", "Live Broadcasts"));            

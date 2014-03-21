@@ -49,7 +49,7 @@ namespace LSKYStreamingVideo.videos
             List<VideoCategory> VideoCategories = new List<VideoCategory>();
             using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
             {
-                VideoCategories = VideoCategory.LoadAll(connection);
+                VideoCategories = VideoCategory.LoadAll(connection, true);
             }
 
             StringBuilder CategoryListHTML = new StringBuilder();
@@ -79,7 +79,7 @@ namespace LSKYStreamingVideo.videos
                         SelectedCategory = VideoCategory.Load(connection, parsedCatID);
                         if (SelectedCategory != null)
                         {
-                            CategoryVideos = Video.LoadVideosFromCategory(connection, SelectedCategory);
+                            CategoryVideos = Video.LoadFromCategory(connection, SelectedCategory);
                         }
                     }
 
@@ -104,7 +104,7 @@ namespace LSKYStreamingVideo.videos
             // Try to find videos
             using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
             {
-                foundVideos = Video.SearchVideos(connection, SanitizedInputString);
+                foundVideos = Video.Find(connection, SanitizedInputString);
             }
 
 

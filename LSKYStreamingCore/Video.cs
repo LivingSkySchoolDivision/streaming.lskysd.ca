@@ -47,6 +47,13 @@ namespace LSKYStreamingCore
                 this.DurationInSeconds = (int)value.TotalSeconds;
                 } 
         }
+        public bool Expires
+        {
+            get
+            {
+                return !this.IsAlwaysAvailable;
+            }
+        }
 
         public Video(string id, string name, string author, string location, string description, int width, int height, string thumbnail, DateTime added, DateTime aired,
             int duration, string file_ism, string file_mp4, string file_ogv, string file_webm, string downloadurl, bool displayairdate, bool displaythumbnail, bool ishidden, bool isprivate, bool islivestreamrecording, bool allowembed,
@@ -108,10 +115,23 @@ namespace LSKYStreamingCore
                 return true;
             }
         }
+        
+        private static List<VideoCategory> VideoCategoryCache;
+        private static DateTime VideoCategoryCacheLastUpdated;
+        private static List<VideoCategory> GetVideoCategoryCache(SqlConnection connection)
+        {
+            if ((VideoCategoryCache == null) || (DateTime.Now.Subtract(VideoCategoryCacheLastUpdated) > new TimeSpan(0, 5, 0)))
+            {
+                VideoCategoryCacheLastUpdated = DateTime.Now;
+                VideoCategoryCache = VideoCategory.LoadAll(connection, false);
+            }
+            
+            return VideoCategoryCache;            
+        }
 
         private static Video dbDataReaderToVideo(SqlDataReader dbDataReader)
         {
-            return new Video(
+            Video returnedVideo = new Video(
                 dbDataReader["id"].ToString(),
                 dbDataReader["name"].ToString(),
                 dbDataReader["author"].ToString(),
@@ -141,6 +161,8 @@ namespace LSKYStreamingCore
                 dbDataReader["legacy_video_id"].ToString(),
                 dbDataReader["category_id"].ToString()
                 );
+
+            return returnedVideo;
         }
 
         public static bool DoesVideoIDExist(SqlConnection connection, string videoID)
@@ -165,8 +187,8 @@ namespace LSKYStreamingCore
             sqlCommand.Connection.Close();
             return returnMe;
         }
-
-        public static Video LoadThisVideo(SqlConnection connection, string videoID)
+        
+        public static Video Load(SqlConnection connection, string videoID)
         {
             Video ReturnedVideo = null;
 
@@ -189,10 +211,22 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Get this video's category
+            if (ReturnedVideo != null)
+            {
+                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                {
+                    if (ReturnedVideo.CategoryID == cat.ID)
+                    {
+                        ReturnedVideo.Category = cat;
+                    }
+                }
+            }
+
             return ReturnedVideo;
         }
 
-        public static List<Video> LoadAllVideos(SqlConnection connection)
+        public static List<Video> LoadAll(SqlConnection connection)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -213,15 +247,27 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Associate video categories
+            foreach(Video video in ReturnedVideos) 
+            {
+                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                {
+                    if (video.CategoryID == cat.ID)
+                    {
+                        video.Category = cat;
+                    }
+                }
+            }
+
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadVideosFromCategory(SqlConnection connection, VideoCategory category)
+        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category)
         {
-            return LoadVideosFromCategory(connection, category, 10000);
+            return LoadFromCategory(connection, category, 10000);
         }
         
-        public static List<Video> LoadVideosFromCategory(SqlConnection connection, VideoCategory category, int maxVideos)
+        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category, int maxVideos)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -242,10 +288,22 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Associate video categories
+            foreach (Video video in ReturnedVideos)
+            {
+                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                {
+                    if (video.CategoryID == cat.ID)
+                    {
+                        video.Category = cat;
+                    }
+                }
+            }
+
             return ReturnedVideos;
         }
 
-        public static List<Video> SearchVideos(SqlConnection connection, string searchTerms)
+        public static List<Video> Find(SqlConnection connection, string searchTerms)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -283,10 +341,22 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Associate video categories
+            foreach (Video video in ReturnedVideos)
+            {
+                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                {
+                    if (video.CategoryID == cat.ID)
+                    {
+                        video.Category = cat;
+                    }
+                }
+            }
+
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadFeaturedVideos(SqlConnection connection)
+        public static List<Video> LoadFeatured(SqlConnection connection)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -308,10 +378,22 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Associate video categories
+            foreach (Video video in ReturnedVideos)
+            {
+                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                {
+                    if (video.CategoryID == cat.ID)
+                    {
+                        video.Category = cat;
+                    }
+                }
+            }
+
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadPublicVideos(SqlConnection connection)
+        public static List<Video> LoadPublic(SqlConnection connection)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -333,10 +415,22 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Associate video categories
+            foreach (Video video in ReturnedVideos)
+            {
+                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                {
+                    if (video.CategoryID == cat.ID)
+                    {
+                        video.Category = cat;
+                    }
+                }
+            }
+
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadNewestVideos(SqlConnection connection)
+        public static List<Video> LoadNewest(SqlConnection connection)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -357,6 +451,18 @@ namespace LSKYStreamingCore
             }
 
             sqlCommand.Connection.Close();
+
+            // Associate video categories
+            foreach (Video video in ReturnedVideos)
+            {
+                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                {
+                    if (video.CategoryID == cat.ID)
+                    {
+                        video.Category = cat;
+                    }
+                }
+            }
 
             return ReturnedVideos;
         }
@@ -398,7 +504,19 @@ namespace LSKYStreamingCore
 
         }
 
-        public static bool InsertNewVideo(SqlConnection connection, Video video)
+        public string GetFullCategory()
+        {
+            if (this.Category != null)
+            {
+                return this.Category.GetFullName();
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        public static bool Insert(SqlConnection connection, Video video)
         {
             bool returnMe = false;
 
@@ -451,7 +569,7 @@ namespace LSKYStreamingCore
             return returnMe;
         }
 
-        public static bool UpdateVideo(SqlConnection connection, Video video)
+        public static bool Update(SqlConnection connection, Video video)
         {
             bool returnMe = false;
 
