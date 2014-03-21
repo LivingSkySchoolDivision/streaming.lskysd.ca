@@ -15,10 +15,16 @@ namespace LSKYStreamingVideo.videos
         private string ListCategoryWithChildren(VideoCategory cat)
         {
             StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<li><a href=\"/Videos/?category=" + cat.ID + "\">" + cat.Name + "</a>");
+            returnMe.Append("<li>");
             if (cat.VideoCount > 0)
             {
-                returnMe.Append(" <div class=\"video_category_meta\">(" + cat.VideoCount + " videos)</div>");
+                returnMe.Append("<a href=\"/Videos/?category=" + cat.ID + "\">");
+            }
+            returnMe.Append(cat.Name);
+            if (cat.VideoCount > 0) 
+            {
+                returnMe.Append("</a>");
+                //returnMe.Append(" <div class=\"video_category_meta\">(" + cat.VideoCount + " videos)</div>");
             }
             returnMe.Append("</li>");
             if (cat.HasChildren())
