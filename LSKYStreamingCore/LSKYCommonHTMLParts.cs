@@ -52,6 +52,11 @@ namespace LSKYStreamingCore
             returnMe.Append("<div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div>");
             returnMe.Append("<div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div>");
 
+            if (video.IsPrivate)
+            {
+                returnMe.Append("<div class=\"video_list_info\"><b>This video is flagged as private</b></div>");
+            }
+
             if (video.ShouldDisplayAirDate)
             {
                 returnMe.Append("<div class=\"video_list_info\"><b>Original broadcast:</b> " + video.DateAired.ToLongDateString() + "</div>");
@@ -343,7 +348,10 @@ namespace LSKYStreamingCore
             {
                 returnMe.Append("<div class=\"video_list_info\"><b>Original broadcast:</b> " + video.DateAired.ToLongDateString() + "</div>");
             }
-
+            if (video.IsPrivate)
+            {
+                returnMe.Append("<div class=\"video_list_info\"><b>This video is flagged as private</b></div>");
+            }
             if (!string.IsNullOrEmpty(video.DownloadURL))
             {
                 returnMe.Append("<div class=\"video_list_info\"><a href=\"/video_files/" + video.DownloadURL + "\">Download available</a></div>");

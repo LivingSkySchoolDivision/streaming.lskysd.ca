@@ -324,7 +324,7 @@ namespace LSKYStreamingCore
             
             // Build an SQL query
             StringBuilder sqlQuery = new StringBuilder();
-            sqlQuery.Append("SELECT TOP 25 * FROM videos WHERE hidden=0 AND private=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) AND (");
+            sqlQuery.Append("SELECT TOP 25 * FROM videos WHERE hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) AND (");
             sqlQuery.Append("name like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("author like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("location like '%" + sanitizedSearchString + "%' OR ");
