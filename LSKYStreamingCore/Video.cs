@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 
 namespace LSKYStreamingCore
@@ -262,12 +263,12 @@ namespace LSKYStreamingCore
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category)
+        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category, bool includePrivate)
         {
-            return LoadFromCategory(connection, category, 10000);
+            return LoadFromCategory(connection, category, 10000, includePrivate);
         }
         
-        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category, int maxVideos)
+        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category, int maxVideos, bool includePrivate)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -288,8 +289,19 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Should the list include private videos or not?
+            List<Video> filteredVideos = new List<Video>();
+            if (includePrivate)
+            {
+                filteredVideos = ReturnedVideos;
+            }
+            else
+            {
+                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
+            }
+
             // Associate video categories
-            foreach (Video video in ReturnedVideos)
+            foreach (Video video in filteredVideos)
             {
                 foreach (VideoCategory cat in GetVideoCategoryCache(connection))
                 {
@@ -300,10 +312,10 @@ namespace LSKYStreamingCore
                 }
             }
 
-            return ReturnedVideos;
+            return filteredVideos;
         }
 
-        public static List<Video> Find(SqlConnection connection, string searchTerms)
+        public static List<Video> Find(SqlConnection connection, string searchTerms, bool includePrivate)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -341,8 +353,19 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Should the list include private videos or not?
+            List<Video> filteredVideos = new List<Video>();
+            if (includePrivate)
+            {
+                filteredVideos = ReturnedVideos;
+            }
+            else
+            {
+                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
+            }
+
             // Associate video categories
-            foreach (Video video in ReturnedVideos)
+            foreach (Video video in filteredVideos)
             {
                 foreach (VideoCategory cat in GetVideoCategoryCache(connection))
                 {
@@ -353,10 +376,10 @@ namespace LSKYStreamingCore
                 }
             }
 
-            return ReturnedVideos;
+            return filteredVideos;
         }
 
-        public static List<Video> LoadFeatured(SqlConnection connection)
+        public static List<Video> LoadFeatured(SqlConnection connection, bool loadPrivate)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -378,8 +401,19 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Should the list include private videos or not?
+            List<Video> filteredVideos = new List<Video>();
+            if (loadPrivate)
+            {
+                filteredVideos = ReturnedVideos;
+            }
+            else
+            {
+                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
+            }
+
             // Associate video categories
-            foreach (Video video in ReturnedVideos)
+            foreach (Video video in filteredVideos)
             {
                 foreach (VideoCategory cat in GetVideoCategoryCache(connection))
                 {
@@ -390,7 +424,7 @@ namespace LSKYStreamingCore
                 }
             }
 
-            return ReturnedVideos;
+            return filteredVideos;
         }
 
         public static List<Video> LoadPublic(SqlConnection connection)
@@ -430,7 +464,7 @@ namespace LSKYStreamingCore
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadNewest(SqlConnection connection)
+        public static List<Video> LoadNewest(SqlConnection connection, bool loadPrivate)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
@@ -452,8 +486,19 @@ namespace LSKYStreamingCore
 
             sqlCommand.Connection.Close();
 
+            // Should the list include private videos or not?
+            List<Video> filteredVideos = new List<Video>();
+            if (loadPrivate)
+            {
+                filteredVideos = ReturnedVideos;
+            }
+            else
+            {
+                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
+            }
+
             // Associate video categories
-            foreach (Video video in ReturnedVideos)
+            foreach (Video video in filteredVideos)
             {
                 foreach (VideoCategory cat in GetVideoCategoryCache(connection))
                 {
@@ -464,7 +509,7 @@ namespace LSKYStreamingCore
                 }
             }
 
-            return ReturnedVideos;
+            return filteredVideos;
         }
 
         public string GetDurationInEnglish()

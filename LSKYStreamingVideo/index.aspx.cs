@@ -21,8 +21,8 @@ namespace LSKYStreamingVideo
             
             using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
             {
-                NewestVideos = Video.LoadNewest(connection);
-                FeaturedVideos = Video.LoadFeatured(connection);
+                NewestVideos = Video.LoadNewest(connection, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
+                FeaturedVideos = Video.LoadFeatured(connection, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
                 UpcomingStreams = LiveBroadcast.LoadUpcoming(connection);
                 CurrentlyLiveStreams = LiveBroadcast.LoadCurrentlyBroadcasting(connection, 20);
 

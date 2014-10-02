@@ -14,7 +14,7 @@ namespace LSKYStreamingVideo
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblServerTime.Text = DateTime.Now.ToLongDateString() + " - " + DateTime.Now.ToLongTimeString();
+            lblServerTime.Text = DateTime.Now.ToLongDateString() + " - " + DateTime.Now.ToLongTimeString() + " (" + Request.ServerVariables["REMOTE_ADDR"] + ")";
 
             // Load any alerts from the database
             List<Alert> ActiveAlerts = new List<Alert>();

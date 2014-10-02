@@ -79,7 +79,7 @@ namespace LSKYStreamingVideo.videos
                         SelectedCategory = VideoCategory.Load(connection, parsedCatID);
                         if (SelectedCategory != null)
                         {
-                            CategoryVideos = Video.LoadFromCategory(connection, SelectedCategory);
+                            CategoryVideos = Video.LoadFromCategory(connection, SelectedCategory, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
                         }
                     }
 
@@ -104,7 +104,7 @@ namespace LSKYStreamingVideo.videos
             // Try to find videos
             using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
             {
-                foundVideos = Video.Find(connection, SanitizedInputString);
+                foundVideos = Video.Find(connection, SanitizedInputString, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
             }
 
 
