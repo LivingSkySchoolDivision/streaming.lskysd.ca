@@ -85,7 +85,6 @@
     <Content Include="live\index.aspx" />
     <Content Include="live\lsky_stream_poster.png" />
     <Content Include="live\Preview.png" />
-    <Content Include="live\StrendinSmoothStreamArchive.xap" />
     <Content Include="Logo_Circle_Notext_Trans.png" />
     <Content Include="lsky_logo_text.png" />
     <Content Include="lsky_logo_watermark.png" />
@@ -94,11 +93,12 @@
     <Content Include="player\index.aspx" />
     <Content Include="player\lsky_stream_poster.png" />
     <Content Include="player\Preview.png" />
-    <Content Include="player\StrendinSmoothStreamArchive.xap" />
     <Content Include="robots.txt" />
     <Content Include="trans_background.png" />
     <Content Include="videos\index.aspx" />
-    <Content Include="Web.config" />
+    <None Include="Properties\PublishProfiles\Development Server.pubxml" />
+    <None Include="Properties\PublishProfiles\Live.pubxml" />
+    <None Include="Web.config.TEMPLATE" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="about\index.aspx.cs">
@@ -155,11 +155,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Template.master" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
+    <None Include="Web.config.Debug.TEMPLATE">
+      <DependentUpon>Web.config.TEMPLATE</DependentUpon>
     </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
+    <None Include="Web.config.Release.TEMPLATE">
+      <DependentUpon>Web.config.TEMPLATE</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -94,7 +94,11 @@
     <Content Include="VideoCategories\index.aspx" />
     <Content Include="Videos\index.aspx" />
     <Content Include="Videos\NewVideo.aspx" />
-    <Content Include="Web.config" />
+    <None Include="Properties\PublishProfiles\Development Server.pubxml" />
+    <None Include="Properties\PublishProfiles\Live.pubxml" />
+    <None Include="Web.config.TEMPLATE">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alerts\AlertManager.aspx.cs">
@@ -197,11 +201,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Template.Master" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
+    <None Include="Web.config.Debug.TEMPLATE">
+      <DependentUpon>Web.config.TEMPLATE</DependentUpon>
     </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
+    <None Include="Web.config.Release.TEMPLATE">
+      <DependentUpon>Web.config.TEMPLATE</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
