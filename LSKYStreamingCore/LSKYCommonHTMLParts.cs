@@ -34,9 +34,8 @@ namespace LSKYStreamingCore
                 thumbnailURL = video.ThumbnailURL;
             }
 
-            returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%; padding-bottom: 10px;\">");
-            returnMe.Append("<tr>");
-
+            returnMe.Append("<div class=\"SmallVideoListItem\">");
+            /*
             if (showThumbnail)
             {
                 returnMe.Append("<td valign=\"top\" width=\"128\">");
@@ -46,11 +45,23 @@ namespace LSKYStreamingCore
                 returnMe.Append("</a></div>");
                 returnMe.Append("</td>");
             }
-            returnMe.Append("<td valign=\"top\"><div class=\"video_list_info_container\">");
-            returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + playerURL + "\"><div class=\"video_list_name\">" + video.Name + "</div></a>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Duration:</b> " + video.GetDurationInEnglish() + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div>");
+             */
+            if (showThumbnail)
+            {
+                returnMe.Append("<div class=\"VideoListThumb\" width=\"128\">");
+                returnMe.Append("<a href=\"" + playerURL + "\">");
+                //returnMe.Append("<div style=\"width: 200px;\">");
+                returnMe.Append("<img border=\"0\" src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+                returnMe.Append("</a>");
+                returnMe.Append("</div>");
+            }
+            returnMe.Append("<div class=\"video_list_info_container\">");
+            returnMe.Append("<ul>");
+            returnMe.Append("<li class=\"VideoListDescTitle\"> <a style=\"text-decoration: none;\" href=\"" + playerURL + "\"><div class=\"video_list_name\">" + video.Name + "</div></a> </li>");
+            returnMe.Append("<li class=\"VideoListDescDuration\"> <div class=\"video_list_info\"><b>Duration:</b> " + video.GetDurationInEnglish() + "</div></li>");
+            returnMe.Append("<li class=\"VideoListDescSubmitted\"> <div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div></li>");
+            returnMe.Append("<li class=\"VideoListDescRecorded\"> <div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div></li>");
+            returnMe.Append("</ul>");
 
             if (video.IsPrivate)
             {
@@ -71,8 +82,8 @@ namespace LSKYStreamingCore
             returnMe.Append("</div></td>");
 
 
-            returnMe.Append("</tr>");
-            returnMe.Append("</table><br/>");
+            returnMe.Append("</ul>");
+            returnMe.Append("</div>");
 
             return returnMe.ToString();
 

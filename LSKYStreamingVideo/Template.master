@@ -9,45 +9,47 @@
     <META NAME="ROBOTS" CONTENT="NONE"> 
     <META NAME="GOOGLEBOT" CONTENT="NOARCHIVE"> 
     <link rel="stylesheet" href="/Normalize.css" /> 
-    <link rel="stylesheet" href="/MainStyles.css" />  
+    <link rel="stylesheet" href="/MainStyles.css" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
     <form id="Form1" runat="server">
-    <div class="header_container">
-        <table cellpadding="0" cellspacing="0" border="0" style="width: 100%; margin-left: auto; margin-right: auto;">
-            <tr>
-                <td style="border: 0;" width="35px"><img id="LSKYLogo" src="/Logo_Circle_Notext_Trans.png" /></td>
-                <td style="border: 0;">                    
-                    <div id="PageTitle">Living Sky School Division:</div> <div id="PageTitle_Specific">Streaming Video</div>                     
-                </td>
-                <td width="250">
-                </td>
-            </tr>
-        </table> 
-    </div>
-    <div runat="server" id="divNavBar_Right" class="navbar">
-        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
-            <tr>
-                <td align="left">
-                    <a href="/" class="navbar_link">Front page</a>
-                    <a href="/videos" class="navbar_link">Videos</a>
-                </td>
-                <td align="right">
-                    <a href="/about" class="navbar_link">About</a>
-                    <a href="/help" class="navbar_link">Help</a>
-                </td>
-            </tr>
-        </table>
-        
-    </div>
+    <div class="allHeaderWrap">
+        <div class="header_container clearfix">
+            <div class="LSKYLogoWrap">
+                <img id="LSKYLogo" src="/Logo_Circle_Notext_Trans.png" />
+            </div>
+            <div class="PageTitleWrap">
+                <h1 class="floatfix PageTitle">Living Sky School Division:</h1> <h2 class="PageTitle_Specific">Streaming Video</h2>
+            </div>
+        </div><!-- .header_container -->
+            <!-- <div class="nav_wrap clearfix"> -->
+            <div class="nav_wrap">
+                <ul class="main_navigation clearfix">
+                        <li>
+                            <a href="/">Front page</a>
+                        </li>
+                        <li>
+                            <a href="/videos">Videos</a>
+                        </li>
+                        <li>
+                            <a href="/about">About</a>
+                        </li>
+                        <li>
+                            <a href="/help">Help</a>
+                        </li>
+                </ul>
+            </div>
+        <!--</div>-->
+    </div><!-- allHeaderWrap -->
     <asp:Literal ID="litAlertContainer" runat="server"></asp:Literal>
-    <div class="fixed_width_page_container"><br />
+    <div class="fixed_width_page_container mainWrap">
         <asp:ContentPlaceHolder ID="Body" runat="server"></asp:ContentPlaceHolder>
         <div class="footer">
-        All content on this site is owned by Living Sky School Division No. 202, unless otherwise specified<br />
-        Current server time is <asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label>
+        <p>All content on this site is owned by Living Sky School Division No. 202, unless otherwise specified</p>
+        <p>Current server time is <asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label></p>
         </div>
 
         <!-- Google analytics tracking code -->

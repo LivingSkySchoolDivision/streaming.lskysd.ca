@@ -1,16 +1,127 @@
-﻿/*@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);*/
+﻿/*
+    *****************************
+    Table of Contents
+    *****************************
+    1. [Normalize] 
+        -general styles, clearfix, floatfix
+    2. [General - Fonts]
+    3. [General - Layout]
+        - fixed_width_page_container, page_container, PageTitle_Specific, header_container
+        - Responsive Layout
+    4. [General] - Unknown
+    5. [Header]
+        - PageTitle, LSKYLogo, main_navigation, nav_wrap
+    6. [Body / Content]
+        - Currently Empty
+    7. [Body / Content - Live Stream Defaults [livestream]]
+    8. [Body / Content - Live Stream]
+    9. [Body / Content - My Additions]
+        - PageTitle, some floating
+    10. [Body / Content - Newest Videos Structure]
+    11. [Footer]
+    12. [Media Queries]    
+    *****************************
 
-@media print 
-{
-    .noPrint 
-    {
-        display:none;
-    }
+    **look for @todo**
 
-    .header_container {
-        display: none;
-    }
+    *****************************
+    to do:
+    *****************************
+    take out unknown1 and unknown2    
+
+    @todo working on it - responsive    .main_navigation .left_nav {
+
+
+*/
+
+/*@import url(https://fonts.googleapis.com/css?family=Roboto:400,700);*/
+
+/*
+    *****************************
+    *****************************
+    Normalize
+    *****************************
+    *****************************
+*/
+
+/* @todo - headers have strange margins - set to .75em - needs testing.*/
+h1, h2, h3, h4, h5, h6 {
+    font-family:"", "RobotoBold",​sans-serif;
+    font-weight: 400;
+    line-height: 31px;
+    /*
+    margin: 0 0 20px;
+    padding: 0 0 5px;
+    */
+    margin:10px 0;
+    padding:0px;
+    border:0px;
 }
+ul, li, menu, dir { list-style:none;}
+.footer {clear:both;}
+ul {padding-inline-start:0px;}
+
+/*Clearfix*/
+.clearfix:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+/* old styles
+h1 {            
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
+}
+
+h2 {
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
+}
+
+h3 {    
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
+}
+*/
+
+body {
+    font-size: 10pt;
+    padding: 0;
+    margin: 0;
+}
+
+ul, ol {
+    line-height: 1.5;
+}
+
+p {
+    line-height: 1.5;
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #343434;
+}
+
+
+html {
+    height: 101%;
+    background:  #F0F0F0 url('/bg.png');
+    background-position: center;
+    background-repeat: repeat-y;
+    font-family: 'ArchivoNarrow', sans-serif;
+    color: #333333;
+    
+}
+
+
+/*
+    *****************************
+    *****************************
+    General - Fonts
+    *****************************
+    *****************************
+*/
 
 @font-face {
     font-family: "ArchivoNarrow";
@@ -54,72 +165,17 @@
             url("/Fonts/ClearSans-Regular.woff") format("woff");
 }
 
-html {
-    height: 101%;
-    background:  #F0F0F0 url('/bg.png');
-    background-position: center;
-    background-repeat: repeat-y;
-    font-family: 'ArchivoNarrow', sans-serif;
-    color: #333333;
-    
-}
-
-.flat_button_green {
-    background-color: #009900;
-    color: #FFFFFF;
-    border: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    padding: 5px;
-    border-radius: 4px;
-    text-align:center;
-    text-decoration: none;
-    font-family: sans-serif;
-    font-size: 110%;
-}
-
-#HomeLink {
-    font-size: 8pt;
-    float: left;
-    padding: 5px;
-    display: block;
-    color: #0000FF;
-    border: 1px solid #C0C0C0;
-    background-color: #FFFFFF;
-}
-
-.flat_button_green:hover {
-    background-color: #00AA00;
-}
-
-.flat_button_red {
-}
-
-.flat_button_gray {
-}
-
-.checkbox_description {
-    font-size: 9pt;
-    padding-left: 5px;
-}
-
-body {
-    font-size: 10pt;
-    padding: 0;
-    margin: 0;
-}
-
-ul, ol {
-    line-height: 1.5;
-}
-
-p {
-    line-height: 1.5;
-    font-family: 'ArchivoNarrow', sans-serif;
-    color: #343434;
-}
+/*
+    *****************************
+    *****************************
+    General - Layout
+    *****************************
+    *****************************
+*/
 
 .fixed_width_page_container {
-    width: 1024px;
+    max-width:1024px;
+    /*width: 1024px;*/
     margin-left: auto;
     margin-right: auto;
     padding: 25px;
@@ -129,6 +185,134 @@ p {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
+
+.page_container {
+    padding: 15px;
+}
+
+/* [Mike's Additions] Responsive Layout */
+    
+    /*  SECTIONS  */
+    .section {
+    	clear: both;
+    	padding: 0px;
+    	margin: 0px;
+    }
+    
+    /*  COLUMN SETUP  */
+    .col {
+    	display: block;
+    	float:left;
+    	margin: 1% 0 1% 1.6%;
+    }
+    .col:first-child { margin-left: 0; }
+    
+    /*  Floatfix  */
+    .floatfix:before, .floatfix:after,
+    .group:before,
+    .group:after { content:""; display:table; }
+    .floatfix:after, .group:after { clear:both;}
+    .floatfix, .group { zoom:1; /* For IE 6/7 */ }
+    
+    /*  GRID OF TWO  */
+    .span_2_of_2 {
+    	width: 100%;
+    }
+    .span_1_of_2 {
+    	width: 49.2%;
+    }
+    
+    /*  Responsiveness -  480px */
+    
+    @media only screen and (max-width: 850px) {
+    	.col { margin: 1% 0 1% 0%;}
+    }
+    
+    @media only screen and (max-width: 850px) {
+    	.span_2_of_2, .span_1_of_2 { width: 100%; }        
+            .span_1_of_2 .VideoListThumb { display:none;}              
+        .fixed_width_page_container { 
+            padding:0px; 
+            max-width:none; 
+        }    
+        
+        /*1 Col - Responsive view*/
+        .span_1_of_2 {    
+
+        }
+    
+       /*   .video_list_info_container:nth-child(2n) { */
+            .span_1_of_2:nth-child(2n){
+            background:#d3d3d3;
+        }
+    }
+/* End Responsive Layout */
+
+/*
+    *****************************
+    *****************************
+    General - Unkown
+    *****************************
+    *****************************
+*/
+
+
+#LogOutLink {
+    color: black;
+    background-color: rgba(255, 255, 255, 0.7);  
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    padding: 2px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: table-cell;
+    width: 80px;
+    height: 50px;
+    vertical-align: middle; 
+    text-align: center;
+    font-weight: bold;
+}
+
+#LogOutLink:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+#LoggedInUserInfo {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 0;
+    margin-left: auto;
+    text-align: right;
+    vertical-align: top;
+    font-size: 8pt;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 5px;
+    padding: 2px;
+    vertical-align: middle; 
+    display: table-cell;
+    text-align: center;  
+    height: 50px;       
+    width: 300px; 
+}
+/* Mike S redid code at bottom
+#LSKYLogo {
+    margin-top: 2px;
+    margin-bottom: auto;
+    margin-right: 0;
+    margin-left: 10px;  
+    height: 40px; 
+    width: 40px; 
+    float:left;
+}
+
+#PageTitle {
+    font-size: 20pt;
+    padding-left: 7px;
+    color: rgba(255,255,255,0.9);
+    font-family: 'RobotoBold', sans-serif;
+    font-weight: bold;
+    display: inline;    
+}
+    */
 
 #loggedInUserBanner {        
     font-size: 8pt;
@@ -144,21 +328,6 @@ p {
 
 #loggedInUserBanner a {
     color: white;
-}
-
-h1 {            
-    font-family: 'ArchivoNarrow', sans-serif;
-    color: #333333;
-}
-
-h2 {
-    font-family: 'ArchivoNarrow', sans-serif;
-    color: #333333;
-}
-
-h3 {    
-    font-family: 'ArchivoNarrow', sans-serif;
-    color: #333333;
 }
 
 .Centered {
@@ -227,57 +396,96 @@ h3 {
     font-weight: bold;
 }
 
-.page_container {
-    padding: 15px;
-}
-
-#LogOutLink {
-    color: black;
-    background-color: rgba(255, 255, 255, 0.7);  
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    padding: 2px;
-    border-radius: 3px;
+.flat_button_green {
+    background-color: #009900;
+    color: #FFFFFF;
+    border: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    padding: 5px;
+    border-radius: 4px;
+    text-align:center;
     text-decoration: none;
-    display: table-cell;
-    width: 80px;
-    height: 50px;
-    vertical-align: middle; 
-    text-align: center;
-    font-weight: bold;
+    font-family: sans-serif;
+    font-size: 110%;
 }
 
-#LogOutLink:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-}
-
-#LoggedInUserInfo {
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-right: 0;
-    margin-left: auto;
-    text-align: right;
-    vertical-align: top;
+#HomeLink {
     font-size: 8pt;
-    background-color: rgba(255,255,255,0.2);
-    border-radius: 5px;
-    padding: 2px;
-    vertical-align: middle; 
-    display: table-cell;
-    text-align: center;  
-    height: 50px;       
-    width: 300px; 
+    float: left;
+    padding: 5px;
+    display: block;
+    color: #0000FF;
+    border: 1px solid #C0C0C0;
+    background-color: #FFFFFF;
+}
+
+.flat_button_green:hover {
+    background-color: #00AA00;
+}
+
+.flat_button_red {
+}
+
+.flat_button_gray {
+}
+
+.checkbox_description {
+    font-size: 9pt;
+    padding-left: 5px;
+}
+
+/*
+    *****************************
+    *****************************
+    Header
+    *****************************
+    *****************************
+*/
+
+
+/* headers h1 h2 h3 */
+h1.PageTitle {
+    
+}
+h2.PageTitle_Specific {
+    padding-left:10px;
+    border-bottom:0 none;
+}
+
+.LSKYLogoWrap {}
+
+.header_container {
+    padding: 10px 0;   
+}
+
+
+
+/* making room for logo which is positioned absolute*/
+.allHeaderWrap {
+    /*padding-left: 255px;*/
+}
+
+/* @logoOffset 265px */
+.header_container {
+    padding-left:265px;
 }
 
 #LSKYLogo {
-    margin-top: 2px;
-    margin-bottom: auto;
-    margin-right: 0;
-    margin-left: 10px;  
-    height: 40px; 
-    width: 40px; 
+    max-height:180px;
+    max-width:180px;
+    /*height: 40px; 
+    width: 40px; */
+    float:left;
+    position:absolute;
+    left:75px;
+    top:30px;
 }
 
-#PageTitle {
+.PageTitle, .PageTitle_Specific {
+    float:left;
+}
+
+.PageTitle {
     font-size: 20pt;
     padding-left: 7px;
     color: rgba(255,255,255,0.9);
@@ -286,8 +494,8 @@ h3 {
     display: inline;    
 }
 
-#PageTitle_Specific {
-    padding: 5px; 
+.PageTitle_Specific {
+   
     font-size: 20pt;
     color: rgba(255,255,255,0.9);
     font-family: 'RobotoRegular', sans-serif;
@@ -296,7 +504,7 @@ h3 {
 
 .header_container {
   color: #FFFFFF;
-  height: 45px;
+  /*height: 45px;*/
   /* Background color for district: 25383C */
   /* Background color for schools: 4682B4 */
   /* Background color for public: 007730 */
@@ -307,9 +515,56 @@ h3 {
   /* Background color for schools: 689AD3 */
   /* Background color for public: 228A4C */
   border-bottom: 3px solid #45585C;
-  padding: 0;
+  /*padding: 0;*/
   margin: 0; 
 }
+
+ul.main_navigation {    
+    text-align: right;
+    font-size: 14pt;
+    font-family: Roboto, Arial;
+    color: white;
+    border: 0;
+    margin:0 auto;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+/* @todo navigation height*/
+/* @logoOffset 265 */
+.nav_wrap{
+    background-color: #689AD3;
+    border-bottom: 4px solid rgba(0,0,0,0.1);
+    
+    /*padding: 4px 0px;*/
+    padding-left:265px;
+}
+
+/** @todo working on it - responsive*/
+
+ul.main_navigation li  {
+    display:block;
+    float:left;
+    min-height:45px;
+    padding-right:20px;
+
+}
+.main_navigation li a {
+    color:#FFF;
+    text-decoration:none;
+    padding:0px 5px;
+    display: inline-block;
+    min-height: 45px;
+}
+.main_navigation a:hover {
+    /*background-color:rgba(0, 0, 0, 0.10);*/
+    color:#555555;
+}
+
+
+/*
+   *******may not be used anymore********
+
 
 .navbar {
     background-color: #689AD3;
@@ -342,7 +597,7 @@ h3 {
     border: 0;
     border-bottom: 2px solid white;
 }
-
+   
 .header_button:hover {
     background-color: #FFFACD;
 }
@@ -359,35 +614,17 @@ h3 {
     padding-right: 10px;
 
 }
-
-.large_infobox_important {    
-    padding: 20px;
-    font-size: 12pt;
-    border: 1px solid #dbb936;
-    background-color: #fadf88;
-}
-
-.large_infobox {
-    padding: 20px;
-    font-size: 12pt;
-    border: 1px solid #C0C0C0;
-}
-
-.footer {
-    font-size: 8pt;
-    text-align: center;
-    border: 0;
-    border-top: 1px solid #C0C0C0;
-    margin: 25px;
-    padding: 5px;
-    color: #555555;
-}
-
-.search_result {
-    background-color: #00FFFF;
-}
+     */
 
 
+
+/*
+    *****************************
+    *****************************
+    Body / Content - Live Stream Defaults [livestream]
+    *****************************
+    *****************************
+*/
 
 .stream_title {
   font-family: Arial;
@@ -522,13 +759,14 @@ h3 {
 }
 
 .searchBox {
-    width: 600px;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    padding:0px 20px;
 }
 
 .searchTextBox {
-    width: 500px;
+    max-width: 500px;
 }
 
 .searchButton {
@@ -605,4 +843,242 @@ h3 {
     font-size: 12pt;
     font-weight: bold;
     text-align: center;
+}
+
+/*
+    *****************************
+    *****************************
+    Body / Content - Live Stream
+    *****************************
+    *****************************
+*/
+
+.liveWrap {
+   
+}
+
+div.liveStream {
+
+}
+
+/*                     @todo (tempname - fix later)         */
+
+.test2 img {
+    height:100%;
+    width:100%;
+}
+
+.test2 {
+    max-width:360px;
+    margin:0 auto;
+}
+.test3 {
+    /*padding top for just above the (currently live) live stream video*/
+    padding-top:25px;
+    max-width:360px;
+}
+
+/* Center without fixed width
+.test2
+{
+     padding: 30px;
+     text-align: center;
+}
+.test3
+{
+     display: inline-block;
+     padding: 50px;
+}
+
+*/
+
+/*
+    *****************************
+    *****************************
+    Body / Content - My Additions
+    *****************************
+    *****************************
+*/
+
+#PageTitle {
+    float:left;
+}
+
+/*
+    *****************************
+    *****************************
+    Body / Content - Newest Videos Structure
+    *****************************
+    File of interest: [LSKYStreamingCore.LSKYCommonHTMLParts]
+    *  
+    *  SmallVideoListItem - div -  container?
+    *  VideoListThumb - div - Should be the video thumbnail
+    *
+    *  video_list_info_container - div - title, description, duration, submitted by, recorded at
+    *  ul
+    *       -VideoListDescTitle 
+    *       -VideoListDescDuration
+    *       -VideoListDescSubmitted
+    *       -VideoListDescRecorded 
+    *  
+    *  
+    */
+
+.SmallVideoListItem {
+
+}
+
+.video_list_info_container {
+    padding-left:20px;
+    /*float:left;*/
+}
+
+.VideoListThumb {
+    float:left;
+    margin-right:20px;
+}
+
+/*still is/used to be fixed_width_page_container*/
+.mainWrap{
+    padding-top:25px;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.liveWrap {
+
+}
+
+.featuredWrap {
+
+}
+
+.newestWrapOuter {
+
+}
+
+/*
+    not working @todo
+
+
+.newestWrapInner .section div:nth-child(2) {
+    background:#555555;
+}
+    */
+
+/*
+    *****************************
+    *****************************
+    Footer
+    *****************************
+    *****************************
+*/
+
+.large_infobox_important {    
+    padding: 20px;
+    font-size: 12pt;
+    border: 1px solid #dbb936;
+    background-color: #fadf88;
+}
+
+.large_infobox {
+    padding: 20px;
+    font-size: 12pt;
+    border: 1px solid #C0C0C0;
+}
+
+.footer {
+    font-size: 8pt;
+    text-align: center;
+    border: 0;
+    border-top: 1px solid #C0C0C0;
+    margin: 25px;
+    padding: 5px;
+    color: #555555;
+}
+
+.search_result {
+    background-color: #00FFFF;
+}
+
+/*
+    *****************************
+    *****************************
+    Media Queries
+    *****************************
+    *****************************
+*/
+
+@media print 
+{
+    .noPrint 
+    {
+        display:none;
+    }
+
+    .header_container {
+        display: none;
+    }
+}
+
+
+
+/*    
+    slight margin on 
+    .video_list_info { margin-left:0px}
+*/
+
+
+/*
+    -using clearfix instead
+
+.newestWrapInner .section:after{
+    clear: both;
+    content: "";
+    display: block;
+}
+
+*/
+
+
+/* Nav logoOffset */
+/* @logoOffset 265px */
+
+@media only screen and (max-width: 850px) {
+    .header_container {
+        padding-bottom:40px;
+        padding-left: 265px;
+    }
+    .nav_wrap {
+        padding-left: 265px;
+    }       
+}
+
+@media only screen and (max-width: 850px) {
+    .PageTitle, .PageTitle_Specific {
+        font-size:18pt;
+    }
+}
+
+@media only screen and (max-width: 679px) {
+    img#LSKYLogo {
+        position:static;
+        float:none;     
+        display:block;  
+        max-width:180px;
+        margin:0 auto;
+
+    }
+    .header_container, .nav_wrap  {
+        padding:10px; 
+    }
+    .PageTitleWrap {
+
+    }
+}
+
+@media only screen and (min-width: 679px) {
+    .mainWrap {
+        padding-top: 100px;
+    }
 }

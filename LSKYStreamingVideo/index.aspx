@@ -2,35 +2,35 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
+
+        <div runat="server" id="title_live" class="front_page_heading green" visible="false">Live broadcasts</div>
+        <div class="liveWrap" style=" border-radius: 4px;">
+        <asp:Literal ID="litLiveStreams" Visible="false" runat="server"></asp:Literal>
+        </div>
     
-    <div runat="server" id="title_live" class="front_page_heading green" visible="false">Live broadcasts</div>
-    <div style=" border-radius: 4px;">
-    <asp:Literal ID="litLiveStreams" Visible="false" runat="server"></asp:Literal>
+    <!-- @todo -->
+    <div class="featuredWrap">
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+            <tr>
+                <td valign="top">
+                    <div runat="server" id="title_featured" class="front_page_heading" visible="false">Featured videos</div>
+                    <div style="margin-left: 5px;margin-right: 5px;">
+                        <asp:Literal ID="litFeaturedVideos" Visible="false" runat="server"></asp:Literal>
+                    </div>
+                    <br /><br />
+                </td>
+                <td valign="top" width="40%">
+                    <div runat="server" id="title_upcoming" class="front_page_heading" visible="false">Upcoming live broadcasts</div>
+                    <asp:Literal ID="litUpcomingStreams" Visible="false" runat="server"></asp:Literal>                
+                    <br /><br />
+                </td>
+            </tr>
+        </table>
+    </div><!--featuredWrap-->
+    <div class="newestWrapOuter">
+        <div runat="server" id="title_newest" class="front_page_heading" visible="false">Newest videos</div>
+        <div class="newestWrapInner">
+            <asp:Literal ID="litNewestVideos" Visible="false" runat="server"></asp:Literal>
+        </div>
     </div>
-    <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
-        <tr>
-            <td valign="top">
-                <div runat="server" id="title_featured" class="front_page_heading" visible="false">Featured videos</div>
-                <div style="margin-left: 5px;margin-right: 5px;">
-                    <asp:Literal ID="litFeaturedVideos" Visible="false" runat="server"></asp:Literal>
-                </div>
-                <br /><br />
-            </td>
-            <td valign="top" width="40%">
-                <div runat="server" id="title_upcoming" class="front_page_heading" visible="false">Upcoming live broadcasts</div>
-                <asp:Literal ID="litUpcomingStreams" Visible="false" runat="server"></asp:Literal>                
-                <br /><br />
-            </td>
-        </tr>
-    </table>
-
-    
-
-    
-
-    <div runat="server" id="title_newest" class="front_page_heading" visible="false">Newest videos</div>
-    <div style="margin-left: 5px;">
-        <asp:Literal ID="litNewestVideos" Visible="false" runat="server"></asp:Literal>
-    </div>
-    
 </asp:Content>
