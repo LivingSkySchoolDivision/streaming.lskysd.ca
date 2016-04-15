@@ -216,7 +216,7 @@ namespace LSKYStreamingManager.Streams
             int height = LSKYCommon.ParseDatabaseInt(txtHeight.Text);
             string isml = LSKYCommon.SanitizeGeneralInputString(drpISML.SelectedValue);
             string sidebar = LSKYCommon.SanitizeGeneralInputString(txtSidebar.Text);
-
+            string youtube_id = LSKYCommon.SanitizeGeneralInputString(txtYouTubeID.Text);
             // Dates
             DateTime? startDate = LSKYCommon.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
             DateTime? endDate = LSKYCommon.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
@@ -268,7 +268,8 @@ namespace LSKYStreamingManager.Streams
                         ishidden,
                         isprivate,
                         forceonline,
-                        sidebar
+                        sidebar,
+                        youtube_id
                         );
 
                     using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))

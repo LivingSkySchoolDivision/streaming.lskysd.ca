@@ -11,7 +11,8 @@ namespace LSKYStreamingCore
         public enum Player
         {
             Silverlight,
-            HTML5
+            HTML5,
+            YouTube
         }
 
         #region Video list elements
@@ -190,6 +191,37 @@ namespace LSKYStreamingCore
         }
 
         /// <summary>
+        /// Creates a YouTube live stream player for the specified live broadcast
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        private static string BuildLiveStreamPlayer_YouTube(LiveBroadcast stream, bool display_help_links)
+        {
+            int width = stream.Width;
+            int height = stream.Height;
+            string txtYouTubeID = stream.YouTubeID;
+         //   string playerXapFile = "LSKYSmoothStreamPlayer_Live.xap";
+
+           // playerXapFile = playerXapFile + "?" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond;
+
+            //Temp Goat:
+
+
+            StringBuilder returnMe = new StringBuilder();
+
+            returnMe.Append("<iframe src=\"https://www.youtube.com/embed/" + txtYouTubeID + "?autoplay=1\"" + " frameborder=\"0\" style=\"border: 0px solid black; width: " + width + "px; height: " + height + "px;\">");
+            returnMe.Append("<object data=\"data:application/x-silverlight-2,\" type=\"application/x-silverlight-2\" width=\"" + width + "\" height=\"" + height + "\">");
+            returnMe.Append("</iframe>");
+            if (display_help_links)
+            {
+                returnMe.Append("<div style=\"width: " + stream.Width + "px; margin-left: auto; margin-right: auto; font-size: 8pt; color: #444444; text-align: right;\">");
+                returnMe.Append("Problems viewing the stream? <a href=\"?i=" + stream.ID + "&html5=true\">click here to switch to HTML5 player</a>, or <a href=\"/help/\">click here for our help page</a> ");
+                returnMe.Append("</div>");
+            }
+            return returnMe.ToString();
+        }
+
+        /// <summary>
         /// Creates HTML for a live broadcast applet for the specified broadcast, using the specified player
         /// </summary>
         /// <param name="stream"></param>
@@ -197,6 +229,12 @@ namespace LSKYStreamingCore
         /// <returns></returns>
         public static string BuildLiveStreamPlayerHTML(LiveBroadcast stream, Player player, bool display_help_links = true)
         {
+            //Hopefully this will see if there is any value in the YouTubeID field and if so overwrite the ISML URL and use YouTube.
+            if (!string.IsNullOrEmpty(stream.YouTubeID))
+            {
+                return BuildLiveStreamPlayer_YouTube(stream, display_help_links);               
+            }
+
             if (player == Player.HTML5)
             {
                 return BuildLiveStreamPlayer_HTML5(stream, display_help_links);
@@ -206,6 +244,8 @@ namespace LSKYStreamingCore
             {
                 return BuildLiveStreamPlayer_Silverlight(stream, display_help_links);
             }
+
+
             return string.Empty;
         }
 

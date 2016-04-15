@@ -25,6 +25,8 @@ namespace LSKYStreamingCore
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }
         public string SidebarContent { get; set; }
+        public string YouTubeID { get; set; }
+
 
         public TimeSpan GetTimeUntilStarts()
         {
@@ -65,8 +67,8 @@ namespace LSKYStreamingCore
             }
         }
         
-        public LiveBroadcast(string id, string name, string location, string description, string thumbnail, int width, 
-            int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate, bool forcelive ,string sidebarcontent) 
+        public LiveBroadcast(string id, string name, string location, string description, string thumbnail, int width,
+            int height, string ismurl, DateTime starts, DateTime ends, bool displaySidebar, bool displayThumbnail, bool hidden, bool isprivate, bool forcelive, string sidebarcontent, string txtYouTubeID) 
         {
             this.ID = id;
             this.Name = name;
@@ -84,6 +86,7 @@ namespace LSKYStreamingCore
             this.IsPrivate = isprivate;
             this.SidebarContent = sidebarcontent;
             this.ForcedLive = forcelive;
+            this.YouTubeID = txtYouTubeID;
         }
 
         public static bool DoesIDExist(SqlConnection connection, string streamID)
@@ -127,7 +130,8 @@ namespace LSKYStreamingCore
                 LSKYCommon.ParseDatabaseBool(dbDataReader["hidden"].ToString(), false),
                 LSKYCommon.ParseDatabaseBool(dbDataReader["private"].ToString(), false),
                 LSKYCommon.ParseDatabaseBool(dbDataReader["force_online"].ToString(), false),
-                dbDataReader["sidebar_content"].ToString()
+                dbDataReader["sidebar_content"].ToString(),
+                dbDataReader["youtube_id"].ToString()
                 );
         }
 
@@ -263,8 +267,8 @@ namespace LSKYStreamingCore
             SqlCommand sqlCommand = new SqlCommand();
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "INSERT INTO live_streams(id,name,location,description,thumbnail_url,width,height,isml_url,stream_start,stream_end,display_sidebar,display_thumbnail,hidden,private,force_online,sidebar_content)"
-                                    + "VALUES(@ID,@NAME,@LOC,@DESC,@THUMB,@WIDTH,@HEIGHT,@ISML,@STARTS,@ENDS,@SHOWSIDEBAR,@SHOWTHUMB,@ISHIDDEN,@ISPRIVATE,@FORCEONLINE,@SIDEBAR)";
+            sqlCommand.CommandText = "INSERT INTO live_streams(id,name,location,description,thumbnail_url,width,height,isml_url,stream_start,stream_end,display_sidebar,display_thumbnail,hidden,private,force_online,sidebar_content,youtube_id)"
+                                    + "VALUES(@ID,@NAME,@LOC,@DESC,@THUMB,@WIDTH,@HEIGHT,@ISML,@STARTS,@ENDS,@SHOWSIDEBAR,@SHOWTHUMB,@ISHIDDEN,@ISPRIVATE,@FORCEONLINE,@SIDEBAR,@YOUTUBEID)";
             sqlCommand.Parameters.AddWithValue("ID", newBroadcast.ID);
             sqlCommand.Parameters.AddWithValue("NAME", newBroadcast.Name);
             sqlCommand.Parameters.AddWithValue("LOC", newBroadcast.Location);
@@ -281,6 +285,7 @@ namespace LSKYStreamingCore
             sqlCommand.Parameters.AddWithValue("ISPRIVATE", newBroadcast.IsPrivate);
             sqlCommand.Parameters.AddWithValue("FORCEONLINE", newBroadcast.ForcedLive);
             sqlCommand.Parameters.AddWithValue("SIDEBAR", newBroadcast.SidebarContent);
+            sqlCommand.Parameters.AddWithValue("YOUTUBEID", newBroadcast.YouTubeID);
             sqlCommand.Connection.Open();
             if (sqlCommand.ExecuteNonQuery() > 0)
             {
@@ -305,7 +310,7 @@ namespace LSKYStreamingCore
             sqlCommand.Connection = connection;
             sqlCommand.CommandType = CommandType.Text;
             sqlCommand.CommandText = "UPDATE live_streams SET name=@NAME, location=@LOC, description=@DESC, thumbnail_url=@THUMB, width=@WIDTH, height=@HEIGHT,"
-                                        + " isml_url=@ISML, stream_start=@STARTS, stream_end=@ENDS, display_sidebar=@SHOWSIDEBAR, display_thumbnail=@SHOWTHUMB, hidden=@ISHIDDEN, private=@ISPRIVATE, force_online=@FORCEONLINE, sidebar_content=@SIDEBAR"
+                                        + " isml_url=@ISML, stream_start=@STARTS, stream_end=@ENDS, display_sidebar=@SHOWSIDEBAR, display_thumbnail=@SHOWTHUMB, hidden=@ISHIDDEN, private=@ISPRIVATE, force_online=@FORCEONLINE, sidebar_content=@SIDEBAR, youtube_id=@YOUTUBEID"
                                         + " WHERE id=@ID";
             sqlCommand.Parameters.AddWithValue("ID", newBroadcast.ID);
             sqlCommand.Parameters.AddWithValue("NAME", newBroadcast.Name);
@@ -323,6 +328,7 @@ namespace LSKYStreamingCore
             sqlCommand.Parameters.AddWithValue("ISPRIVATE", newBroadcast.IsPrivate);
             sqlCommand.Parameters.AddWithValue("FORCEONLINE", newBroadcast.ForcedLive);
             sqlCommand.Parameters.AddWithValue("SIDEBAR", newBroadcast.SidebarContent);
+            sqlCommand.Parameters.AddWithValue("YOUTUBEID", newBroadcast.YouTubeID);
             sqlCommand.Connection.Open();
             if (sqlCommand.ExecuteNonQuery() > 0)
             {

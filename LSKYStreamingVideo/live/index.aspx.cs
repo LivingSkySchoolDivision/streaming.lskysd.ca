@@ -62,6 +62,11 @@ namespace LSKYStreamingVideo.live
                 selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight;
             }
 
+            if (!string.IsNullOrEmpty(Request.QueryString["YouTube"]))
+            {
+                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.YouTube;
+            }
+
 
             if (!string.IsNullOrEmpty(Request.QueryString["i"]))
             {

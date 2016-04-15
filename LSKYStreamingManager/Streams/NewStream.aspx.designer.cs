@@ -103,6 +103,15 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.DropDownList drpISML;
         
         /// <summary>
+        /// txtYouTubeID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtYouTubeID;
+        
+        /// <summary>
         /// drpStartYear control.
         /// </summary>
         /// <remarks>

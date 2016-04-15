@@ -75,6 +75,14 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
+                <b>YouTube Stream ID</b>
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <asp:TextBox ID="txtYouTubeID" runat="server"></asp:TextBox >
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow>
+            <asp:TableCell VerticalAlign="Top">
                 <b>Expected start (24-hour time)</b>
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">

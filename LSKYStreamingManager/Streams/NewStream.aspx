@@ -63,6 +63,19 @@
             <asp:TableCell VerticalAlign="Top">
                 <asp:DropDownList ID="drpISML" runat="server"></asp:DropDownList>
             </asp:TableCell>
+        </asp:TableRow>        
+        <asp:TableRow>
+            <asp:TableCell VerticalAlign="Top">
+                <b>YouTube Stream ID</b>
+                <p>
+                Get this from after the "watch?v=" text in the URL.  For example: https://www.youtube.com/watch?v=<b>COPYTHISPART</b>
+                <br />or at the end of the share/Embed URL: https://youtu.be/<b>COPYTHISPART</b>
+                <br /><b>Note:</b> Having any value in here will disable the ISML URL and only use YouTube Live
+                    </p>
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <asp:TextBox ID="txtYouTubeID" runat="server"></asp:TextBox>
+            </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
