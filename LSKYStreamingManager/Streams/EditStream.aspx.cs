@@ -39,6 +39,7 @@ namespace LSKYStreamingManager.Streams
                     txtSidebar.Text = SelectedBroadcast.SidebarContent;
                     txtID.Value = SelectedBroadcast.ID;
                     lblID.Text = SelectedBroadcast.ID;
+                    txtYouTubeID.Text = SelectedBroadcast.YouTubeID;
 
                     if (SelectedBroadcast.IsHidden)
                     {
@@ -83,6 +84,7 @@ namespace LSKYStreamingManager.Streams
                     txtEndHour.Text = SelectedBroadcast.EndTime.Hour.ToString();
                     txtStartMinute.Text = SelectedBroadcast.StartTime.Minute.ToString().PadLeft(2, '0');
                     txtEndMinute.Text = SelectedBroadcast.EndTime.Minute.ToString().PadLeft(2,'0');
+                    
 
                     
                     // Months
