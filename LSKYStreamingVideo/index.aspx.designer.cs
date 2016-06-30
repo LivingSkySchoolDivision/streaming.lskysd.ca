@@ -31,6 +31,24 @@ namespace LSKYStreamingVideo {
         protected global::System.Web.UI.WebControls.Literal litLiveStreams;
         
         /// <summary>
+        /// litPlayer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litPlayer;
+        
+        /// <summary>
+        /// litStreamInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litStreamInfo;
+        
+        /// <summary>
         /// title_featured control.
         /// </summary>
         /// <remarks>

@@ -5,8 +5,10 @@
 
         <div runat="server" id="title_live" class="front_page_heading green" visible="false">Live broadcasts</div>
         <div class="liveWrap" style=" border-radius: 4px;">
-        <asp:Literal ID="litLiveStreams" Visible="false" runat="server"></asp:Literal>
-        </div>
+        <asp:Literal ID="litLiveStreams" Visible="false" runat="server"></asp:Literal></div>
+    
+        <asp:Literal ID="litPlayer" runat="server"></asp:Literal>
+        <asp:Literal ID="litStreamInfo" runat="server"></asp:Literal>
     
     <!-- @todo -->
 

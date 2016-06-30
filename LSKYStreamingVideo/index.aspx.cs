@@ -31,12 +31,27 @@ namespace LSKYStreamingVideo
             // Display live streams currently broadcasting
             if (CurrentlyLiveStreams.Count > 0)
             {
-                //title_live.Visible = true; ;
-                litLiveStreams.Visible = true;
-                litLiveStreams.Text = BuildLiveStreamDisplay(CurrentlyLiveStreams);
+                if (CurrentlyLiveStreams.Count == 1)
+                {
+
+                    litPlayer.Visible = true;
+                    litStreamInfo.Visible = true;
+                    
+                    litPlayer.Text = LSKYCommonHTMLParts.BuildLiveStreamPlayerHTML(CurrentlyLiveStreams.First(), LSKYCommonHTMLParts.Player.YouTube);
+                    litStreamInfo.Text = LSKYCommonHTMLParts.BuildLiveStreamInfoHTML(CurrentlyLiveStreams.First());
+
+                }
+                else
+                {
+                    title_live.Visible = true; ;
+                    litLiveStreams.Visible = true;
+                    litLiveStreams.Text = BuildLiveStreamDisplay(CurrentlyLiveStreams);
+                }
             }
             else
             {
+                litPlayer.Visible = false;
+                litStreamInfo.Visible = false;
                 title_live.Visible = false;
                 litLiveStreams.Visible = false;
             }
@@ -252,9 +267,7 @@ namespace LSKYStreamingVideo
                 {
                     break;
                 }
-
-                //@todo = Workin on it - not quite working yet.
-
+                
                 returnMe.Append("<div class=\"index_date_display\">" + dates.Key + "</div>");
                 //returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%;\">");
                 returnMe.Append("<div class=\"upcomingStream\">");
