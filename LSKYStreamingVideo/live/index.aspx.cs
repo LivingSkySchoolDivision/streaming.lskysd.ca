@@ -38,36 +38,9 @@ namespace LSKYStreamingVideo.live
         protected void Page_Load(object sender, EventArgs e)
         {
             LiveBroadcast selectedStream = null;
-            LSKYStreamingCore.LSKYCommonHTMLParts.Player selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
-
-            // Check to see which player we should be using based on the client's browser
-            //if ((getInternetExplorerVersion() < 10) && (getInternetExplorerVersion() != -1))
-            if (isClientWindows())
-            {
-                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight;
-            }
-            else
-            {
-                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
-            }
-
-            // Check to see if the user has specified a player to use
-            if (!string.IsNullOrEmpty(Request.QueryString["html5"]))
-            {
-                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
-            }
-
-            if (!string.IsNullOrEmpty(Request.QueryString["silverlight"]))
-            {
-                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight;
-            }
-
-            if (!string.IsNullOrEmpty(Request.QueryString["YouTube"]))
-            {
-                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.YouTube;
-            }
-
-
+            LSKYStreamingCore.LSKYCommonHTMLParts.Player selectedPlayer =
+                LSKYStreamingCore.LSKYCommonHTMLParts.Player.YouTube;
+                
             if (!string.IsNullOrEmpty(Request.QueryString["i"]))
             {
                 // Sanitize the video ID
