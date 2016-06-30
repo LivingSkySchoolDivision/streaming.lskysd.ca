@@ -46,7 +46,7 @@
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">    
-    <asp:Table ID="tblContainer" CssClass="player_container" runat="server" Visible="false" Width="900">
+    <asp:Table ID="tblContainer" CssClass="player_container" runat="server" Visible="false" Width="1300">
         <asp:TableRow>
             <asp:TableCell ColumnSpan="2" HorizontalAlign="Center"><asp:Literal ID="litPlayer" runat="server"></asp:Literal></asp:TableCell>
         </asp:TableRow>

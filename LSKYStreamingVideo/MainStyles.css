@@ -174,8 +174,7 @@ html {
 */
 
 .fixed_width_page_container {
-    max-width:1024px;
-    /*width: 1024px;*/
+    max-width:1300px;
     margin-left: auto;
     margin-right: auto;
     padding: 25px;
@@ -1199,7 +1198,7 @@ div.sidebar + div.content {
 
 @media only screen and (min-width: 679px) {
     .mainWrap {
-        padding-top: 100px;
+        padding-top: 75px;
     }    
     .nav_wrap {
         padding-left: 265px;
