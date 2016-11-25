@@ -3,12 +3,15 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
 
-        <div runat="server" id="title_live" class="front_page_heading green" visible="false">Live broadcasts</div>
         <div class="liveWrap" style=" border-radius: 4px;">
         <asp:Literal ID="litLiveStreams" Visible="false" runat="server"></asp:Literal></div>
     
-        <asp:Literal ID="litPlayer" runat="server"></asp:Literal>
-        <asp:Literal ID="litStreamInfo" runat="server"></asp:Literal>
+        <div style="margin-left: auto; margin-right: auto; text-align: center;">
+            <asp:Literal ID="litPlayer" runat="server"></asp:Literal>
+            <div style="text-align: left">
+                <asp:Literal ID="litStreamInfo" runat="server"></asp:Literal>
+            </div>
+        </div>
     
     <!-- @todo -->
 
@@ -23,20 +26,13 @@
   -->
 
     <!--featuredWrap-->
-    <div class="featuredWrap">
-        <ul>
-            <li class="featuredLive">
-                    <div runat="server" id="title_featured" class="front_page_heading" visible="false">Featured videos</div>
-                    <div style="margin-left: 5px;margin-right: 5px;">
-                        <asp:Literal ID="litFeaturedVideos" Visible="false" runat="server"></asp:Literal>                        
-                    </div>                    
-            </li>
-            <li class="upcomingLive">
-                    <div runat="server" id="title_upcoming" class="front_page_heading" visible="false">Upcoming live broadcasts</div>
-                    <asp:Literal ID="litUpcomingStreams" Visible="false" runat="server"></asp:Literal>
-            </li>
-        </ul>
-    </div>
+    
+    <div runat="server" id="title_featured" class="front_page_heading" visible="false">Featured videos</div>
+    <asp:Literal ID="litFeaturedVideos" Visible="false" runat="server"></asp:Literal> 
+
+    <div runat="server" id="title_upcoming" class="front_page_heading" visible="false">Upcoming live broadcasts</div> 
+    <asp:Literal ID="litUpcomingStreams" Visible="false" runat="server"></asp:Literal>
+    
 
 
     <div class="newestWrapOuter">

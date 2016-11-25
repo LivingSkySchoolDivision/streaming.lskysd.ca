@@ -38,12 +38,11 @@ namespace LSKYStreamingVideo
                     litStreamInfo.Visible = true;
                     
                     litPlayer.Text = LSKYCommonHTMLParts.BuildLiveStreamPlayerHTML(CurrentlyLiveStreams.First(), LSKYCommonHTMLParts.Player.YouTube);
-                    litStreamInfo.Text = LSKYCommonHTMLParts.BuildLiveStreamInfoHTML(CurrentlyLiveStreams.First());
+                    litStreamInfo.Text = LSKYCommonHTMLParts.BuildLiveStreamInfoHTML(CurrentlyLiveStreams.First()) + "<br/><br/><br/>";
 
                 }
                 else
                 {
-                    title_live.Visible = true; ;
                     litLiveStreams.Visible = true;
                     litLiveStreams.Text = BuildLiveStreamDisplay(CurrentlyLiveStreams);
                 }
@@ -52,7 +51,6 @@ namespace LSKYStreamingVideo
             {
                 litPlayer.Visible = false;
                 litStreamInfo.Visible = false;
-                title_live.Visible = false;
                 litLiveStreams.Visible = false;
             }
 
@@ -217,8 +215,8 @@ namespace LSKYStreamingVideo
             int numColumns = 3;
             double numRows = Math.Ceiling((double)((double)LiveStreams.Count / (double)numColumns));
             
-            //returnMe.Append("<table border=0 cellpadding=5 cellspacing=0 width=\"900\" style=\"margin-left: auto; margin-right: auto;\">");
-            returnMe.Append("<div class=\"test2\">"); //@todo 
+            returnMe.Append("<table border=0 cellpadding=5 cellspacing=0 width=\"900\" style=\"margin-left: auto; margin-right: auto;\">");
+            //returnMe.Append("<div class=\"test2\">"); //@todo 
             for (int rowCount = 0; rowCount < numRows; rowCount++)
             {
                 returnMe.Append("<div class=\"test3\">");
@@ -226,21 +224,23 @@ namespace LSKYStreamingVideo
                 {
                     if (numDisplayed < LiveStreams.Count)
                     {
-                        //returnMe.Append("<td valign=\"top\">");
+                        returnMe.Append("<td valign=\"top\">");
                         returnMe.Append(LiveStreamListItem(LiveStreams[numDisplayed]));
-                        //returnMe.Append("</td>");
+                        returnMe.Append("</td>");
                         numDisplayed++;
                     }
                 }
-                //returnMe.Append("</tr>");
+                returnMe.Append("</tr>");
                 returnMe.Append("</div>");  // div.test3
             }
             returnMe.Append("</div>");  // div.test2
-                        
+            returnMe.Append("</table><br/><br/>");  // div.test2
+
             return returnMe.ToString();
         }
               
-        private string BuildUpcomingStreamDisplay(List<LiveBroadcast> UpcomingStreams)
+
+        private string OLD_BuildUpcomingStreamDisplay(List<LiveBroadcast> UpcomingStreams)
         {
             // Only display this many sections
             int maxDatesToDisplay = 5;
@@ -309,7 +309,43 @@ namespace LSKYStreamingVideo
 
             return returnMe.ToString();
         }
-       
+
+        private string BuildUpcomingStreamDisplay(List<LiveBroadcast> UpcomingStreams)
+        {
+            int maxUpcomingStreams = 10;
+
+            StringBuilder returnMe = new StringBuilder();
+
+            returnMe.Append("<div class=\"upcomingBroadcasts\">&nbsp;");
+
+            foreach (LiveBroadcast upcomingStream in UpcomingStreams.OrderBy(s => s.StartTime).ThenBy(s => s.Name))
+            {
+                returnMe.Append("<div class=\"upcomingBroadcast\">");
+                returnMe.Append("<div class=\"upcomingBroadcastDate\">");
+                returnMe.Append("<div class=\"upcomingBroadcastDate_Month\">" + LSKYCommon.GetMonthName(upcomingStream.StartTime.Month) + "</div>");
+                returnMe.Append("<div class=\"upcomingBroadcastDate_Day\">" + upcomingStream.StartTime.Day + "</div>");
+                returnMe.Append("</div>");
+
+                if (upcomingStream.GetTimeUntilStarts().TotalMinutes <= 120)
+                {
+                    // If the stream is about to start, draw attention to it
+                    returnMe.Append("<div class=\"upcomingBroadcastTime\">Starts in " + upcomingStream.GetTimeUntilStartsInEnglish() + "</div>");
+                }
+                else
+                {
+                    returnMe.Append("<div class=\"upcomingBroadcastTime\">" + upcomingStream.StartTime.ToShortTimeString() + "</div>");
+                }
+
+                
+                returnMe.Append("<div class=\"upcomingBroadcastDetails\">");
+                returnMe.Append("<div class=\"upcomingBroadcastName\">" + upcomingStream.Name + "</div>");
+                returnMe.Append("</div>");
+                returnMe.Append("</div>");
+            }
+            returnMe.Append("</div><br/><br/>");
+
+            return returnMe.ToString();
+        }
         private string BuildFeaturedVideoDisplay(List<Video> videos)
         {
             int maxFeaturedVideos = 4;
