@@ -107,6 +107,14 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
+                <b>Youtube URL</b>
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <asp:TextBox ID="txtYoutubeURL" runat="server" Width="400"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>    
+        <asp:TableRow>
+            <asp:TableCell VerticalAlign="Top">
                 <b>ISM URL</b>
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">

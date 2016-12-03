@@ -78,6 +78,7 @@ namespace LSKYStreamingManager.Videos
                 // Load the most recent 200 streams
                 using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
                 {
+
                     AllVideos = Video.LoadAll(connection).OrderByDescending(c => c.DateAdded).ToList<Video>();
                 }
 
