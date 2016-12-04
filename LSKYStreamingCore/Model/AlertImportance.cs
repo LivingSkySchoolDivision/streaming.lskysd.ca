@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LSKYStreamingCore.Repositories
+namespace LSKYStreamingCore
 {
-    class SiteAlertRepository
+    public enum AlertImportance
     {
+        High,
+        Normal
     }
 }

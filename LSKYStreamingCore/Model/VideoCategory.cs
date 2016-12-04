@@ -53,5 +53,20 @@ namespace LSKYStreamingCore
             }
         }
         
+        //todo: Test to see if this works
+        public int MenuLevel
+        {
+            get
+            {
+                if (this.HasParent)
+                {
+                    return this.ParentCategory.MenuLevel + 1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+        }
     }
 }

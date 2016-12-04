@@ -24,7 +24,7 @@ namespace LSKYStreamingManager.Alerts
             cell_dateFrom.Text = alert.DisplayFrom.ToShortDateString() + " " + alert.DisplayFrom.ToShortTimeString();
             cell_dateTo.Text = alert.DisplayTo.ToShortDateString() + " " + alert.DisplayTo.ToShortTimeString();
 
-            if (alert.Importance == Alert.importance.High)
+            if (alert.Importance == Alert.AlertImportance.High)
             {
                 cell_importance.Text = "High";
             }
@@ -172,10 +172,10 @@ namespace LSKYStreamingManager.Alerts
             int importance_int = Helpers.ParseDatabaseInt(drpImportance.Text);
             string alertContent = txtAlertContent.Text;
 
-            Alert.importance importance = Alert.importance.Normal;
+            Alert.AlertImportance importance = Alert.AlertImportance.Normal;
             if (importance_int > 0) 
             {
-                importance = Alert.importance.High;
+                importance = Alert.AlertImportance.High;
             }
 
             if (!string.IsNullOrEmpty(alertContent))

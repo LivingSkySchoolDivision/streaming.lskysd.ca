@@ -49,8 +49,9 @@
     <Compile Include="ExtensionMethods\DateTimeExtensions.cs" />
     <Compile Include="ExtensionMethods\ListExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
+    <Compile Include="Model\AlertImportance.cs" />
+    <Compile Include="Repositories\AlertRepository.cs" />
     <Compile Include="Repositories\LiveBroadcastRepository.cs" />
-    <Compile Include="Repositories\SiteAlertRepository.cs" />
     <Compile Include="Static\Helpers.cs" />
     <Compile Include="LSKYCommonHTMLParts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -29,7 +29,7 @@ namespace LSKYStreamingVideo
 
                 foreach (Alert alert in ActiveAlerts)
                 {
-                    if (alert.Importance == Alert.importance.High)
+                    if (alert.Importance == Alert.AlertImportance.High)
                     {
                         AlertBarContent.Append("<div class=\"alertbar_high\">" + alert.Content + "</div>");
                     }
