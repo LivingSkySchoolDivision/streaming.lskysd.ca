@@ -47,7 +47,7 @@ namespace LSKYStreamingVideo.videos
             
             // Always list categories 
             List<VideoCategory> VideoCategories = new List<VideoCategory>();
-            using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
             {
                 VideoCategories = VideoCategory.LoadAll(connection, true);
             }
@@ -68,13 +68,13 @@ namespace LSKYStreamingVideo.videos
             // If given a category ID, display all videos from that category
             if (Request.QueryString["category"] != null)
             {
-                string parsedCatID = LSKYCommon.SanitizeGeneralInputString(Request.QueryString["category"].ToString().Trim());
+                string parsedCatID = Helpers.SanitizeGeneralInputString(Request.QueryString["category"].ToString().Trim());
 
                 if (!string.IsNullOrEmpty(parsedCatID))
                 {
                     VideoCategory SelectedCategory = null;
                     List<Video> CategoryVideos = new List<Video>();
-                    using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+                    using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
                     {
                         SelectedCategory = VideoCategory.Load(connection, parsedCatID);
                         if (SelectedCategory != null)
@@ -97,12 +97,12 @@ namespace LSKYStreamingVideo.videos
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             // Sanitize input string
-            string SanitizedInputString = LSKYCommon.SanitizeSearchString(txtSearchTerms.Text);
+            string SanitizedInputString = Helpers.SanitizeSearchString(txtSearchTerms.Text);
 
             List<Video> foundVideos = new List<Video>();
 
             // Try to find videos
-            using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
             {
                 foundVideos = Video.Find(connection, SanitizedInputString, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
             }

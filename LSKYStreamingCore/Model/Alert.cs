@@ -33,7 +33,7 @@ namespace LSKYStreamingCore
 
         private static Alert dbDataReaderToAlert(SqlDataReader dbDataReader)
         {
-            int parsedImportance = LSKYCommon.ParseDatabaseInt(dbDataReader["importance"].ToString());
+            int parsedImportance = Helpers.ParseDatabaseInt(dbDataReader["importance"].ToString());
 
             importance AlertImportance = importance.Normal;
 
@@ -43,10 +43,10 @@ namespace LSKYStreamingCore
             }
 
             return new Alert(
-                            LSKYCommon.ParseDatabaseInt(dbDataReader["id"].ToString()),
+                            Helpers.ParseDatabaseInt(dbDataReader["id"].ToString()),
                             dbDataReader["text"].ToString(),
-                            LSKYCommon.ParseDatabaseDateTime(dbDataReader["display_from"].ToString()),
-                            LSKYCommon.ParseDatabaseDateTime(dbDataReader["display_to"].ToString()),
+                            Helpers.ParseDatabaseDateTime(dbDataReader["display_from"].ToString()),
+                            Helpers.ParseDatabaseDateTime(dbDataReader["display_to"].ToString()),
                             AlertImportance
                             );
         }

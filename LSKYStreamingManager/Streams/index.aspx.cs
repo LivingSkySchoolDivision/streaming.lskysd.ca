@@ -72,15 +72,15 @@ namespace LSKYStreamingManager.Streams
             returnMe.Cells.Add(Cell_Start);
             
             TableCell Cell_Hidden = new TableCell();
-            Cell_Hidden.Text = LSKYCommon.boolToYesOrNoHTML(thisBroadcast.IsHidden);
+            Cell_Hidden.Text = Helpers.boolToYesOrNoHTML(thisBroadcast.IsHidden);
             returnMe.Cells.Add(Cell_Hidden);
 
             TableCell Cell_Private = new TableCell();
-            Cell_Private.Text = LSKYCommon.boolToYesOrNoHTML(thisBroadcast.IsPrivate);
+            Cell_Private.Text = Helpers.boolToYesOrNoHTML(thisBroadcast.IsPrivate);
             returnMe.Cells.Add(Cell_Private);
 
             TableCell Cell_AlwaysOnline = new TableCell();
-            Cell_AlwaysOnline.Text = LSKYCommon.boolToYesOrNoHTML(thisBroadcast.ForcedLive);
+            Cell_AlwaysOnline.Text = Helpers.boolToYesOrNoHTML(thisBroadcast.ForcedLive);
             returnMe.Cells.Add(Cell_AlwaysOnline);
 
             return returnMe;            

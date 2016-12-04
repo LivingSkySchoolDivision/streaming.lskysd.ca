@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LSKYStreamingCore
 {
+    [Obsolete("Put this in the streaming site instead of the core library", true)]
     public static class LSKYCommonHTMLParts
     {
         public enum Player

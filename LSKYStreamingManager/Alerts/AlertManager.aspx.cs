@@ -115,7 +115,7 @@ namespace LSKYStreamingManager.Alerts
             // Check if we're supposed to delete an alert
             if (!string.IsNullOrEmpty(Request.QueryString["DELETEALERT"]))
             {
-                int parsedAlertID = LSKYCommon.ParseDatabaseInt(Request.QueryString["DELETEALERT"].ToString().Trim());
+                int parsedAlertID = Helpers.ParseDatabaseInt(Request.QueryString["DELETEALERT"].ToString().Trim());
 
                 if (parsedAlertID > 0)
                 {
@@ -153,23 +153,23 @@ namespace LSKYStreamingManager.Alerts
         protected void btnSaveNewAlert_Click(object sender, EventArgs e)
         {
             // Parse the dates
-            int From_Year = LSKYCommon.ParseDatabaseInt(drpYear_From.Text);
-            int From_Month = LSKYCommon.ParseDatabaseInt(drpMonth_From.Text);
-            int From_Day = LSKYCommon.ParseDatabaseInt(txtDay_From.Text);
-            int From_Hour = LSKYCommon.ParseDatabaseInt(txtHour_From.Text); ;
-            int From_Minute = LSKYCommon.ParseDatabaseInt(txtMinute_From.Text);
+            int From_Year = Helpers.ParseDatabaseInt(drpYear_From.Text);
+            int From_Month = Helpers.ParseDatabaseInt(drpMonth_From.Text);
+            int From_Day = Helpers.ParseDatabaseInt(txtDay_From.Text);
+            int From_Hour = Helpers.ParseDatabaseInt(txtHour_From.Text); ;
+            int From_Minute = Helpers.ParseDatabaseInt(txtMinute_From.Text);
                         
             DateTime FromDate = new DateTime(From_Year, From_Month, From_Day, From_Hour, From_Minute, 0);
 
-            int To_Year = LSKYCommon.ParseDatabaseInt(drpYear_To.Text);
-            int To_Month = LSKYCommon.ParseDatabaseInt(drpMonth_To.Text);
-            int To_Day = LSKYCommon.ParseDatabaseInt(txtDay_To.Text);
-            int To_Hour = LSKYCommon.ParseDatabaseInt(txtHour_To.Text); ;
-            int To_Minute = LSKYCommon.ParseDatabaseInt(txtMinute_To.Text);            
+            int To_Year = Helpers.ParseDatabaseInt(drpYear_To.Text);
+            int To_Month = Helpers.ParseDatabaseInt(drpMonth_To.Text);
+            int To_Day = Helpers.ParseDatabaseInt(txtDay_To.Text);
+            int To_Hour = Helpers.ParseDatabaseInt(txtHour_To.Text); ;
+            int To_Minute = Helpers.ParseDatabaseInt(txtMinute_To.Text);            
 
             DateTime ToDate = new DateTime(To_Year, To_Month, To_Day, To_Hour, To_Minute, 0);
 
-            int importance_int = LSKYCommon.ParseDatabaseInt(drpImportance.Text);
+            int importance_int = Helpers.ParseDatabaseInt(drpImportance.Text);
             string alertContent = txtAlertContent.Text;
 
             Alert.importance importance = Alert.importance.Normal;

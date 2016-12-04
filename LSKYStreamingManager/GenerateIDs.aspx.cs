@@ -14,7 +14,7 @@ namespace LSKYStreamingManager
         {
             for (int x = 0; x < 25; x++)
             {
-                litIDs.Text += LSKYCommon.getNewID(6) + "<BR>";
+                litIDs.Text += Helpers.getNewID(6) + "<BR>";
             }
 
         }

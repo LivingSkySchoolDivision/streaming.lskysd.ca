@@ -19,7 +19,7 @@ namespace LSKYStreamingVideo
             List<LiveBroadcast> UpcomingStreams = new List<LiveBroadcast>();
             List<LiveBroadcast> CurrentlyLiveStreams = new List<LiveBroadcast>();
             
-            using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
             {
                 NewestVideos = Video.LoadNewest(connection, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
                 FeaturedVideos = Video.LoadFeatured(connection, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
@@ -322,7 +322,7 @@ namespace LSKYStreamingVideo
             {
                 returnMe.Append("<div class=\"upcomingBroadcast\">");
                 returnMe.Append("<div class=\"upcomingBroadcastDate\">");
-                returnMe.Append("<div class=\"upcomingBroadcastDate_Month\">" + LSKYCommon.GetMonthName(upcomingStream.StartTime.Month) + "</div>");
+                returnMe.Append("<div class=\"upcomingBroadcastDate_Month\">" + Helpers.GetMonthName(upcomingStream.StartTime.Month) + "</div>");
                 returnMe.Append("<div class=\"upcomingBroadcastDate_Day\">" + upcomingStream.StartTime.Day + "</div>");
                 returnMe.Append("</div>");
 

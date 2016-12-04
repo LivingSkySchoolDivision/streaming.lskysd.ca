@@ -44,10 +44,10 @@ namespace LSKYStreamingVideo.live
             if (!string.IsNullOrEmpty(Request.QueryString["i"]))
             {
                 // Sanitize the video ID
-                string requestedID = LSKYCommon.SanitizeQueryStringID(Request.QueryString["i"]);
+                string requestedID = Helpers.SanitizeQueryStringID(Request.QueryString["i"]);
 
                 // See if this video exists
-                using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+                using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
                 {
                     if (LiveBroadcast.DoesIDExist(connection, requestedID))
                     {

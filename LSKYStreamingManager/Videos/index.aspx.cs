@@ -40,11 +40,11 @@ namespace LSKYStreamingManager.Videos
             returnMe.Cells.Add(Cell_Formats);
 
             TableCell Cell_Hidden = new TableCell();
-            Cell_Hidden.Text = LSKYCommon.boolToYesOrNoHTML(video.IsHidden);
+            Cell_Hidden.Text = Helpers.boolToYesOrNoHTML(video.IsHidden);
             returnMe.Cells.Add(Cell_Hidden);
 
             TableCell Cell_Private = new TableCell();
-            Cell_Private.Text = LSKYCommon.boolToYesOrNoHTML(video.IsPrivate);
+            Cell_Private.Text = Helpers.boolToYesOrNoHTML(video.IsPrivate);
             returnMe.Cells.Add(Cell_Private);
 
             TableCell Cell_Expires = new TableCell();

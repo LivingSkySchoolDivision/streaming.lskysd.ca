@@ -209,19 +209,19 @@ namespace LSKYStreamingManager.Streams
         protected void btnAdd_Click(object sender, EventArgs e)
         {            
             // Text values
-            string id = LSKYCommon.SanitizeGeneralInputString(txtID.Value);
-            string name = LSKYCommon.SanitizeGeneralInputString(txtTitle.Text);
-            string location = LSKYCommon.SanitizeGeneralInputString(txtStreamLocation.Text);
-            string description = LSKYCommon.SanitizeGeneralInputString(txtDescription.Text);
-            string thumbnail = LSKYCommon.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
-            int width = LSKYCommon.ParseDatabaseInt(txtWidth.Text);
-            int height = LSKYCommon.ParseDatabaseInt(txtHeight.Text);
-            string isml = LSKYCommon.SanitizeGeneralInputString(drpISML.SelectedValue);
-            string sidebar = LSKYCommon.SanitizeGeneralInputString(txtSidebar.Text);
-            string youtube_id = LSKYCommon.SanitizeGeneralInputString(txtYouTubeID.Text);
+            string id = Helpers.SanitizeGeneralInputString(txtID.Value);
+            string name = Helpers.SanitizeGeneralInputString(txtTitle.Text);
+            string location = Helpers.SanitizeGeneralInputString(txtStreamLocation.Text);
+            string description = Helpers.SanitizeGeneralInputString(txtDescription.Text);
+            string thumbnail = Helpers.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
+            int width = Helpers.ParseDatabaseInt(txtWidth.Text);
+            int height = Helpers.ParseDatabaseInt(txtHeight.Text);
+            string isml = Helpers.SanitizeGeneralInputString(drpISML.SelectedValue);
+            string sidebar = Helpers.SanitizeGeneralInputString(txtSidebar.Text);
+            string youtube_id = Helpers.SanitizeGeneralInputString(txtYouTubeID.Text);
             // Dates
-            DateTime? startDate = LSKYCommon.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
-            DateTime? endDate = LSKYCommon.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
+            DateTime? startDate = Helpers.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
+            DateTime? endDate = Helpers.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
 
             // Binary values
             bool ishidden = false;

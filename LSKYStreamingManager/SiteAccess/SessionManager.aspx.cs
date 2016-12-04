@@ -73,7 +73,7 @@ namespace LSKYStreamingManager.SiteAccess
                 // Expire a session if given the option to                
                 if (!string.IsNullOrEmpty(Request.QueryString["expiresession"]))
                 {
-                    string hashToExpire = LSKYCommon.SanitizeSearchString(Request.QueryString["expiresession"]);
+                    string hashToExpire = Helpers.SanitizeSearchString(Request.QueryString["expiresession"]);
                     if (!string.IsNullOrEmpty(hashToExpire))
                     {
                         LoginSession.expireThisSession(connection, hashToExpire);

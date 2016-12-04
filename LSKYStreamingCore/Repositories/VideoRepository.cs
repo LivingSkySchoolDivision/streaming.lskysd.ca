@@ -10,212 +10,214 @@ namespace LSKYStreamingCore.Repositories
 {
     class VideoRepository
     {
-        private static List<VideoCategory> _categoryCache;
-        private static DateTime VideoCategoryCacheLastUpdated;
-        private static List<VideoCategory> GetVideoCategoryCache(SqlConnection connection)
+        private const int videoIDLength = 5;
+        private readonly VideoCategoryRepository categoryRepo;
+
+        public VideoRepository()
         {
-            if ((_categoryCache == null) || (DateTime.Now.Subtract(VideoCategoryCacheLastUpdated) > new TimeSpan(0, 5, 0)))
+            categoryRepo = new VideoCategoryRepository();
+        }
+                                       
+        private Video dbDataReaderToVideo(SqlDataReader dbDataReader)
+        {
+            return new Video()
             {
-                VideoCategoryCacheLastUpdated = DateTime.Now;
-                _categoryCache = VideoCategory.LoadAll(connection, false);
-            }
-
-            return _categoryCache;
+                ID = dbDataReader["id"].ToString(),
+                Name = dbDataReader["name"].ToString(),
+                Author = dbDataReader["author"].ToString(),
+                Location = dbDataReader["location"].ToString(),
+                Description = dbDataReader["description"].ToString(),
+                Width = Parsers.ParseInt(dbDataReader["width"].ToString()),
+                Height = Parsers.ParseInt(dbDataReader["height"].ToString()),
+                DateAdded = Parsers.ParseDate(dbDataReader["date_added"].ToString()),
+                DateAired = Parsers.ParseDate(dbDataReader["date_aired"].ToString()),
+                DurationInSeconds = Parsers.ParseInt(dbDataReader["duration_in_seconds"].ToString()),
+                FileURL_H264 = dbDataReader["file_mp4"].ToString(),
+                FileURL_THEORA = dbDataReader["file_ogv"].ToString(),
+                FileURL_VP8 = dbDataReader["file_webm"].ToString(),
+                DownloadURL = dbDataReader["download_url"].ToString(),
+                YoutubeURL = dbDataReader["youtube_url"].ToString(),
+                IsAlwaysAvailable = Parsers.ParseBool(dbDataReader["always_available"].ToString()),
+                IsHidden = Parsers.ParseBool(dbDataReader["hidden"].ToString()),
+                IsPrivate = Parsers.ParseBool(dbDataReader["private"].ToString()),
+                Tags = dbDataReader["tags"].ToString().Split(';').ToList(),
+                LegacyVideoID = dbDataReader["legacy_video_id"].ToString(),
+                DateAvailable = Parsers.ParseDate(dbDataReader["available_from"].ToString()),
+                DateExpires = Parsers.ParseDate(dbDataReader["available_to"].ToString()),
+                ThumbnailURL = dbDataReader["thumbnail_url"].ToString(),
+                CategoryID = dbDataReader["category_id"].ToString(),
+                Category = categoryRepo.Get(dbDataReader["category_id"].ToString().Trim())
+            };
+            
         }
 
 
-
-        private static Video dbDataReaderToVideo(SqlDataReader dbDataReader)
-        {
-            Video returnedVideo = new Video(
-                dbDataReader["id"].ToString(),
-                dbDataReader["name"].ToString(),
-                dbDataReader["author"].ToString(),
-                dbDataReader["location"].ToString(),
-                dbDataReader["description"].ToString(),
-                LSKYCommon.ParseDatabaseInt(dbDataReader["width"].ToString()),
-                LSKYCommon.ParseDatabaseInt(dbDataReader["height"].ToString()),
-                dbDataReader["thumbnail_url"].ToString(),
-                LSKYCommon.ParseDatabaseDateTime(dbDataReader["date_added"].ToString()),
-                LSKYCommon.ParseDatabaseDateTime(dbDataReader["date_aired"].ToString()),
-                LSKYCommon.ParseDatabaseInt(dbDataReader["duration_in_seconds"].ToString()),
-                dbDataReader["file_ism"].ToString(),
-                dbDataReader["file_mp4"].ToString(),
-                dbDataReader["file_ogv"].ToString(),
-                dbDataReader["file_webm"].ToString(),
-                dbDataReader["download_url"].ToString(),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["display_airdate"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["display_thumbnail"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["hidden"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["private"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["was_originally_live_stream"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["allow_embed"].ToString(), false),
-                dbDataReader["tags"].ToString(),
-                LSKYCommon.ParseDatabaseDateTime(dbDataReader["available_from"].ToString()),
-                LSKYCommon.ParseDatabaseDateTime(dbDataReader["available_to"].ToString()),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["always_available"].ToString(), false),
-                dbDataReader["legacy_video_id"].ToString(),
-                dbDataReader["category_id"].ToString()
-                );
-
-            return returnedVideo;
-        }
-
-        public static bool DoesVideoIDExist(SqlConnection connection, string videoID)
-        {
-            bool returnMe = false;
-
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT id FROM videos WHERE (id=@VIDEOID) OR (legacy_video_id=@VIDEOID)";
-            sqlCommand.Parameters.AddWithValue("VIDEOID", videoID);
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-            if (dbDataReader.HasRows)
-            {
-                while (dbDataReader.Read())
-                {
-                    returnMe = true;
-                }
-            }
-
-            sqlCommand.Connection.Close();
-            return returnMe;
-        }
-
-        public static Video Load(SqlConnection connection, string videoID)
+        public Video Get(string videoID)
         {
             Video ReturnedVideo = null;
-
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM videos WHERE (id=@VIDEOID) OR (legacy_video_id=@VIDEOID)";
-            sqlCommand.Parameters.AddWithValue("VIDEOID", videoID);
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-
-            if (dbDataReader.HasRows)
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
             {
-                while (dbDataReader.Read())
+                using (SqlCommand sqlCommand = new SqlCommand())
                 {
-                    //throw new Exception("'" + videoID + "'");
-                    ReturnedVideo = dbDataReaderToVideo(dbDataReader);
-                }
-            }
+                    sqlCommand.Connection = connection;
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "SELECT * FROM videos WHERE (id=@VIDEOID) OR (legacy_video_id=@VIDEOID)";
+                    sqlCommand.Parameters.AddWithValue("VIDEOID", videoID);
+                    sqlCommand.Connection.Open();
+                    SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
-            sqlCommand.Connection.Close();
-
-            // Get this video's category
-            if (ReturnedVideo != null)
-            {
-                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
-                {
-                    if (ReturnedVideo.CategoryID == cat.ID)
+                    if (dbDataReader.HasRows)
                     {
-                        ReturnedVideo.Category = cat;
+                        while (dbDataReader.Read())
+                        {
+                            //throw new Exception("'" + videoID + "'");
+                            ReturnedVideo = dbDataReaderToVideo(dbDataReader);
+                        }
                     }
+
+                    sqlCommand.Connection.Close();
                 }
             }
+            
 
             return ReturnedVideo;
         }
 
-        public static List<Video> LoadAll(SqlConnection connection)
+        public List<Video> GetAll()
         {
             List<Video> ReturnedVideos = new List<Video>();
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM videos;";
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-
-            if (dbDataReader.HasRows)
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
             {
-                while (dbDataReader.Read())
+                using (SqlCommand sqlCommand = new SqlCommand())
                 {
-                    ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
+                    sqlCommand.Connection = connection;
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "SELECT * FROM Videos ORDER BY date_added DESC;";
+                    sqlCommand.Connection.Open();
+                    SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+                    if (dbDataReader.HasRows)
+                    {
+                        while (dbDataReader.Read())
+                        {
+                            ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
+                        }
+                    }
+                    sqlCommand.Connection.Close();
+
                 }
             }
+            
+            return ReturnedVideos;
+        }
 
-            sqlCommand.Connection.Close();
+        public List<Video> GetNewest(bool includePrivateVideos)
+        {
+            return GetNewest(includePrivateVideos, int.MaxValue);
+        }
 
-            // Associate video categories
-            foreach (Video video in ReturnedVideos)
+        public List<Video> GetNewest(bool includePrivateVideos, int max)
+        {
+            string SQL = "SELECT TOP " + max + " * FROM videos WHERE ";
+            if (!includePrivateVideos)
             {
-                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
+                SQL += "private=0 AND ";
+            }
+            SQL += "hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) ORDER BY date_added DESC;";
+
+            List <Video> ReturnedVideos = new List<Video>();
+            if (max > 0)
+            {
+                using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
                 {
-                    if (video.CategoryID == cat.ID)
+                    using (SqlCommand sqlCommand = new SqlCommand())
                     {
-                        video.Category = cat;
+                        sqlCommand.Connection = connection;
+                        sqlCommand.CommandType = CommandType.Text;
+                        sqlCommand.CommandText = SQL;
+                        sqlCommand.Connection.Open();
+                        SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+                        if (dbDataReader.HasRows)
+                        {
+                            while (dbDataReader.Read())
+                            {
+                                ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
+                            }
+                        }
+                        sqlCommand.Connection.Close();
+
                     }
+                }
+            }
+            return ReturnedVideos;
+        }
+                     
+        public List<Video> GetFeatured(bool includePrivateVideos)
+        {
+            List<Video> ReturnedVideos = new List<Video>();
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand())
+                {
+                    sqlCommand.Connection = connection;
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "SELECT * FROM vFeatured_videos WHERE hidden=0 AND FeaturedFrom  < @CURRENTDATETIME AND FeaturedTo > @CURRENTDATETIME ORDER BY date_added DESC;";
+                    sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
+                    sqlCommand.Connection.Open();
+                    SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+                    if (dbDataReader.HasRows)
+                    {
+                        while (dbDataReader.Read())
+                        {
+                            ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
+                        }
+                    }
+
+                    sqlCommand.Connection.Close();
                 }
             }
 
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category, bool includePrivate)
+        public List<Video> GetFromCategory(VideoCategory category, bool includePrivateVideos)
         {
-            return LoadFromCategory(connection, category, 10000, includePrivate);
-        }
+            List<Video> returnMe = new List<Video>();
 
-        public static List<Video> LoadFromCategory(SqlConnection connection, VideoCategory category, int maxVideos, bool includePrivate)
-        {
-            List<Video> ReturnedVideos = new List<Video>();
-
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT TOP " + maxVideos + " * FROM videos WHERE category_id='" + category.ID + "' ORDER BY date_added DESC;";
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-
-            if (dbDataReader.HasRows)
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
             {
-                while (dbDataReader.Read())
+                using (SqlCommand sqlCommand = new SqlCommand())
                 {
-                    ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
-                }
-            }
+                    sqlCommand.Connection = connection;
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "SELECT * FROM videos WHERE category_id='" + category.ID + "' ORDER BY date_added DESC;";
+                    sqlCommand.Connection.Open();
+                    SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
-            sqlCommand.Connection.Close();
-
-            // Should the list include private videos or not?
-            List<Video> filteredVideos = new List<Video>();
-            if (includePrivate)
-            {
-                filteredVideos = ReturnedVideos;
-            }
-            else
-            {
-                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
-            }
-
-            // Associate video categories
-            foreach (Video video in filteredVideos)
-            {
-                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
-                {
-                    if (video.CategoryID == cat.ID)
+                    if (dbDataReader.HasRows)
                     {
-                        video.Category = cat;
+                        while (dbDataReader.Read())
+                        {
+                            returnMe.Add(dbDataReaderToVideo(dbDataReader));
+                        }
                     }
+
+                    sqlCommand.Connection.Close();
                 }
             }
 
-            return filteredVideos;
+            return returnMe;
         }
-
-        public static List<Video> Find(SqlConnection connection, string searchTerms, bool includePrivate)
+        
+        public List<Video> Find(string searchTerms, bool includePrivateVideos)
         {
             List<Video> ReturnedVideos = new List<Video>();
 
             // Sanitize the input string
-            string sanitizedSearchString = LSKYCommon.SanitizeSearchString(searchTerms.Trim()).ToLower().Trim();
+            string sanitizedSearchString = Sanitizers.SanitizeSearchString(searchTerms.Trim()).ToLower().Trim();
 
             // Build an SQL query
             StringBuilder sqlQuery = new StringBuilder();
@@ -226,291 +228,213 @@ namespace LSKYStreamingCore.Repositories
             sqlQuery.Append("description_small like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("description_large like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("tags like '%" + sanitizedSearchString + "%')");
+            if (!includePrivateVideos)
+            {
+                sqlQuery.Append(" AND private=0 ");
+            }
             sqlQuery.Append(" ORDER BY date_added DESC;");
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = sqlQuery.ToString();
-            sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
-            sqlCommand.Parameters.AddWithValue("SEARCHTERM", sanitizedSearchString);
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-
-            if (dbDataReader.HasRows)
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
             {
-                while (dbDataReader.Read())
+                using (SqlCommand sqlCommand = new SqlCommand())
                 {
+                    sqlCommand.Connection = connection;
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = sqlQuery.ToString();
+                    sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
+                    sqlCommand.Parameters.AddWithValue("SEARCHTERM", sanitizedSearchString);
+                    sqlCommand.Connection.Open();
+                    SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
-                    ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
-                }
-            }
-
-            sqlCommand.Connection.Close();
-
-            // Should the list include private videos or not?
-            List<Video> filteredVideos = new List<Video>();
-            if (includePrivate)
-            {
-                filteredVideos = ReturnedVideos;
-            }
-            else
-            {
-                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
-            }
-
-            // Associate video categories
-            foreach (Video video in filteredVideos)
-            {
-                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
-                {
-                    if (video.CategoryID == cat.ID)
+                    if (dbDataReader.HasRows)
                     {
-                        video.Category = cat;
+                        while (dbDataReader.Read())
+                        {
+
+                            ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
+                        }
                     }
+
+                    sqlCommand.Connection.Close();
                 }
             }
-
-            return filteredVideos;
-        }
-
-        public static List<Video> LoadFeatured(SqlConnection connection, bool loadPrivate)
-        {
-            List<Video> ReturnedVideos = new List<Video>();
-
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM vFeatured_videos WHERE hidden=0 AND FeaturedFrom  < @CURRENTDATETIME AND FeaturedTo > @CURRENTDATETIME ORDER BY date_added DESC;";
-            sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-
-            if (dbDataReader.HasRows)
-            {
-                while (dbDataReader.Read())
-                {
-                    ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
-                }
-            }
-
-            sqlCommand.Connection.Close();
-
-            // Should the list include private videos or not?
-            List<Video> filteredVideos = new List<Video>();
-            if (loadPrivate)
-            {
-                filteredVideos = ReturnedVideos;
-            }
-            else
-            {
-                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
-            }
-
-            // Associate video categories
-            foreach (Video video in filteredVideos)
-            {
-                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
-                {
-                    if (video.CategoryID == cat.ID)
-                    {
-                        video.Category = cat;
-                    }
-                }
-            }
-
-            return filteredVideos;
-        }
-
-        public static List<Video> LoadPublic(SqlConnection connection)
-        {
-            List<Video> ReturnedVideos = new List<Video>();
-
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT * FROM videos WHERE hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) ORDER BY date_added;";
-            sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-
-            if (dbDataReader.HasRows)
-            {
-                while (dbDataReader.Read())
-                {
-                    ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
-                }
-            }
-
-            sqlCommand.Connection.Close();
-
-            // Associate video categories
-            foreach (Video video in ReturnedVideos)
-            {
-                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
-                {
-                    if (video.CategoryID == cat.ID)
-                    {
-                        video.Category = cat;
-                    }
-                }
-            }
-
+            
             return ReturnedVideos;
         }
 
-        public static List<Video> LoadNewest(SqlConnection connection, bool loadPrivate)
+
+        public string CreateNewVideoID()
         {
-            List<Video> ReturnedVideos = new List<Video>();
-
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "SELECT TOP 15 * FROM videos WHERE hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) ORDER BY date_added DESC;";
-            sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
-            sqlCommand.Connection.Open();
-            SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-            //throw new Exception(sqlCommand.CommandText);
-            if (dbDataReader.HasRows)
+            string returnMe = string.Empty;
+            do
             {
-                while (dbDataReader.Read())
+                returnMe = Crypto.GenerateID(videoIDLength);
+            } while ((returnMe != string.Empty) && (!IsVideoIDAvailable(returnMe)));
+            return returnMe;
+        }
+
+        private bool IsVideoIDAvailable(string videoID)
+        {
+            if (string.IsNullOrEmpty(videoID.Trim()))
+            {
+                return false;
+            }
+
+            bool foundVideoWithGivenID = false;
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand())
                 {
-                    ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
-                }
-            }
-
-            sqlCommand.Connection.Close();
-
-            // Should the list include private videos or not?
-            List<Video> filteredVideos = new List<Video>();
-            if (loadPrivate)
-            {
-                filteredVideos = ReturnedVideos;
-            }
-            else
-            {
-                filteredVideos = ReturnedVideos.Where(v => v.IsPrivate == false).ToList();
-            }
-
-            // Associate video categories
-            foreach (Video video in filteredVideos)
-            {
-                foreach (VideoCategory cat in GetVideoCategoryCache(connection))
-                {
-                    if (video.CategoryID == cat.ID)
+                    sqlCommand.Connection = connection;
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "SELECT id FROM videos WHERE (id=@VIDEOID) OR (legacy_video_id=@VIDEOID)";
+                    sqlCommand.Parameters.AddWithValue("VIDEOID", videoID.Trim());
+                    sqlCommand.Connection.Open();
+                    SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+                    if (dbDataReader.HasRows)
                     {
-                        video.Category = cat;
+                        while (dbDataReader.Read())
+                        {
+                            foundVideoWithGivenID = true;
+                        }
                     }
+
+                    sqlCommand.Connection.Close();
                 }
             }
 
-            return filteredVideos;
+            return !foundVideoWithGivenID;
         }
 
-        public static bool Insert(SqlConnection connection, Video video)
+        public bool Insert(Video video)
         {
             bool returnMe = false;
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "INSERT INTO videos(id, name, author, location, description, width, height, thumbnail_url, date_added, date_aired, duration_in_seconds, file_ism, file_mp4, file_ogv, file_webm, display_airdate, download_url, display_thumbnail, hidden, private, was_originally_live_stream, allow_embed, tags, available_From, available_to, always_available, legacy_video_id, category_id)"
-                                    + "VALUES(@ID, @NAME, @AUTHOR, @LOCATION, @DESCRIPTION, @WIDTH, @HEIGHT, @THUMB, @DATEADD, @DATEAIRED, @DURATION, @ISM, @MP4, @OGV, @WEBM, @DISPLAYAIRDATE, @DOWNLOADURL, @DISPLAYTHUMB, @HIDDEN, @PRIVATE, @ORIGINALLYLIVE, @ALLOWEMBED, @TAGS, @AVAILFROM, @AVAILTO, @ALWAYSAVAIL, @LEGACYID, @CATEGORY)";
-
-            sqlCommand.Parameters.AddWithValue("ID", video.ID);
-            sqlCommand.Parameters.AddWithValue("NAME", video.Name);
-            sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
-            sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
-            sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
-            sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
-            sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
-            sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
-            sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
-            sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
-            sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
-            sqlCommand.Parameters.AddWithValue("ISM", video.FileURL_ISM);
-            sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
-            sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
-            sqlCommand.Parameters.AddWithValue("WEBM", video.FileURL_VP8);
-            sqlCommand.Parameters.AddWithValue("DISPLAYAIRDATE", video.ShouldDisplayAirDate);
-            sqlCommand.Parameters.AddWithValue("DOWNLOADURL", video.DownloadURL);
-            sqlCommand.Parameters.AddWithValue("DISPLAYTHUMB", video.ShouldDisplayThumbnail);
-            sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
-            sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
-            sqlCommand.Parameters.AddWithValue("ORIGINALLYLIVE", video.IsLiveStreamRecording);
-            sqlCommand.Parameters.AddWithValue("ALLOWEMBED", video.AllowEmbedding);
-            sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
-            sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
-            sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
-            sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
-            sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
-            sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
-
-            sqlCommand.Connection.Open();
-            if (sqlCommand.ExecuteNonQuery() > 0)
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
             {
-                returnMe = true;
-            }
-            else
-            {
-                returnMe = false;
-            }
-            sqlCommand.Connection.Close();
+                using (SqlCommand sqlCommand = new SqlCommand())
+                {
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "INSERT INTO videos(id, name, author, location, description, width, height, thumbnail_url, date_added, date_aired, duration_in_seconds, file_ism, file_mp4, file_ogv, file_webm, display_airdate, download_url, display_thumbnail, hidden, private, was_originally_live_stream, allow_embed, tags, available_From, available_to, always_available, legacy_video_id, category_id, youtube_url)"
+                                            + "VALUES(@ID, @NAME, @AUTHOR, @LOCATION, @DESCRIPTION, @WIDTH, @HEIGHT, @THUMB, @DATEADD, @DATEAIRED, @DURATION, @MP4, @OGV, @WEBM, @DOWNLOADURL, @HIDDEN, @PRIVATE, @TAGS, @AVAILFROM, @AVAILTO, @ALWAYSAVAIL, @LEGACYID, @CATEGORY, @YOUTUBEURL)";
 
-            return returnMe;
+                    sqlCommand.Parameters.AddWithValue("ID", video.ID);
+                    sqlCommand.Parameters.AddWithValue("NAME", video.Name);
+                    sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
+                    sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
+                    sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
+                    sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
+                    sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
+                    sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
+                    sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
+                    sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
+                    sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
+                    sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
+                    sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
+                    sqlCommand.Parameters.AddWithValue("WEBM", video.FileURL_VP8);
+                    sqlCommand.Parameters.AddWithValue("DOWNLOADURL", video.DownloadURL);
+                    sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
+                    sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
+                    sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
+                    sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
+                    sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
+                    sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
+                    sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
+                    sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
+                    sqlCommand.Parameters.AddWithValue("YOUTUBEURL", video.YoutubeURL);
+
+                    sqlCommand.Connection.Open();
+                    if (sqlCommand.ExecuteNonQuery() > 0)
+                    {
+                        returnMe = true;
+                    }
+                    else
+                    {
+                        returnMe = false;
+                    }
+                    sqlCommand.Connection.Close();
+
+                    return returnMe;
+                }
+            }
         }
 
-        public static bool Update(SqlConnection connection, Video video)
+        public bool Update(Video video)
         {
             bool returnMe = false;
 
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlCommand.Connection = connection;
-            sqlCommand.CommandType = CommandType.Text;
-            sqlCommand.CommandText = "UPDATE videos SET name=@NAME, author=@AUTHOR, location=@LOCATION, description=@DESCRIPTION, width=@WIDTH, height=@HEIGHT, thumbnail_url=@THUMB, date_added=@DATEADD, date_aired=@DATEAIRED, duration_in_seconds=@DURATION, file_ism=@ISM, file_mp4=@MP4, file_ogv=@OGV, file_webm=@WEBM, display_airdate=@DISPLAYAIRDATE, download_url=@DOWNLOADURL, display_thumbnail=@DISPLAYTHUMB, hidden=@HIDDEN, private=@PRIVATE, was_originally_live_stream=@ORIGINALLYLIVE, allow_embed=@ALLOWEMBED, tags=@TAGS, available_From=@AVAILFROM, available_to=@AVAILTO, always_available=@ALWAYSAVAIL, legacy_video_id=@LEGACYID, category_id=@CATEGORY WHERE id=@ID";
-
-            sqlCommand.Parameters.AddWithValue("ID", video.ID);
-            sqlCommand.Parameters.AddWithValue("NAME", video.Name);
-            sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
-            sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
-            sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
-            sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
-            sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
-            sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
-            sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
-            sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
-            sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
-            sqlCommand.Parameters.AddWithValue("ISM", video.FileURL_ISM);
-            sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
-            sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
-            sqlCommand.Parameters.AddWithValue("WEBM", video.FileURL_VP8);
-            sqlCommand.Parameters.AddWithValue("DISPLAYAIRDATE", video.ShouldDisplayAirDate);
-            sqlCommand.Parameters.AddWithValue("DOWNLOADURL", video.DownloadURL);
-            sqlCommand.Parameters.AddWithValue("DISPLAYTHUMB", video.ShouldDisplayThumbnail);
-            sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
-            sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
-            sqlCommand.Parameters.AddWithValue("ORIGINALLYLIVE", video.IsLiveStreamRecording);
-            sqlCommand.Parameters.AddWithValue("ALLOWEMBED", video.AllowEmbedding);
-            sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
-            sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
-            sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
-            sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
-            sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
-            sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
-
-            sqlCommand.Connection.Open();
-            if (sqlCommand.ExecuteNonQuery() > 0)
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
             {
-                returnMe = true;
-            }
-            else
-            {
-                returnMe = false;
-            }
-            sqlCommand.Connection.Close();
+                using (SqlCommand sqlCommand = new SqlCommand())
+                {
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "UPDATE videos SET name=@NAME, author=@AUTHOR, location=@LOCATION, description=@DESCRIPTION, width=@WIDTH, height=@HEIGHT, thumbnail_url=@THUMB, date_added=@DATEADD, date_aired=@DATEAIRED, duration_in_seconds=@DURATION, file_mp4=@MP4, file_ogv=@OGV, file_webm=@WEBM, download_url=@DOWNLOADURL, hidden=@HIDDEN, private=@PRIVATE, tags=@TAGS, available_From=@AVAILFROM, available_to=@AVAILTO, always_available=@ALWAYSAVAIL, legacy_video_id=@LEGACYID, youtube_url=@YOUTUBEURL, category_id=@CATEGORY WHERE id=@ID";
 
+                    sqlCommand.Parameters.AddWithValue("ID", video.ID);
+                    sqlCommand.Parameters.AddWithValue("NAME", video.Name);
+                    sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
+                    sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
+                    sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
+                    sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
+                    sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
+                    sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
+                    sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
+                    sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
+                    sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
+                    sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
+                    sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
+                    sqlCommand.Parameters.AddWithValue("WEBM", video.FileURL_VP8);
+                    sqlCommand.Parameters.AddWithValue("DOWNLOADURL", video.DownloadURL);
+                    sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
+                    sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
+                    sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
+                    sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
+                    sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
+                    sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
+                    sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
+                    sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
+                    sqlCommand.Parameters.AddWithValue("YOUTUBEURL", video.YoutubeURL);
+
+                    sqlCommand.Connection.Open();
+                    if (sqlCommand.ExecuteNonQuery() > 0)
+                    {
+                        returnMe = true;
+                    }
+                    else
+                    {
+                        returnMe = false;
+                    }
+                    sqlCommand.Connection.Close();
+                }
+            }
             return returnMe;
-
         }
+
+        public bool Delete(Video video)
+        {
+            bool returnMe = false;
+
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            {
+                using (SqlCommand sqlCommand = new SqlCommand())
+                {
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandText = "DELETE FROM videos WHERE id=@ID";
+                    sqlCommand.Parameters.AddWithValue("ID", video.ID);
+                    sqlCommand.Connection.Open();
+                    if (sqlCommand.ExecuteNonQuery() > 0)
+                    {
+                        returnMe = true;
+                    }
+                    else
+                    {
+                        returnMe = false;
+                    }
+                    sqlCommand.Connection.Close();
+                }
+            }
+            return returnMe;
+        }
+
     }
 }

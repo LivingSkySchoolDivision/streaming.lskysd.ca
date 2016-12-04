@@ -129,20 +129,20 @@ namespace LSKYStreamingManager.Streams
             // Validate inputted data
 
             // Text values
-            string name = LSKYCommon.SanitizeGeneralInputString(txtTitle.Text);
-            string location = LSKYCommon.SanitizeGeneralInputString(txtStreamLocation.Text);
-            string description = LSKYCommon.SanitizeGeneralInputString(txtDescription.Text);
-            string thumbnail = LSKYCommon.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
-            int width = LSKYCommon.ParseDatabaseInt(txtWidth.Text);
-            int height = LSKYCommon.ParseDatabaseInt(txtHeight.Text);
-            string isml = LSKYCommon.SanitizeGeneralInputString(drpISML.SelectedValue);
-            string sidebar = LSKYCommon.SanitizeGeneralInputString(txtSidebar.Text);
-            string YouTubeID = LSKYCommon.SanitizeGeneralInputString(txtYouTubeID.Text);
+            string name = Helpers.SanitizeGeneralInputString(txtTitle.Text);
+            string location = Helpers.SanitizeGeneralInputString(txtStreamLocation.Text);
+            string description = Helpers.SanitizeGeneralInputString(txtDescription.Text);
+            string thumbnail = Helpers.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
+            int width = Helpers.ParseDatabaseInt(txtWidth.Text);
+            int height = Helpers.ParseDatabaseInt(txtHeight.Text);
+            string isml = Helpers.SanitizeGeneralInputString(drpISML.SelectedValue);
+            string sidebar = Helpers.SanitizeGeneralInputString(txtSidebar.Text);
+            string YouTubeID = Helpers.SanitizeGeneralInputString(txtYouTubeID.Text);
 
 
             // Dates
-            DateTime? startDate = LSKYCommon.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
-            DateTime? endDate = LSKYCommon.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
+            DateTime? startDate = Helpers.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
+            DateTime? endDate = Helpers.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
             
             // Binary values
             bool ishidden = false;
@@ -179,7 +179,7 @@ namespace LSKYStreamingManager.Streams
                         string newStreamID = string.Empty;
                         do
                         {
-                            newStreamID = LSKYCommon.getNewID(6);
+                            newStreamID = Helpers.getNewID(6);
                         } while (LiveBroadcast.DoesIDExist(connection, newStreamID));
 
                         // Create a new stream in the database

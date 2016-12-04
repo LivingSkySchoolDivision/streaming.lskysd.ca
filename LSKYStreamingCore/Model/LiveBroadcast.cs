@@ -16,16 +16,18 @@ namespace LSKYStreamingCore
         public string ThumbnailURL { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public string ISM_URL { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public bool ForcedLive { get; set; }
-        public bool DisplaySidebar { get; set; }
         public bool DisplayThumbnail { get; set; }
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }
+        public bool DisplaySidebar { get; set; }
         public string SidebarContent { get; set; }
         public string YouTubeID { get; set; }
+
+        public bool IsDelayed { get; set; }
+        public bool IsCancelled { get; set; }
 
 
         public TimeSpan GetTimeUntilStarts()
@@ -120,16 +122,16 @@ namespace LSKYStreamingCore
                 dbDataReader["location"].ToString(),
                 dbDataReader["description"].ToString(),
                 dbDataReader["thumbnail_url"].ToString(),
-                LSKYCommon.ParseDatabaseInt(dbDataReader["Width"].ToString()),
-                LSKYCommon.ParseDatabaseInt(dbDataReader["Height"].ToString()),
+                Helpers.ParseDatabaseInt(dbDataReader["Width"].ToString()),
+                Helpers.ParseDatabaseInt(dbDataReader["Height"].ToString()),
                 dbDataReader["isml_url"].ToString(),
-                LSKYCommon.ParseDatabaseDateTime(dbDataReader["stream_start"].ToString()),
-                LSKYCommon.ParseDatabaseDateTime(dbDataReader["stream_end"].ToString()),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["display_sidebar"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["display_thumbnail"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["hidden"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["private"].ToString(), false),
-                LSKYCommon.ParseDatabaseBool(dbDataReader["force_online"].ToString(), false),
+                Helpers.ParseDatabaseDateTime(dbDataReader["stream_start"].ToString()),
+                Helpers.ParseDatabaseDateTime(dbDataReader["stream_end"].ToString()),
+                Helpers.ParseDatabaseBool(dbDataReader["display_sidebar"].ToString(), false),
+                Helpers.ParseDatabaseBool(dbDataReader["display_thumbnail"].ToString(), false),
+                Helpers.ParseDatabaseBool(dbDataReader["hidden"].ToString(), false),
+                Helpers.ParseDatabaseBool(dbDataReader["private"].ToString(), false),
+                Helpers.ParseDatabaseBool(dbDataReader["force_online"].ToString(), false),
                 dbDataReader["sidebar_content"].ToString(),
                 dbDataReader["youtube_id"].ToString()
                 );

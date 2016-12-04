@@ -18,7 +18,7 @@ namespace LSKYStreamingVideo
 
             // Load any alerts from the database
             List<Alert> ActiveAlerts = new List<Alert>();
-            using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
             {
                 ActiveAlerts = Alert.LoadActiveAlerts(connection);
             }

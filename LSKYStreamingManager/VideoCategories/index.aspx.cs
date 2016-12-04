@@ -20,11 +20,11 @@ namespace LSKYStreamingManager.VideoCategories
             returnMe.Cells.Add(Cell_Name);
 
             TableCell Cell_Hidden = new TableCell();
-            Cell_Hidden.Text = LSKYCommon.boolToYesOrNoHTML(category.IsHidden);
+            Cell_Hidden.Text = Helpers.boolToYesOrNoHTML(category.IsHidden);
             returnMe.Cells.Add(Cell_Hidden);
 
             TableCell Cell_Private = new TableCell();
-            Cell_Private.Text = LSKYCommon.boolToYesOrNoHTML(category.IsPrivate);
+            Cell_Private.Text = Helpers.boolToYesOrNoHTML(category.IsPrivate);
             returnMe.Cells.Add(Cell_Private);
             
             TableCell Cell_ID = new TableCell();
@@ -78,8 +78,8 @@ namespace LSKYStreamingManager.VideoCategories
         protected void btnNewCategory_Click(object sender, EventArgs e)
         {
             // Parse the new category
-            string CatName = LSKYCommon.SanitizeGeneralInputString(txtNewCategoryName.Text);
-            string Parent = LSKYCommon.SanitizeGeneralInputString(drpParent.SelectedValue);
+            string CatName = Helpers.SanitizeGeneralInputString(txtNewCategoryName.Text);
+            string Parent = Helpers.SanitizeGeneralInputString(drpParent.SelectedValue);
 
             bool Hidden = false;
             if (chkHidden.Checked)
@@ -101,7 +101,7 @@ namespace LSKYStreamingManager.VideoCategories
                     string newCatID = string.Empty;
                     do
                     {
-                        newCatID = LSKYCommon.getNewID(5);
+                        newCatID = Helpers.getNewID(5);
                     } while (LiveBroadcast.DoesIDExist(connection, newCatID));
                     
                     VideoCategory NewCategory = new VideoCategory(newCatID, CatName, Parent, Hidden, Private, 0);
