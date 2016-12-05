@@ -44,5 +44,7 @@ namespace LSKYStreamingCore
 
             return numList.Aggregate(string.Empty, (current, num) => current + BaseUrlChars.Substring(num, 1));
         }
+
+
     }
 }
