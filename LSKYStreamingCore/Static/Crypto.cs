@@ -9,6 +9,7 @@ namespace LSKYStreamingCore
 {
     class Crypto
     {
+        public static Random random = new Random(DateTime.Now.Millisecond); // Not cryptographically random, but random enough for what I need it for
         /// <summary>
         /// Returns an MD5 hash of the specified string
         /// </summary>
@@ -39,7 +40,7 @@ namespace LSKYStreamingCore
 
             for (int x = 0; x < number_of_characters; x++)
             {
-                numList.Add(Helpers.random.Next(maxNumber));
+                numList.Add(Crypto.random.Next(maxNumber));
             }
 
             return numList.Aggregate(string.Empty, (current, num) => current + BaseUrlChars.Substring(num, 1));

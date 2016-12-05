@@ -52,8 +52,6 @@
     <Compile Include="Model\AlertImportance.cs" />
     <Compile Include="Repositories\AlertRepository.cs" />
     <Compile Include="Repositories\LiveBroadcastRepository.cs" />
-    <Compile Include="Static\Helpers.cs" />
-    <Compile Include="LSKYCommonHTMLParts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\LiveBroadcast.cs" />
     <Compile Include="Model\Video.cs" />
