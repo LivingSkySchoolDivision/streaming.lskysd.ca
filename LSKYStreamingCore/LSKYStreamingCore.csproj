@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensionMethods\IntExtensionMethods.cs" />
     <Compile Include="Model\Alert.cs" />
     <Compile Include="ExtensionMethods\BoolExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\DateTimeExtensions.cs" />

@@ -7,36 +7,34 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LSKYStreamingCore.Repositories;
 
 namespace LSKYStreamingVideo.videos
 {
     public partial class index : System.Web.UI.Page
     {
-        private string ListCategoryWithChildren(VideoCategory cat)
+        private string addMenuChildren(List<VideoCategory> children)
         {
             StringBuilder returnMe = new StringBuilder();
-            returnMe.Append("<li>");
-            if (cat.VideoCount > 0)
+
+            returnMe.Append("<ul>");
+
+            foreach (VideoCategory category in children.Where(c => !c.IsHidden))
             {
-                returnMe.Append("<a href=\"/Videos/?category=" + cat.ID + "\">");
-            }
-            returnMe.Append(cat.Name);
-            if (cat.VideoCount > 0) 
-            {
-                returnMe.Append("</a>");
-                //returnMe.Append(" <div class=\"video_category_meta\">(" + cat.VideoCount + " videos)</div>");
-            }
-            returnMe.Append("</li>");
-            if (cat.HasChildren())
-            {
-                returnMe.Append("<ul>");
-                foreach (VideoCategory child in cat.Children)
+                returnMe.Append("<li>");
+                if (category.VideoCount > 0) { returnMe.Append("<a href=\"/Videos/?category=" + category.ID + "\">"); }
+                returnMe.Append(category.Name);
+                if (category.VideoCount > 0) { returnMe.Append("</a>"); }
+
+                returnMe.Append("</li>");
+                if (category.HasChildren)
                 {
-                    returnMe.Append(ListCategoryWithChildren(child));
+                    returnMe.Append(addMenuChildren(category.Children));
                 }
-                returnMe.Append("</ul>");
             }
-            
+
+            returnMe.Append("</ul>");
+
             return returnMe.ToString();
         }
 
@@ -46,49 +44,38 @@ namespace LSKYStreamingVideo.videos
             // If the user has selected a category, display all videos in that category
             
             // Always list categories 
-            List<VideoCategory> VideoCategories = new List<VideoCategory>();
-            using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
-            {
-                VideoCategories = VideoCategory.LoadAll(connection, true);
-            }
+            VideoCategoryRepository videoCategoryRepo = new VideoCategoryRepository();
+            List<VideoCategory> VideoCategories = videoCategoryRepo.GetTopLevel();
 
-            StringBuilder CategoryListHTML = new StringBuilder();
 
-            CategoryListHTML.Append("<ul>");            
-            foreach (VideoCategory category in VideoCategories)
-            {
-                if ((!category.IsHidden) && (!category.IsPrivate))
-                {
-                    CategoryListHTML.Append(ListCategoryWithChildren(category));
-                }
-            }
-            CategoryListHTML.Append("</ul>");
-            litCategories.Text = CategoryListHTML.ToString();
+            litCategories.Text = addMenuChildren(VideoCategories);
 
             // If given a category ID, display all videos from that category
-            if (Request.QueryString["category"] != null)
+            if (!string.IsNullOrEmpty(Request.QueryString["category"]))
             {
-                string parsedCatID = Helpers.SanitizeGeneralInputString(Request.QueryString["category"].ToString().Trim());
-
+                string parsedCatID = Sanitizers.SanitizeGeneralInputString(Request.QueryString["category"].ToString().Trim());
+                
                 if (!string.IsNullOrEmpty(parsedCatID))
                 {
-                    VideoCategory SelectedCategory = null;
-                    List<Video> CategoryVideos = new List<Video>();
-                    using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
+                    VideoCategory selectedCategory = videoCategoryRepo.Get(parsedCatID);
+                    if (selectedCategory != null)
                     {
-                        SelectedCategory = VideoCategory.Load(connection, parsedCatID);
-                        if (SelectedCategory != null)
-                        {
-                            CategoryVideos = Video.LoadFromCategory(connection, SelectedCategory, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
-                        }
-                    }
+                        // Determine if the viewer is viewing from inside the network
+                        string clientIP = Request.ServerVariables["REMOTE_ADDR"];
+                        bool canUserAccessPrivateContent = Config.CanAccessPrivate(clientIP);
 
-                    StringBuilder VideoListHTML = new StringBuilder();
-                    foreach (Video video in CategoryVideos)
-                    {
-                        VideoListHTML.Append(LSKYCommonHTMLParts.SmallVideoListItem(video, true));
+                        
+                        VideoRepository videoRepository = new VideoRepository();
+                        List<Video> CategoryVideos = videoRepository.GetFromCategory(selectedCategory, canUserAccessPrivateContent);
+
+                        StringBuilder VideoListHTML = new StringBuilder();
+                        foreach (Video video in CategoryVideos)
+                        {
+                            VideoListHTML.Append(videoListItem(video));
+                        }
+                        litVideos.Text = VideoListHTML.ToString();
+                        
                     }
-                    litVideos.Text = VideoListHTML.ToString();
                 }
             }
             
@@ -97,17 +84,15 @@ namespace LSKYStreamingVideo.videos
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             // Sanitize input string
-            string SanitizedInputString = Helpers.SanitizeSearchString(txtSearchTerms.Text);
+            string SanitizedInputString = Sanitizers.SanitizeSearchString(txtSearchTerms.Text);
 
-            List<Video> foundVideos = new List<Video>();
+            // Determine if the viewer is viewing from inside the network
+            string clientIP = Request.ServerVariables["REMOTE_ADDR"];
+            bool canUserAccessPrivateContent = Config.CanAccessPrivate(clientIP);
 
-            // Try to find videos
-            using (SqlConnection connection = new SqlConnection(Helpers.dbConnectionString_ReadOnly))
-            {
-                foundVideos = Video.Find(connection, SanitizedInputString, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
-            }
-
-
+            VideoRepository videoRepository = new VideoRepository();
+            List<Video> foundVideos = videoRepository.Find(SanitizedInputString, canUserAccessPrivateContent);
+            
             searchResultsTitle.Visible = true;
             litSearchResults.Visible = true;             
             if (foundVideos.Count > 0)
@@ -115,7 +100,7 @@ namespace LSKYStreamingVideo.videos
                 litSearchResults.Text = "";
                 foreach (Video video in foundVideos)
                 {
-                    litSearchResults.Text += LSKYCommonHTMLParts.SmallVideoListItem(video, true);
+                    litSearchResults.Text += videoListItem(video);
                 }
             }
             else
@@ -125,6 +110,55 @@ namespace LSKYStreamingVideo.videos
 
             litCategories.Visible = false;
             litVideos.Visible = false;
+        }
+
+        public static string videoListItem(Video video)
+        {
+            StringBuilder returnMe = new StringBuilder();
+
+            string thumbnailURL = "none.png";
+            string playerURL = "/player/?i=" + video.ID;
+
+            if (!string.IsNullOrEmpty(video.ThumbnailURL))
+            {
+                thumbnailURL = video.ThumbnailURL;
+            }
+
+            returnMe.Append("<div class=\"SmallVideoListItem\">");
+            
+            returnMe.Append("<div class=\"VideoListThumb\" width=\"128\">");
+            returnMe.Append("<a href=\"" + playerURL + "\">");
+            //returnMe.Append("<div style=\"width: 200px;\">");
+            returnMe.Append("<img border=\"0\" src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+            returnMe.Append("</a>");
+            returnMe.Append("</div>");
+            
+            returnMe.Append("<div class=\"video_list_info_container\">");
+            returnMe.Append("<ul>");
+            returnMe.Append("<li class=\"VideoListDescTitle\"> <a style=\"text-decoration: none;\" href=\"" + playerURL + "\"><div class=\"video_list_name\">" + video.Name + "</div></a> </li>");
+            returnMe.Append("<li class=\"VideoListDescDuration\"> <div class=\"video_list_info\"><b>Duration:</b> " + video.DurationInEnglish + "</div></li>");
+            returnMe.Append("<li class=\"VideoListDescSubmitted\"> <div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div></li>");
+            returnMe.Append("<li class=\"VideoListDescRecorded\"> <div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div></li>");
+            returnMe.Append("</ul>");
+
+            if (video.IsPrivate)
+            {
+                returnMe.Append("<div class=\"video_list_info\"><b>This video is flagged as private</b></div>");
+            }
+            
+            if (!string.IsNullOrEmpty(video.DownloadURL))
+            {
+                returnMe.Append("<div class=\"video_list_info\">Download available</div>");
+            }
+            returnMe.Append("<br/><div class=\"video_list_description\">" + video.Description + "</div>");
+
+            returnMe.Append("</div></td>");
+
+
+            returnMe.Append("</ul>");
+            returnMe.Append("</div>");
+
+            return returnMe.ToString();
 
         }
     }

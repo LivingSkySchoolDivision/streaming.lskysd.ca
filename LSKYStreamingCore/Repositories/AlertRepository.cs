@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LSKYStreamingCore.Repositories
 {
-    class AlertRepository
+    public class AlertRepository
     {
         private readonly Dictionary<int, Alert> _cache;
 

@@ -16,6 +16,7 @@ namespace LSKYStreamingCore
         public bool IsPrivate { get; set; }
         public List<VideoCategory> Children { get; set; }
         public VideoCategory ParentCategory { get; set; }
+        public int VideoCount { get; set; }
 
         public bool HasChildren
         {
@@ -28,7 +29,7 @@ namespace LSKYStreamingCore
         {
             get
             {
-                return string.IsNullOrEmpty(ParentCategoryID);
+                return !string.IsNullOrEmpty(ParentCategoryID);
             }
         }
 

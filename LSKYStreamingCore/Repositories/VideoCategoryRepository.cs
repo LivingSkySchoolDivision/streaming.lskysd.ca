@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LSKYStreamingCore.Repositories
+namespace LSKYStreamingCore
 {
     public class VideoCategoryRepository
     {
@@ -21,7 +21,8 @@ namespace LSKYStreamingCore.Repositories
                 Name = dataReader["name"].ToString().Trim(),
                 ParentCategoryID = dataReader["parent"].ToString().Trim(),
                 IsHidden = Parsers.ParseBool(dataReader["hidden"].ToString().Trim()),
-                IsPrivate = Parsers.ParseBool(dataReader["private"].ToString().Trim())
+                IsPrivate = Parsers.ParseBool(dataReader["private"].ToString().Trim()),
+                VideoCount = Parsers.ParseInt(dataReader["Count"].ToString().Trim())
             };
         }
 
@@ -35,7 +36,7 @@ namespace LSKYStreamingCore.Repositories
                 {
                     sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = "SELECT * FROM video_categories;";
+                    sqlCommand.CommandText = "SELECT * FROM vCategoriesWithCount;";
                     sqlCommand.Connection.Open();
                     SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
@@ -86,6 +87,12 @@ namespace LSKYStreamingCore.Repositories
             return _cache.Values.ToList();
         }
 
+        public List<VideoCategory> GetTopLevel()
+        {
+            return _cache.Values.Where(c => !c.HasParent).ToList();
+
+        }
+
         public string CreateNewVideoCategoryID()
         {
             string returnMe = string.Empty;
@@ -110,7 +117,7 @@ namespace LSKYStreamingCore.Repositories
                 {
                     sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = "SELECT id FROM video_categories WHERE (id=@ID)";
+                    sqlCommand.CommandText = "SELECT id FROM vCategoriesWithCount WHERE (id=@ID)";
                     sqlCommand.Parameters.AddWithValue("ID", categoryID);
                     sqlCommand.Connection.Open();
                     SqlDataReader dbDataReader = sqlCommand.ExecuteReader();

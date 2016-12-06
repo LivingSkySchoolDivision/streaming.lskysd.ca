@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LSKYStreamingCore.Repositories
 {
-    class VideoRepository
+    public class VideoRepository
     {
         private const int videoIDLength = 5;
         private readonly VideoCategoryRepository categoryRepo;
@@ -136,6 +136,7 @@ namespace LSKYStreamingCore.Repositories
                         sqlCommand.Connection = connection;
                         sqlCommand.CommandType = CommandType.Text;
                         sqlCommand.CommandText = SQL;
+                        sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
                         sqlCommand.Connection.Open();
                         SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
 
@@ -153,7 +154,46 @@ namespace LSKYStreamingCore.Repositories
             }
             return ReturnedVideos;
         }
-                     
+
+        public List<Video> GetNewest(bool includePrivateVideos, TimeSpan thisFarBack, int max)
+        {
+            string SQL = "SELECT TOP " + max + " * FROM videos WHERE ";
+            if (!includePrivateVideos)
+            {
+                SQL += "private=0 AND ";
+            }
+            SQL += "hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) AND (date_added <= @THISFAR) ORDER BY date_added DESC;";
+
+            List<Video> ReturnedVideos = new List<Video>();
+            if (max > 0)
+            {
+                using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+                {
+                    using (SqlCommand sqlCommand = new SqlCommand())
+                    {
+                        sqlCommand.Connection = connection;
+                        sqlCommand.CommandType = CommandType.Text;
+                        sqlCommand.CommandText = SQL;
+                        sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
+                        sqlCommand.Parameters.AddWithValue("THISFAR", DateTime.Now.Subtract(thisFarBack));
+                        sqlCommand.Connection.Open();
+                        SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+                        if (dbDataReader.HasRows)
+                        {
+                            while (dbDataReader.Read())
+                            {
+                                ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
+                            }
+                        }
+                        sqlCommand.Connection.Close();
+
+                    }
+                }
+            }
+            return ReturnedVideos;
+        }
+
         public List<Video> GetFeatured(bool includePrivateVideos)
         {
             List<Video> ReturnedVideos = new List<Video>();
@@ -225,8 +265,7 @@ namespace LSKYStreamingCore.Repositories
             sqlQuery.Append("name like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("author like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("location like '%" + sanitizedSearchString + "%' OR ");
-            sqlQuery.Append("description_small like '%" + sanitizedSearchString + "%' OR ");
-            sqlQuery.Append("description_large like '%" + sanitizedSearchString + "%' OR ");
+            sqlQuery.Append("description like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("tags like '%" + sanitizedSearchString + "%')");
             if (!includePrivateVideos)
             {

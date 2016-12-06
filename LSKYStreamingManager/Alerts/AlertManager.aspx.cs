@@ -24,7 +24,7 @@ namespace LSKYStreamingManager.Alerts
             cell_dateFrom.Text = alert.DisplayFrom.ToShortDateString() + " " + alert.DisplayFrom.ToShortTimeString();
             cell_dateTo.Text = alert.DisplayTo.ToShortDateString() + " " + alert.DisplayTo.ToShortTimeString();
 
-            if (alert.Importance == Alert.AlertImportance.High)
+            if (alert.Importance == AlertImportance.High)
             {
                 cell_importance.Text = "High";
             }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LSKYStreamingCore.Repositories
 {
-    class LiveBroadcastRepository
+    public class LiveBroadcastRepository
     {
         private const int liveBroadcastIDLength = 5;
         private readonly Dictionary<string, LiveBroadcast> _cache;

@@ -28,7 +28,7 @@ namespace LSKYStreamingVideo.CommonHTMLParts
             }
             returnMe.Append("<em>Sorry, your browser doesn't support HTML5 video.</em>");
             returnMe.Append("</video>");
-            returnMe.Append("Problems viewing the stream? <a href=\"/help/\">Click here for our help page</a> ");
+            returnMe.Append("<div style=\"font-size: 8pt; text-align: right; width: " + video.Width + "px;\">Problems viewing this video? <a href=\"/help/\">Click here for our help page</a></div>");
             return returnMe.ToString();
         }
     }
