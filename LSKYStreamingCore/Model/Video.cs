@@ -25,6 +25,7 @@ namespace LSKYStreamingCore
         public string FileURL_VP8 { get; set; }
         public string DownloadURL { get; set; }
         public string YoutubeURL { get; set; }
+        public int YoutubeStartTimeInSeconds { get; set; }
         public bool IsAlwaysAvailable { get; set; }
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }

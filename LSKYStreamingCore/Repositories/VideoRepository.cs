@@ -46,7 +46,8 @@ namespace LSKYStreamingCore.Repositories
                 DateExpires = Parsers.ParseDate(dbDataReader["available_to"].ToString()),
                 ThumbnailURL = dbDataReader["thumbnail_url"].ToString(),
                 CategoryID = dbDataReader["category_id"].ToString(),
-                Category = categoryRepo.Get(dbDataReader["category_id"].ToString().Trim())
+                Category = categoryRepo.Get(dbDataReader["category_id"].ToString().Trim()),
+                YoutubeStartTimeInSeconds = Parsers.ParseInt(dbDataReader["youtube_start_time_in_seconds"].ToString().Trim())
             };
             
         }
