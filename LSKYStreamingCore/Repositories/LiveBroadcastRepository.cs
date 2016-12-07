@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LSKYStreamingCore.Repositories
+namespace LSKYStreamingCore
 {
     public class LiveBroadcastRepository
     {
@@ -38,7 +38,7 @@ namespace LSKYStreamingCore.Repositories
         public LiveBroadcastRepository()
         {
             _cache = new Dictionary<string, LiveBroadcast>();
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -103,7 +103,7 @@ namespace LSKYStreamingCore.Repositories
                 broadcast.ID = CreateNewID();
             }
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -135,7 +135,7 @@ namespace LSKYStreamingCore.Repositories
 
         public void Update(LiveBroadcast broadcast)
         {
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -185,7 +185,7 @@ namespace LSKYStreamingCore.Repositories
             
             bool foundGivenID = false;
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {

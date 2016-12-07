@@ -173,7 +173,7 @@ namespace LSKYStreamingManager.Streams
             {
                 if (startDate != null)
                 {
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+                    using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadWrite))
                     {
                         // Create a unique ID for the stream
                         string newStreamID = string.Empty;

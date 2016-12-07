@@ -61,7 +61,7 @@
     <Compile Include="Static\Crypto.cs" />
     <Compile Include="Static\Parsers.cs" />
     <Compile Include="Static\Sanitizers.cs" />
-    <Compile Include="Static\Settings.cs" />
+    <Compile Include="Static\GlobalStreamingSettings.cs" />
     <Compile Include="Model\VideoCategory.cs" />
   </ItemGroup>
   <ItemGroup />

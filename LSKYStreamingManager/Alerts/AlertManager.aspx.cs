@@ -111,18 +111,17 @@ namespace LSKYStreamingManager.Alerts
         }
 
         protected void Page_Load(object sender, EventArgs e)
-        {    
+        {
+            AlertRepository alertRepo = new AlertRepository();
+
             // Check if we're supposed to delete an alert
             if (!string.IsNullOrEmpty(Request.QueryString["DELETEALERT"]))
             {
-                int parsedAlertID = Helpers.ParseDatabaseInt(Request.QueryString["DELETEALERT"].ToString().Trim());
+                int parsedAlertID = Parsers.ParseInt(Request.QueryString["DELETEALERT"].ToString().Trim());
 
                 if (parsedAlertID > 0)
                 {
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-                    {
-                        Alert.DeleteAlert(connection, parsedAlertID);
-                    }
+                    alertRepo.Delete(parsedAlertID);
                 }
 
                 Response.Redirect(Request.Url.GetLeftPart(UriPartial.Path));   
@@ -136,12 +135,7 @@ namespace LSKYStreamingManager.Alerts
             }
 
             // Load all alerts from the database
-            List<Alert> AllAlerts = new List<Alert>();
-
-            using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-            {
-                AllAlerts = Alert.LoadAllAlerts(connection);
-            }
+            List<Alert> AllAlerts = alertRepo.GetAll();
                         
             foreach (Alert alert in AllAlerts)
             {
@@ -153,39 +147,43 @@ namespace LSKYStreamingManager.Alerts
         protected void btnSaveNewAlert_Click(object sender, EventArgs e)
         {
             // Parse the dates
-            int From_Year = Helpers.ParseDatabaseInt(drpYear_From.Text);
-            int From_Month = Helpers.ParseDatabaseInt(drpMonth_From.Text);
-            int From_Day = Helpers.ParseDatabaseInt(txtDay_From.Text);
-            int From_Hour = Helpers.ParseDatabaseInt(txtHour_From.Text); ;
-            int From_Minute = Helpers.ParseDatabaseInt(txtMinute_From.Text);
+            int From_Year = Parsers.ParseInt(drpYear_From.Text);
+            int From_Month = Parsers.ParseInt(drpMonth_From.Text);
+            int From_Day = Parsers.ParseInt(txtDay_From.Text);
+            int From_Hour = Parsers.ParseInt(txtHour_From.Text); ;
+            int From_Minute = Parsers.ParseInt(txtMinute_From.Text);
                         
             DateTime FromDate = new DateTime(From_Year, From_Month, From_Day, From_Hour, From_Minute, 0);
-
-            int To_Year = Helpers.ParseDatabaseInt(drpYear_To.Text);
-            int To_Month = Helpers.ParseDatabaseInt(drpMonth_To.Text);
-            int To_Day = Helpers.ParseDatabaseInt(txtDay_To.Text);
-            int To_Hour = Helpers.ParseDatabaseInt(txtHour_To.Text); ;
-            int To_Minute = Helpers.ParseDatabaseInt(txtMinute_To.Text);            
+            
+            int To_Year = Parsers.ParseInt(drpYear_To.Text);
+            int To_Month = Parsers.ParseInt(drpMonth_To.Text);
+            int To_Day = Parsers.ParseInt(txtDay_To.Text);
+            int To_Hour = Parsers.ParseInt(txtHour_To.Text); ;
+            int To_Minute = Parsers.ParseInt(txtMinute_To.Text);            
 
             DateTime ToDate = new DateTime(To_Year, To_Month, To_Day, To_Hour, To_Minute, 0);
 
-            int importance_int = Helpers.ParseDatabaseInt(drpImportance.Text);
+            int importance_int = Parsers.ParseInt(drpImportance.Text);
             string alertContent = txtAlertContent.Text;
 
-            Alert.AlertImportance importance = Alert.AlertImportance.Normal;
+            AlertImportance importance = AlertImportance.Normal;
             if (importance_int > 0) 
             {
-                importance = Alert.AlertImportance.High;
+                importance = AlertImportance.High;
             }
 
             if (!string.IsNullOrEmpty(alertContent))
             {
-                Alert newAlert = new Alert(0, alertContent, FromDate, ToDate, importance);
-                using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-                {
-                    Alert.InsertNewAlert(connection, newAlert);
-                    Response.Redirect(Request.RawUrl);
-                }
+                Alert newAlert = new Alert() {
+                    Content = alertContent,
+                    DisplayFrom = FromDate,
+                    DisplayTo = ToDate,
+                    Importance = importance
+                };
+
+                AlertRepository alertRepo = new AlertRepository();
+                alertRepo.Insert(newAlert);
+                Response.Redirect(Request.RawUrl);
             }
 
         }

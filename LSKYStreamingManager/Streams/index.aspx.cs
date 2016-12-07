@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LSKYStreamingCore.ExtensionMethods;
 
 namespace LSKYStreamingManager.Streams
 {
@@ -14,16 +15,13 @@ namespace LSKYStreamingManager.Streams
         private TableRow addBroadcastTableRow(LiveBroadcast thisBroadcast, bool highlight)
         {
             TableRow returnMe = new TableRow();
-
-            bool isLive = thisBroadcast.IsLive();
-            bool isComplete = thisBroadcast.IsComplete();
-
-            if (isLive)
+            
+            if (thisBroadcast.IsLive)
             {
                 returnMe.CssClass += " stream_list_live";
             }
 
-            if (isComplete)
+            if (thisBroadcast.IsEnded)
             {
                 returnMe.CssClass += " stream_list_complete";
             }
@@ -36,14 +34,7 @@ namespace LSKYStreamingManager.Streams
 
 
             TableCell Cell_View = new TableCell();
-            if (isLive)
-            {
-                Cell_View.Text = "<a href=\"http://streaming.lskysd.ca/live/?i=" + thisBroadcast.ID + "\" target=\"_New\">View</a>";
-            }
-            else
-            {
-                Cell_View.Text = "";
-            }
+            Cell_View.Text = "<a href=\"http://streaming.lskysd.ca/live/?i=" + thisBroadcast.ID + "\" target=\"_New\">View</a>";
             returnMe.Cells.Add(Cell_View);
 
             TableCell Cell_Edit = new TableCell();
@@ -52,12 +43,12 @@ namespace LSKYStreamingManager.Streams
 
             TableCell Cell_Name = new TableCell();
             Cell_Name.Text = thisBroadcast.Name;
-            if (isLive)
+            if (thisBroadcast.IsLive)
             {
                 Cell_Name.Text += " <div style=\"display: inline; font-size: 8pt; font-weight: bold; color: rgba(0,128,0,1); text-decoration: none;\">(live now)</div>";
             } 
             
-            if (isComplete)
+            if (thisBroadcast.IsEnded)
             {
                 Cell_Name.Text += " <div style=\"display: inline; font-size: 8pt; font-weight: bold; color: rgba(128,0,0,1); text-decoration: none;\">(completed)</div>";
             }
@@ -72,15 +63,15 @@ namespace LSKYStreamingManager.Streams
             returnMe.Cells.Add(Cell_Start);
             
             TableCell Cell_Hidden = new TableCell();
-            Cell_Hidden.Text = Helpers.boolToYesOrNoHTML(thisBroadcast.IsHidden);
+            Cell_Hidden.Text = thisBroadcast.IsHidden.ToYesOrNoHTML();
             returnMe.Cells.Add(Cell_Hidden);
 
             TableCell Cell_Private = new TableCell();
-            Cell_Private.Text = Helpers.boolToYesOrNoHTML(thisBroadcast.IsPrivate);
+            Cell_Private.Text = thisBroadcast.IsPrivate.ToYesOrNoHTML();
             returnMe.Cells.Add(Cell_Private);
 
             TableCell Cell_AlwaysOnline = new TableCell();
-            Cell_AlwaysOnline.Text = Helpers.boolToYesOrNoHTML(thisBroadcast.ForcedLive);
+            Cell_AlwaysOnline.Text = thisBroadcast.ForcedLive.ToYesOrNoHTML();
             returnMe.Cells.Add(Cell_AlwaysOnline);
 
             return returnMe;            
@@ -90,9 +81,10 @@ namespace LSKYStreamingManager.Streams
         {
             if (!IsPostBack)
             {
-                List<LiveBroadcast> AllLiveBroadcasts = new List<LiveBroadcast>();
+                LiveBroadcastRepository liveBroadcastRepository = new LiveBroadcastRepository();
+                List<LiveBroadcast> AllLiveBroadcasts = liveBroadcastRepository.GetAll();
 
-                // See if we should highlight one (that would have been just added
+                // See if we should highlight one (that would have been just added)
                 string HighLightID = string.Empty;
 
                 if (Request.QueryString["highlight"] != null)
@@ -100,19 +92,9 @@ namespace LSKYStreamingManager.Streams
                     HighLightID = Request.QueryString["highlight"].ToString().Trim();
                 }
                 
-                // Load the most recent 200 streams
-                using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+                foreach (LiveBroadcast stream in AllLiveBroadcasts.OrderBy(l => l.IsLive).ThenBy(l => l.StartTime))
                 {
-                    AllLiveBroadcasts = LiveBroadcast.LoadAll(connection, 200);
-                }
-                                
-                foreach (LiveBroadcast stream in AllLiveBroadcasts)
-                {
-                    bool highlight = false;
-                    if ((HighLightID != string.Empty) && (HighLightID == stream.ID))
-                    {
-                        highlight = true;
-                    }
+                    bool highlight = (HighLightID != string.Empty) && (HighLightID == stream.ID);
 
                     tblStreams.Rows.Add(addBroadcastTableRow(stream, highlight));
                 }

@@ -65,7 +65,7 @@ namespace LSKYStreamingManager.SiteAccess
         {
             List<LoginAttempt> loginAttempts = new List<LoginAttempt>();
 
-            using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadWrite))
             {
                 loginAttempts = LoginAttempt.getRecentLoginEvents(connection, DateTime.Now.AddMonths(-1), DateTime.Now, recordsToDisplay);
             }

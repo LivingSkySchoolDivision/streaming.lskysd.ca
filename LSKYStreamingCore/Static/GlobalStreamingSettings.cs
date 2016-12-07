@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LSKYStreamingCore
 {
-    public static class Settings
+    public static class GlobalStreamingSettings
     { 
         // Database connection strings
         public static string dbConnectionString_ReadOnly = ConfigurationManager.ConnectionStrings["StreamingDatabaseReadOnly"].ConnectionString;

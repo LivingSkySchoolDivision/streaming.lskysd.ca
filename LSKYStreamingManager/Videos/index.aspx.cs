@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LSKYStreamingCore.ExtensionMethods;
 
 namespace LSKYStreamingManager.Videos
 {
@@ -28,7 +29,7 @@ namespace LSKYStreamingManager.Videos
             returnMe.Cells.Add(Cell_Name);
 
             TableCell Cell_Category = new TableCell();
-            Cell_Category.Text = video.GetFullCategory();
+            Cell_Category.Text = video.CategoryName;
             returnMe.Cells.Add(Cell_Category);
 
             TableCell Cell_Dimensions = new TableCell();
@@ -40,11 +41,11 @@ namespace LSKYStreamingManager.Videos
             returnMe.Cells.Add(Cell_Formats);
 
             TableCell Cell_Hidden = new TableCell();
-            Cell_Hidden.Text = Helpers.boolToYesOrNoHTML(video.IsHidden);
+            Cell_Hidden.Text = video.IsHidden.ToYesOrNoHTML();
             returnMe.Cells.Add(Cell_Hidden);
 
             TableCell Cell_Private = new TableCell();
-            Cell_Private.Text = Helpers.boolToYesOrNoHTML(video.IsPrivate);
+            Cell_Private.Text = video.IsPrivate.ToYesOrNoHTML();
             returnMe.Cells.Add(Cell_Private);
 
             TableCell Cell_Expires = new TableCell();
@@ -65,22 +66,8 @@ namespace LSKYStreamingManager.Videos
         {
             if (!IsPostBack)
             {
-                List<Video> AllVideos = new List<Video>();
-
-                // See if we should highlight one (that would have been just added
-                string HighLightID = string.Empty;
-
-                if (Request.QueryString["highlight"] != null)
-                {
-                    HighLightID = Request.QueryString["highlight"].ToString().Trim();
-                }
-
-                // Load the most recent 200 streams
-                using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-                {
-
-                    AllVideos = Video.LoadAll(connection).OrderByDescending(c => c.DateAdded).ToList<Video>();
-                }
+                VideoRepository videoRepository = new VideoRepository();
+                List<Video> AllVideos = videoRepository.GetAll();
 
                 foreach (Video video in AllVideos)
                 {

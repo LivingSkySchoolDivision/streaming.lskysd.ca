@@ -21,7 +21,7 @@ namespace LSKYStreamingManager.Streams
                 
                 if (Request.QueryString["i"] != null)
                 {
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+                    using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadWrite))
                     {
                         SelectedBroadcast = LiveBroadcast.LoadThisBroadcast(connection, Request.QueryString["i"].Trim().ToString());
                     }
@@ -274,7 +274,7 @@ namespace LSKYStreamingManager.Streams
                         youtube_id
                         );
 
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+                    using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadWrite))
                     {         
                         if (LiveBroadcast.UpdateBroadcast(connection, newBroadcast))
                         {

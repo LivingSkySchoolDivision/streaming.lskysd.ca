@@ -113,7 +113,7 @@ namespace LSKYStreamingManager.Videos
 
                 // Populate list of categories
                 List<VideoCategory> VideoCategories = new List<VideoCategory>();
-                using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+                using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadWrite))
                 {
                     VideoCategories = VideoCategory.LoadAll(connection, false);
                 }

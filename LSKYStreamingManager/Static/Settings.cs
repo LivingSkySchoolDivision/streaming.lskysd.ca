@@ -9,7 +9,7 @@ using System.Web;
 
 namespace LSKYStreamingManager
 {
-    public static class LSKYStreamingManagerCommon
+    public static class Settings
     {
         public static string adminGroupName = "Streaming Site Managers";
         public static string dbConnectionString_ReadWrite = ConfigurationManager.ConnectionStrings["StreamingDatabaseReadWrite"].ConnectionString;

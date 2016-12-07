@@ -22,7 +22,7 @@ namespace LSKYStreamingCore
                 ParentCategoryID = dataReader["parent"].ToString().Trim(),
                 IsHidden = Parsers.ParseBool(dataReader["hidden"].ToString().Trim()),
                 IsPrivate = Parsers.ParseBool(dataReader["private"].ToString().Trim()),
-                VideoCount = Parsers.ParseInt(dataReader["Count"].ToString().Trim())
+                VideoCount = Parsers.ParseInt(dataReader["Count"].ToString().Trim()),
             };
         }
 
@@ -30,7 +30,7 @@ namespace LSKYStreamingCore
         {
             _cache = new Dictionary<string, VideoCategory>();
             
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -111,7 +111,7 @@ namespace LSKYStreamingCore
             }
 
             bool foundCategoryWithGivenID = false;
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -138,7 +138,12 @@ namespace LSKYStreamingCore
 
         public void Insert(VideoCategory category)
         {
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            if (string.IsNullOrEmpty(category.ID))
+            {
+                category.ID = CreateNewVideoCategoryID();
+            }
+
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -162,7 +167,7 @@ namespace LSKYStreamingCore
 
         public void Update(VideoCategory category)
         {
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -185,7 +190,7 @@ namespace LSKYStreamingCore
 
         public void Delete(VideoCategory category)
         {
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {

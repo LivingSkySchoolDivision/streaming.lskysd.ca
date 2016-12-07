@@ -64,7 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Alerts\AlertManager.aspx" />
-    <Content Include="GenerateIDs.aspx" />
     <Content Include="icon_3d.gif" />
     <Content Include="icon_doc.gif" />
     <Content Include="icon_file_locked.gif" />
@@ -109,13 +108,6 @@
     <Compile Include="Alerts\AlertManager.aspx.designer.cs">
       <DependentUpon>AlertManager.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GenerateIDs.aspx.cs">
-      <DependentUpon>GenerateIDs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="GenerateIDs.aspx.designer.cs">
-      <DependentUpon>GenerateIDs.aspx</DependentUpon>
-    </Compile>
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -123,9 +115,9 @@
     <Compile Include="index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Logging.cs" />
-    <Compile Include="LoginAttempt.cs" />
-    <Compile Include="LoginSession.cs" />
+    <Compile Include="Repositories\Logging.cs" />
+    <Compile Include="Model\LoginAttempt.cs" />
+    <Compile Include="Model\LoginSession.cs" />
     <Compile Include="Login\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -133,8 +125,9 @@
     <Compile Include="Login\index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
-    <Compile Include="LSKYStreamingManagerCommon.cs" />
-    <Compile Include="NavMenuItem.cs" />
+    <Compile Include="Repositories\LoginSessionRepository.cs" />
+    <Compile Include="Static\Settings.cs" />
+    <Compile Include="Model\NavMenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteAccess\AccessLog.aspx.cs">
       <DependentUpon>AccessLog.aspx</DependentUpon>

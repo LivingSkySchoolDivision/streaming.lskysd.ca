@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LSKYStreamingCore.Repositories
+namespace LSKYStreamingCore
 {
     public class VideoRepository
     {
@@ -56,7 +56,7 @@ namespace LSKYStreamingCore.Repositories
         public Video Get(string videoID)
         {
             Video ReturnedVideo = null;
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -88,7 +88,7 @@ namespace LSKYStreamingCore.Repositories
         {
             List<Video> ReturnedVideos = new List<Video>();
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -130,7 +130,7 @@ namespace LSKYStreamingCore.Repositories
             List <Video> ReturnedVideos = new List<Video>();
             if (max > 0)
             {
-                using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+                using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
                 {
                     using (SqlCommand sqlCommand = new SqlCommand())
                     {
@@ -168,7 +168,7 @@ namespace LSKYStreamingCore.Repositories
             List<Video> ReturnedVideos = new List<Video>();
             if (max > 0)
             {
-                using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+                using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
                 {
                     using (SqlCommand sqlCommand = new SqlCommand())
                     {
@@ -198,7 +198,7 @@ namespace LSKYStreamingCore.Repositories
         public List<Video> GetFeatured(bool includePrivateVideos)
         {
             List<Video> ReturnedVideos = new List<Video>();
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -228,7 +228,7 @@ namespace LSKYStreamingCore.Repositories
         {
             List<Video> returnMe = new List<Video>();
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -274,7 +274,7 @@ namespace LSKYStreamingCore.Repositories
             }
             sqlQuery.Append(" ORDER BY date_added DESC;");
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -321,7 +321,7 @@ namespace LSKYStreamingCore.Repositories
             }
 
             bool foundVideoWithGivenID = false;
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -355,7 +355,7 @@ namespace LSKYStreamingCore.Repositories
                 video.ID = CreateNewVideoID();
             }
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -408,7 +408,7 @@ namespace LSKYStreamingCore.Repositories
         {
             bool returnMe = false;
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -459,7 +459,7 @@ namespace LSKYStreamingCore.Repositories
         {
             bool returnMe = false;
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {

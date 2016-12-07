@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LSKYStreamingCore.Repositories
+namespace LSKYStreamingCore
 {
     public class AlertRepository
     {
@@ -16,7 +16,7 @@ namespace LSKYStreamingCore.Repositories
         {
             this._cache = new Dictionary<int, Alert>();
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -82,7 +82,7 @@ namespace LSKYStreamingCore.Repositories
 
         public void Delete(int alertID)
         {
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -111,7 +111,7 @@ namespace LSKYStreamingCore.Repositories
                 importance = 1;
             }
 
-            using (SqlConnection connection = new SqlConnection(Settings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {

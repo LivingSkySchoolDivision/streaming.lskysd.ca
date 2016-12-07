@@ -56,14 +56,6 @@ namespace LSKYStreamingManager
             MainMenu.Add(new NavMenuItem(0, "/GenerateIDs.aspx", "ID Generator", "Generate random ID numbers for manually adding things into the database", "Site Administration"));
 
 
-            // Get the current user
-            LoginSession currentUser = null;
-            using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-            {
-                string userSessionID = LSKYStreamingManagerCommon.getSessionIDFromCookies(LSKYStreamingManagerCommon.logonCookieName, Request);
-                currentUser = LoginSession.loadThisSession(connection, userSessionID, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
-            }
-
 
             // Get a list of all categories
             List<string> MenuCategories = new List<string>();
