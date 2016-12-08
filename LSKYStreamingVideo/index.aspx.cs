@@ -154,58 +154,31 @@ namespace LSKYStreamingVideo
             returnMe.Append("</div>"); //div.liveStream
             
             returnMe.Append("</a>");
-            
+
             //returnMe.Append("</td>");
 
             //returnMe.Append("</tr>");
             //returnMe.Append("<tr>");
 
-
+           
             returnMe.Append("<div class=\"featuredDesc\">");
-            if (stream.IsLive)
-            {
-                returnMe.Append("<div class=\"stream_title\"><a style=\"text-decoration: none;\" href=\"" + player_url + "\">" + stream.Name + "</a> <div class=\"live_indicator\">LIVE</div></div>");
-            }
-            else
-            {
-                returnMe.Append("<div class=\"stream_title\">" + stream.Name + "</div><div class=\"upcoming_indicator\">Starts in " + stream.TimeUntilLive + "</div>");
-            }
+            returnMe.Append("<div class=\"stream_title\"><a style=\"text-decoration: none;\" href=\"" + player_url + "\">" + stream.Name + "</a> <div class=\"live_indicator\">LIVE</div></div>");
             if (!string.IsNullOrEmpty(stream.Location))
             {
                 returnMe.Append("<div class=\"stream_info\">Location: " + stream.Location + "</div>");
             }
-
-            if ((minutes_since_start > 0))
-            {
-                if (minutes_since_start > 120)
-                {
-                    returnMe.Append("<div class=\"stream_info\">Started: " + hours_since_start + " hours ago</div>");
-                }
-                else
-                {
-                    returnMe.Append("<div class=\"stream_info\">Started: " + minutes_since_start + " minutes ago</div>");
-                }
             
-            }
-            else
-            {
-                returnMe.Append("<div class=\"stream_info\">Starts in " + (minutes_since_start * -1) + " minutes</div>");
-                //returnMe.Append("<div class=\"stream_info\">Expected start: " + stream.StreamStartTime.ToShortDateString() + " " + stream.StreamStartTime.ToShortTimeString() + "</div>");
-            }
-            
-            returnMe.Append("<div class=\"stream_info\">Expected duration: " + Math.Round(expected_duration.TotalMinutes).ToString() + " minutes");
-
             if (stream.IsLive)
             {
                 if (minutes_until_finish > 0)
                 {
                     if (minutes_until_finish > 120)
                     {
-                        returnMe.Append(" (" + hours_until_finish + " hours to go)");
+                        returnMe.Append("" + hours_until_finish + " hours left");
                     }
                     else
                     {
-                        returnMe.Append(" (" + minutes_until_finish + " minutes to go)");
+                        returnMe.Append("" + minutes_until_finish + " minutes left");
                     }
                 }
             }
@@ -323,26 +296,52 @@ namespace LSKYStreamingVideo
             foreach (LiveBroadcast upcomingStream in UpcomingStreams.OrderBy(s => s.StartTime).ThenBy(s => s.Name))
             {
                 returnMe.Append("<div class=\"upcomingBroadcast\">");
-                returnMe.Append("<div class=\"upcomingBroadcastDate\">");
-                returnMe.Append("<div class=\"upcomingBroadcastDate_Month\">" + upcomingStream.StartTime.MonthName() + "</div>");
-                returnMe.Append("<div class=\"upcomingBroadcastDate_Day\">" + upcomingStream.StartTime.Day + "</div>");
+
+                // Date box
+                returnMe.Append("<div class=\"upcomingBroadcastDateBox\">");
+                 returnMe.Append("<div class=\"upcomingBroadcastDate\">");
+                 returnMe.Append("<div class=\"upcomingBroadcastDate_Month\">" + upcomingStream.StartTime.MonthName() + "</div>");
+                 returnMe.Append("<div class=\"upcomingBroadcastDate_Day\">" + upcomingStream.StartTime.Day + "</div>");
                 returnMe.Append("</div>");
+
 
                 if (upcomingStream.TimeUntilLive.TotalMinutes <= 120)
                 {
                     // If the stream is about to start, draw attention to it
-                    returnMe.Append("<div class=\"upcomingBroadcastTime\">Starts in " + upcomingStream.TimeUntilLive + "</div>");
+                    returnMe.Append("<div class=\"upcomingBroadcastTime\">Starts in " + upcomingStream.TimeUntilStartsInEnglish + "</div>");
                 }
                 else
                 {
                     returnMe.Append("<div class=\"upcomingBroadcastTime\">" + upcomingStream.StartTime.ToShortTimeString() + "</div>");
                 }
 
+                if (upcomingStream.IsDelayed)
+                {
+                    returnMe.Append("<div class=\"upcomingStreamDelayed\">DELAYED</div>");
+                }
+
+                if (upcomingStream.IsCancelled)
+                {
+                    returnMe.Append("<div class=\"upcomingStreamCancelled\">CANCELLED</div>");
+                }
+                returnMe.Append("</div>");
+
+
+                // Details box
                 
                 returnMe.Append("<div class=\"upcomingBroadcastDetails\">");
                 returnMe.Append("<div class=\"upcomingBroadcastName\">" + upcomingStream.Name + "</div>");
+                returnMe.Append("<div class=\"upcomingBroadcastSmallDetails\"><b>Starts:</b> " + upcomingStream.StartTime.ToString() + "</div>");
+                returnMe.Append("<div class=\"upcomingBroadcastSmallDetails\"><b>Expected end:</b> " + upcomingStream.EndTime.ToString() + " (" + upcomingStream.ExpectedDuration + ")</div>");
+                if (!string.IsNullOrEmpty(upcomingStream.Location))
+                {
+                    returnMe.Append("<div class=\"upcomingBroadcastSmallDetails\"><b>Streaming from:</b> " + upcomingStream.Location + "</div>");
+                }
+                returnMe.Append("<div class=\"upcomingBroadcastDescription\">" + upcomingStream.Name + "</div>");
                 returnMe.Append("</div>");
+                
                 returnMe.Append("</div>");
+                
             }
             returnMe.Append("</div><br/><br/>");
 
