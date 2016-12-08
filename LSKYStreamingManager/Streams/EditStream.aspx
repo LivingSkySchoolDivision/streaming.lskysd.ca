@@ -67,10 +67,10 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
-                <b>ISML URL</b>
+                <b>YouTube Stream ID</b>
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
-                <asp:DropDownList ID="drpISML" runat="server"></asp:DropDownList>
+                <asp:TextBox ID="txtYouTubeID" runat="server"></asp:TextBox >
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>
@@ -95,15 +95,6 @@
                 <asp:TextBox ID="txtEndDay" runat="server" MaxLength="2" Width="25"></asp:TextBox> &nbsp;&nbsp;
                 <asp:TextBox ID="txtEndHour" runat="server" MaxLength="2" Width="25"></asp:TextBox>:
                 <asp:TextBox ID="txtEndMinute" runat="server" MaxLength="2" Width="25"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Sidebar content</b>  
-                <p>Note: Not currently implemented</p>              
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:TextBox ID="txtSidebar" runat="server" TextMode="MultiLine" Width="100%" Height="100" Enabled="false"></asp:TextBox>
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>
@@ -140,15 +131,28 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkSidebar" runat="server" Enabled="false" />
+                <asp:CheckBox ID="chkDelayed" runat="server" />
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
-                <b>Display sidebar</b>
-                <p>Note: Sidebars are not currently implemented.</p>
+                <b>Stream is delayed</b>
+                <p>Check this to indicate that this stream may be delayed.</p>
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>
-            <asp:TableCell ColumnSpan="2" HorizontalAlign="Center">
+            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
+                <asp:CheckBox ID="chkCancelled" runat="server" />
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <b>Stream is cancelled</b>
+                <p>Check this to indicate that this stream has been cancelled. If you just delete it, it will disappear, and users won't know what happened.</p>
+            </asp:TableCell>
+        </asp:TableRow>
+
+        <asp:TableRow>
+            <asp:TableCell HorizontalAlign="Center">
+                <asp:LinkButton ID="btnDelete" runat="server" OnClick="btnDelete_OnClick">Delete this stream</asp:LinkButton>
+            </asp:TableCell>
+            <asp:TableCell HorizontalAlign="Center">
                 <asp:Button ID="btnAdd" runat="server" Text="Update" OnClick="btnAdd_Click" />
             </asp:TableCell>
         </asp:TableRow>

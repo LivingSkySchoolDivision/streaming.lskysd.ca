@@ -13,15 +13,6 @@ namespace LSKYStreamingVideo {
     public partial class index {
         
         /// <summary>
-        /// title_live control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl title_live;
-        
-        /// <summary>
         /// litLiveStreams control.
         /// </summary>
         /// <remarks>
@@ -29,6 +20,24 @@ namespace LSKYStreamingVideo {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litLiveStreams;
+        
+        /// <summary>
+        /// litPlayer control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litPlayer;
+        
+        /// <summary>
+        /// litStreamInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litStreamInfo;
         
         /// <summary>
         /// title_featured control.

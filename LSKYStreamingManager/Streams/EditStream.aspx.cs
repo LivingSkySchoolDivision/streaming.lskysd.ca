@@ -12,177 +12,193 @@ namespace LSKYStreamingManager.Streams
 {
     public partial class EditStream : System.Web.UI.Page
     {
+        /// <summary>
+        /// Parses a stream from the input fields on the page
+        /// </summary>
+        /// <returns></returns>
+        private LiveBroadcast ParseStream()
+        {
+            string ID = Sanitizers.SanitizeGeneralInputString(lblID.Text);
+            string name = Sanitizers.SanitizeGeneralInputString(txtTitle.Text);
+            string location = Sanitizers.SanitizeGeneralInputString(txtStreamLocation.Text);
+            string description = Sanitizers.SanitizeGeneralInputString(txtDescription.Text);
+            string thumbnail = Sanitizers.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
+            int width = Parsers.ParseInt(txtWidth.Text);
+            int height = Parsers.ParseInt(txtHeight.Text);
+            string YouTubeID = Sanitizers.SanitizeGeneralInputString(txtYouTubeID.Text);
+
+            DateTime? startDate = Parsers.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
+            DateTime? endDate = Parsers.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
+
+            bool ishidden = chkHidden.Checked;
+            bool isprivate = chkPrivate.Checked;
+            bool forceonline = chkForce.Checked;
+            bool isDelayed = chkDelayed.Checked;
+            bool isCancelled = chkCancelled.Checked;
+
+            // Validate
+            if (string.IsNullOrEmpty(name)) { throw new Exception("Name cannot be empty. "); }
+            if (width <= 0) { throw new Exception("Width must be more than zero."); }
+            if (height <= 0) { throw new Exception("Height must be more than zero."); }
+            if (startDate == null) { throw new Exception("Start time cannot be null."); }
+            if (endDate == null) { throw new Exception("End time cannot be null."); }
+
+            // Return 
+            return new LiveBroadcast()
+            {
+                ID = ID,
+                Name = name,
+                Location = location,
+                Description = description,
+                ThumbnailURL = thumbnail,
+                Width = width,
+                Height = height,
+                YouTubeID = YouTubeID,
+                StartTime = startDate.Value,
+                EndTime = endDate.Value,
+                ForcedLive = forceonline,
+                IsPrivate = isprivate,
+                IsHidden = ishidden,
+                IsDelayed = isDelayed,
+                IsCancelled = isCancelled
+            };
+
+
+
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void DisplayStream(LiveBroadcast SelectedBroadcast)
+        {
+            //thumbnail
+
+            lblID.Text = SelectedBroadcast.ID;
+            txtTitle.Text = SelectedBroadcast.Name;
+            txtStreamLocation.Text = SelectedBroadcast.Location;
+            txtDescription.Text = SelectedBroadcast.Description;
+            txtWidth.Text = SelectedBroadcast.Width.ToString();
+            txtHeight.Text = SelectedBroadcast.Height.ToString();
+            txtID.Value = SelectedBroadcast.ID;
+            
+            txtYouTubeID.Text = SelectedBroadcast.YouTubeID;
+
+            chkHidden.Checked = SelectedBroadcast.IsHidden;
+            chkPrivate.Checked = SelectedBroadcast.IsPrivate;
+            chkForce.Checked = SelectedBroadcast.ForcedLive;
+            chkDelayed.Checked = SelectedBroadcast.IsDelayed;
+            chkCancelled.Checked = SelectedBroadcast.IsCancelled;
+
+            // Populate date dropdowns
+            txtStartDay.Text = SelectedBroadcast.StartTime.Day.ToString();
+            txtEndDay.Text = SelectedBroadcast.EndTime.Day.ToString();
+            txtStartHour.Text = SelectedBroadcast.StartTime.Hour.ToString();
+            txtEndHour.Text = SelectedBroadcast.EndTime.Hour.ToString();
+            txtStartMinute.Text = SelectedBroadcast.StartTime.Minute.ToString().PadLeft(2, '0');
+            txtEndMinute.Text = SelectedBroadcast.EndTime.Minute.ToString().PadLeft(2, '0');
+
+            // Months
+            String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+            drpStartMonth.Items.Clear();
+            drpEndMonth.Items.Clear();
+            for (int month = 1; month <= 12; month++)
+            {
+                ListItem newItem = null;
+                newItem = new ListItem();
+                newItem.Text = Months[month - 1];
+                newItem.Value = month.ToString();
+                if (month == SelectedBroadcast.StartTime.Month)
+                {
+                    newItem.Selected = true;
+                }
+                drpStartMonth.Items.Add(newItem);
+
+                newItem = new ListItem();
+                newItem.Text = Months[month - 1];
+                newItem.Value = month.ToString();
+                if (month == SelectedBroadcast.EndTime.Month)
+                {
+                    newItem.Selected = true;
+                }
+                drpEndMonth.Items.Add(newItem);
+            }
+
+            // Years
+            drpStartYear.Items.Clear();
+            drpEndYear.Items.Clear();
+            for (int year = (SelectedBroadcast.StartTime.Year - 10); year < (SelectedBroadcast.StartTime.Year + 10); year++)
+            {
+                ListItem newItem = null;
+                newItem = new ListItem();
+                newItem.Text = year.ToString();
+                newItem.Value = year.ToString();
+                if (year == SelectedBroadcast.StartTime.Year)
+                {
+                    newItem.Selected = true;
+                }
+                drpStartYear.Items.Add(newItem);
+
+
+                newItem = new ListItem();
+                newItem.Text = year.ToString();
+                newItem.Value = year.ToString();
+                if (year == SelectedBroadcast.EndTime.Year)
+                {
+                    newItem.Selected = true;
+                }
+                drpEndYear.Items.Add(newItem);
+            }
+
+            // Populate thumbnail dropdown
+            imgThumbnail.ImageUrl = "/thumbnails/broadcasts/" + SelectedBroadcast.ThumbnailURL;
+
+            DirectoryInfo ThumbnailDirectory = new DirectoryInfo(Server.MapPath("/thumbnails/broadcasts"));
+            foreach (FileInfo file in ThumbnailDirectory.GetFiles())
+            {
+                if (
+                    (file.Extension.ToLower() == ".png") ||
+                    (file.Extension.ToLower() == ".jpg") ||
+                    (file.Extension.ToLower() == ".gif")
+                    )
+                {
+                    ListItem NewThumb = new ListItem(file.Name, file.Name);
+                    if (file.Name == SelectedBroadcast.ThumbnailURL)
+                    {
+                        NewThumb.Selected = true;
+                    }
+                    drpThumbnail.Items.Add(NewThumb);
+
+
+
+
+                }
+            }
+
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 // Get the stream ID and attempt to load it
-                LiveBroadcast SelectedBroadcast = null;
-                
-                if (Request.QueryString["i"] != null)
+
+                if (!string.IsNullOrEmpty(Request.QueryString["i"]))
                 {
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-                    {
-                        SelectedBroadcast = LiveBroadcast.LoadThisBroadcast(connection, Request.QueryString["i"].Trim().ToString());
-                    }
-                }
+                    string streamID = Request.QueryString["i"].ToString();
+                    LiveBroadcastRepository liveBroadcastRepository = new LiveBroadcastRepository();
+                    LiveBroadcast lb = liveBroadcastRepository.Get(streamID);
 
-                // If unable to load, just display an error
-                if (SelectedBroadcast != null)
-                {
-                    // Populate stream data fields
-                    txtTitle.Text = SelectedBroadcast.Name;
-                    txtDescription.Text = SelectedBroadcast.Description;
-                    txtStreamLocation.Text = SelectedBroadcast.Location;
-                    txtWidth.Text = SelectedBroadcast.Width.ToString();
-                    txtHeight.Text = SelectedBroadcast.Height.ToString();
-                    txtSidebar.Text = SelectedBroadcast.SidebarContent;
-                    txtID.Value = SelectedBroadcast.ID;
-                    lblID.Text = SelectedBroadcast.ID;
-
-                    if (SelectedBroadcast.IsHidden)
+                    if (lb != null)
                     {
-                        chkHidden.Checked = true;
+                        DisplayStream(lb);
                     }
                     else
                     {
-                        chkHidden.Checked = false;
+                        displayError("A stream with that ID was not found.");
                     }
 
-                    if (SelectedBroadcast.IsPrivate)
-                    {
-                        chkPrivate.Checked = true;
-                    }
-                    else
-                    {
-                        chkPrivate.Checked = false;
-                    }
-
-                    if (SelectedBroadcast.ForcedLive)
-                    {
-                        chkForce.Checked = true;
-                    }
-                    else
-                    {
-                        chkForce.Checked = false;
-                    }
-
-                    if (SelectedBroadcast.DisplaySidebar)
-                    {
-                        chkSidebar.Checked = true;
-                    }
-                    else
-                    {
-                        chkSidebar.Checked = false;
-                    }
-                    
-                    // Populate date dropdowns
-                    txtStartDay.Text = SelectedBroadcast.StartTime.Day.ToString();
-                    txtEndDay.Text = SelectedBroadcast.EndTime.Day.ToString();
-                    txtStartHour.Text = SelectedBroadcast.StartTime.Hour.ToString();
-                    txtEndHour.Text = SelectedBroadcast.EndTime.Hour.ToString();
-                    txtStartMinute.Text = SelectedBroadcast.StartTime.Minute.ToString().PadLeft(2, '0');
-                    txtEndMinute.Text = SelectedBroadcast.EndTime.Minute.ToString().PadLeft(2,'0');
-
-                    
-                    // Months
-                    String[] Months = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-                    drpStartMonth.Items.Clear();
-                    drpEndMonth.Items.Clear();
-                    for (int month = 1; month <= 12; month++)
-                    {
-                        ListItem newItem = null;
-                        newItem = new ListItem();
-                        newItem.Text = Months[month - 1];
-                        newItem.Value = month.ToString();
-                        if (month == SelectedBroadcast.StartTime.Month)
-                        {
-                            newItem.Selected = true;
-                        }
-                        drpStartMonth.Items.Add(newItem);
-
-                        newItem = new ListItem();
-                        newItem.Text = Months[month - 1];
-                        newItem.Value = month.ToString();
-                        if (month == SelectedBroadcast.EndTime.Month)
-                        {
-                            newItem.Selected = true;
-                        }
-                        drpEndMonth.Items.Add(newItem);
-                    }
-
-                    // Years
-                    drpStartYear.Items.Clear();
-                    drpEndYear.Items.Clear();
-                    for (int year = (SelectedBroadcast.StartTime.Year - 10); year < (SelectedBroadcast.StartTime.Year + 10); year++)
-                    {
-                        ListItem newItem = null;
-                        newItem = new ListItem();
-                        newItem.Text = year.ToString();
-                        newItem.Value = year.ToString();
-                        if (year == SelectedBroadcast.StartTime.Year)
-                        {
-                            newItem.Selected = true;
-                        }
-                        drpStartYear.Items.Add(newItem);
-
-
-                        newItem = new ListItem();
-                        newItem.Text = year.ToString();
-                        newItem.Value = year.ToString();
-                        if (year == SelectedBroadcast.EndTime.Year)
-                        {
-                            newItem.Selected = true;
-                        }
-                        drpEndYear.Items.Add(newItem);
-                    }
-
-
-                    // Populate thumbnail dropdown
-                    imgThumbnail.ImageUrl = "/thumbnails/broadcasts/" + SelectedBroadcast.ThumbnailURL;
-
-                    DirectoryInfo ThumbnailDirectory = new DirectoryInfo(Server.MapPath("/thumbnails/broadcasts"));
-                    foreach (FileInfo file in ThumbnailDirectory.GetFiles())
-                    {
-                        if (
-                            (file.Extension.ToLower() == ".png") ||
-                            (file.Extension.ToLower() == ".jpg") ||
-                            (file.Extension.ToLower() == ".gif")
-                            )
-                        {
-                            ListItem NewThumb = new ListItem(file.Name, file.Name);
-                            if (file.Name == SelectedBroadcast.ThumbnailURL)
-                            {
-                                NewThumb.Selected = true;
-                            }
-                            drpThumbnail.Items.Add(NewThumb);
-
-
-                            
-
-                        }
-                    }
-
-                    // Populate isml dropdown
-                    DirectoryInfo ISMLDirectory = new DirectoryInfo(Server.MapPath("/isml"));
-                    foreach (FileInfo file in ISMLDirectory.GetFiles("*.isml"))
-                    {
-                        ListItem NewFileItem = new ListItem(file.Name, file.Name);
-                        if (file.Name == SelectedBroadcast.ISM_URL)
-                        {
-                            NewFileItem.Selected = true;
-                        }
-
-                        drpISML.Items.Add(NewFileItem);
-                    }
-
-                }
-                else
-                {
-                    // Broadcast couldn't be loaded
-                    displayError("Broadcast could not be loaded");
-                    tblControls.Visible = false;
-                    tblControls2.Visible = false;
                 }
             }
         }
@@ -205,93 +221,42 @@ namespace LSKYStreamingManager.Streams
         }
 
         protected void btnAdd_Click(object sender, EventArgs e)
-        {            
-            // Text values
-            string id = LSKYCommon.SanitizeGeneralInputString(txtID.Value);
-            string name = LSKYCommon.SanitizeGeneralInputString(txtTitle.Text);
-            string location = LSKYCommon.SanitizeGeneralInputString(txtStreamLocation.Text);
-            string description = LSKYCommon.SanitizeGeneralInputString(txtDescription.Text);
-            string thumbnail = LSKYCommon.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
-            int width = LSKYCommon.ParseDatabaseInt(txtWidth.Text);
-            int height = LSKYCommon.ParseDatabaseInt(txtHeight.Text);
-            string isml = LSKYCommon.SanitizeGeneralInputString(drpISML.SelectedValue);
-            string sidebar = LSKYCommon.SanitizeGeneralInputString(txtSidebar.Text);
+        {
+            string streamID = lblID.Text.Trim();
+            LiveBroadcastRepository liveBroadcastRepository = new LiveBroadcastRepository();
+            LiveBroadcast lb = liveBroadcastRepository.Get(streamID);
 
-            // Dates
-            DateTime? startDate = LSKYCommon.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
-            DateTime? endDate = LSKYCommon.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
-
-            // Binary values
-            bool ishidden = false;
-            if (chkHidden.Checked)
+            if (lb != null)
             {
-                ishidden = true;
-            }
-
-            bool isprivate = false;
-            if (chkPrivate.Checked)
-            {
-                isprivate = true;
-            }
-
-            bool showsidebar = false;
-            if (chkSidebar.Checked)
-            {
-                showsidebar = true;
-            }
-
-            bool forceonline = false;
-            if (chkForce.Checked)
-            {
-                forceonline = true;
-            }
-
-            if (endDate != null)
-            {
-                if (startDate != null)
+                try
                 {
-
-                    // Create a new stream in the database
-                    LiveBroadcast newBroadcast = new LiveBroadcast(
-                        id,
-                        name,
-                        location,
-                        description,
-                        thumbnail,
-                        width,
-                        height,
-                        isml,
-                        (DateTime)startDate,
-                        (DateTime)endDate,
-                        showsidebar,
-                        true,
-                        ishidden,
-                        isprivate,
-                        forceonline,
-                        sidebar
-                        );
-
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-                    {         
-                        if (LiveBroadcast.UpdateBroadcast(connection, newBroadcast))
-                        {
-                            RedirectToStreamList(id);
-                        }
-                        else
-                        {
-                            displayError("Error updating stream");
-                        }
-                        
-                    }
+                    liveBroadcastRepository.Update(ParseStream());
                 }
-                else
+                catch (Exception ex)
                 {
-                    displayError("Error parsing start date");
+                    displayError(ex.Message);
                 }
+                
             }
-            else
+        }
+
+        protected void btnDelete_OnClick(object sender, EventArgs e)
+        {
+            string streamID = lblID.Text.Trim();
+            LiveBroadcastRepository liveBroadcastRepository = new LiveBroadcastRepository();
+            LiveBroadcast lb = liveBroadcastRepository.Get(streamID);
+
+            if (lb != null)
             {
-                displayError("Error parsing end date");
+                try
+                {
+                    liveBroadcastRepository.Delete(ParseStream());
+                }
+                catch (Exception ex)
+                {
+                    displayError(ex.Message);
+                }
+
             }
         }
     }

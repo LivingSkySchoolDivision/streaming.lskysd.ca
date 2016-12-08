@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LSKYStreamingCore.ExtensionMethods;
 
 namespace LSKYStreamingManager.VideoCategories
 {
@@ -15,51 +16,36 @@ namespace LSKYStreamingManager.VideoCategories
         {
             TableRow returnMe = new TableRow();
 
-            TableCell Cell_Name = new TableCell();
-            Cell_Name.Text = category.Name;
-            returnMe.Cells.Add(Cell_Name);
+            string categoryName = string.Empty;
 
-            TableCell Cell_Hidden = new TableCell();
-            Cell_Hidden.Text = LSKYCommon.boolToYesOrNoHTML(category.IsHidden);
-            returnMe.Cells.Add(Cell_Hidden);
-
-            TableCell Cell_Private = new TableCell();
-            Cell_Private.Text = LSKYCommon.boolToYesOrNoHTML(category.IsPrivate);
-            returnMe.Cells.Add(Cell_Private);
-            
-            TableCell Cell_ID = new TableCell();
-            Cell_ID.Text = category.ID;
-            returnMe.Cells.Add(Cell_ID);
-
-            TableCell Cell_Parent = new TableCell();
-            if (category.HasParent())
+            for (int x = 1; x < category.MenuLevel; x++)
             {
-                Cell_Parent.Text = "/" + category.ParentCategory.FullName;
+                categoryName += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             }
-            else
-            {
-                Cell_Parent.Text = "/";
-            }
-            returnMe.Cells.Add(Cell_Parent);
+
+            categoryName += category.Name;
+
+            returnMe.Cells.Add(new TableCell() { Text = categoryName });
+            returnMe.Cells.Add(new TableCell() { Text = category.IsHidden.ToYesOrNoHTML() });
+            returnMe.Cells.Add(new TableCell() { Text = category.IsPrivate.ToYesOrNoHTML() });
+            returnMe.Cells.Add(new TableCell() { Text = category.ID });
+            returnMe.Cells.Add(new TableCell() { Text = category.ParentCategoryID });
+            returnMe.Cells.Add(new TableCell() { Text = category.MenuLevel.ToString() });
+            returnMe.Cells.Add(new TableCell() { Text = category.VideoCount.ToString() });
 
             return returnMe;
         }
 
-
-        protected void Page_Load(object sender, EventArgs e)
+        private void refreshCategoryList()
         {
-            List<VideoCategory> AllCategories = new List<VideoCategory>();
 
-            using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-            {
-                AllCategories = VideoCategory.LoadAll(connection, false);
-            }
+            VideoCategoryRepository videoCategoryRepo = new VideoCategoryRepository();
+            List<VideoCategory> AllCategories = videoCategoryRepo.GetAll();
 
-            //drpParent.Items.Clear();
-            if (!IsPostBack)
-            {
-                drpParent.Items.Add(new ListItem(" - No Parent Category -", string.Empty));
-            }
+            tblCategories.Rows.Clear();
+            drpParent.Items.Clear();
+            drpParent.Items.Add(new ListItem(" - No Parent Category -", string.Empty));
+
             foreach (VideoCategory cat in AllCategories.OrderBy(c => c.FullName).ToList<VideoCategory>())
             {
                 tblCategories.Rows.Add(AddVideoCategoryTableRow(cat, false));
@@ -67,56 +53,52 @@ namespace LSKYStreamingManager.VideoCategories
                 // Add categories to the dropdown list
                 if (!IsPostBack)
                 {
-                    ListItem newCategoryItem = new ListItem(cat.GetFullName(), cat.ID);
+                    ListItem newCategoryItem = new ListItem(cat.FullName, cat.ID);
                     drpParent.Items.Add(newCategoryItem);
                 }
-
             }
-            
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            VideoCategoryRepository videoCategoryRepo = new VideoCategoryRepository();
+            List<VideoCategory> AllCategories = videoCategoryRepo.GetAll();
+
+            if (!IsPostBack)
+            {
+                refreshCategoryList();
+            }
         }
 
         protected void btnNewCategory_Click(object sender, EventArgs e)
         {
             // Parse the new category
-            string CatName = LSKYCommon.SanitizeGeneralInputString(txtNewCategoryName.Text);
-            string Parent = LSKYCommon.SanitizeGeneralInputString(drpParent.SelectedValue);
+            string CatName = Sanitizers.SanitizeGeneralInputString(txtNewCategoryName.Text);
+            string Parent = Sanitizers.SanitizeGeneralInputString(drpParent.SelectedValue);
 
-            bool Hidden = false;
-            if (chkHidden.Checked)
-            {
-                Hidden = true;
-            }
+            bool Hidden = chkHidden.Checked;
 
-            bool Private = false;
-            if (chkPrivate.Checked)
-            {
-                Private = true;
-            }
+            bool Private = chkPrivate.Checked;
 
             if ((!string.IsNullOrEmpty(CatName)) && (CatName.Length > 2)) 
-            {                                                 
-                using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+            {       
+                VideoCategory NewCategory = new VideoCategory()
                 {
-                    // Create a unique ID for the category
-                    string newCatID = string.Empty;
-                    do
-                    {
-                        newCatID = LSKYCommon.getNewID(5);
-                    } while (LiveBroadcast.DoesIDExist(connection, newCatID));
+                    Name = CatName,
+                    ParentCategoryID = Parent,
+                    IsHidden = Hidden,
+                    IsPrivate = Private
+                };
                     
-                    VideoCategory NewCategory = new VideoCategory(newCatID, CatName, Parent, Hidden, Private, 0);
-                    VideoCategory.InsertNew(connection, NewCategory);
-
-                    drpParent.Items.Add(new ListItem(NewCategory.Name, NewCategory.ID));
-                    tblCategories.Rows.Add(AddVideoCategoryTableRow(NewCategory, false));
-
-                }
-
+                VideoCategoryRepository videoCategoryRepository = new VideoCategoryRepository();
+                videoCategoryRepository.Insert(NewCategory);
+                
                 txtNewCategoryName.Text = "";
                 chkHidden.Checked = false;
                 chkPrivate.Checked = false;
-
+                refreshCategoryList();
             }
+
 
 
         }

@@ -95,14 +95,6 @@ namespace LSKYStreamingManager.Streams
                         drpThumbnail.Items.Add(Thumb);
                     }
                 }
-
-                // Populate isml dropdown
-                DirectoryInfo ISMLDirectory = new DirectoryInfo(Server.MapPath("/isml"));
-                foreach (FileInfo file in ISMLDirectory.GetFiles("*.isml"))
-                {
-                    drpISML.Items.Add(new ListItem(file.Name, file.Name));                    
-                }
-
             }
 
         }
@@ -123,95 +115,73 @@ namespace LSKYStreamingManager.Streams
             // Set the preview thumbnail to the selected one
             imgThumbnail.ImageUrl = "/thumbnails/broadcasts/" + drpThumbnail.SelectedValue;
         }
-                
+
+        /// <summary>
+        /// Parses a stream from the input fields on the page
+        /// </summary>
+        /// <returns></returns>
+        private LiveBroadcast ParseStream()
+        {
+            string name = Sanitizers.SanitizeGeneralInputString(txtTitle.Text);
+            string location = Sanitizers.SanitizeGeneralInputString(txtStreamLocation.Text);
+            string description = Sanitizers.SanitizeGeneralInputString(txtDescription.Text);
+            string thumbnail = Sanitizers.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
+            int width = Parsers.ParseInt(txtWidth.Text);
+            int height = Parsers.ParseInt(txtHeight.Text);
+            string YouTubeID = Sanitizers.SanitizeGeneralInputString(txtYouTubeID.Text);
+
+            DateTime? startDate = Parsers.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
+            DateTime? endDate = Parsers.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
+            
+            bool ishidden = chkHidden.Checked;
+            bool isprivate = chkPrivate.Checked;
+            bool forceonline = chkForce.Checked;
+            bool isDelayed = chkDelayed.Checked;
+            bool isCancelled = chkCancelled.Checked;
+
+            // Validate
+            if (string.IsNullOrEmpty(name)) { throw new Exception("Name cannot be empty. "); }
+            if (width <= 0) { throw new Exception("Width must be more than zero.");}
+            if (height <= 0) { throw new Exception("Height must be more than zero.");}
+            if (startDate == null) { throw new Exception("Start time cannot be null."); }
+            if (endDate == null) { throw new Exception("End time cannot be null."); }
+
+            // Return 
+            return new LiveBroadcast()
+            {
+                Name = name,
+                Location = location,
+                Description = description,
+                ThumbnailURL = thumbnail,
+                Width = width,
+                Height = height,
+                YouTubeID = YouTubeID,
+                StartTime = startDate.Value,
+                EndTime = endDate.Value,
+                ForcedLive = forceonline,
+                IsPrivate = isprivate,
+                IsHidden = ishidden,
+                IsDelayed = isDelayed,
+                IsCancelled = isCancelled
+            };
+
+
+
+
+        }
+
         protected void btnAdd_Click(object sender, EventArgs e)
         {
-            // Validate inputted data
-
-            // Text values
-            string name = LSKYCommon.SanitizeGeneralInputString(txtTitle.Text);
-            string location = LSKYCommon.SanitizeGeneralInputString(txtStreamLocation.Text);
-            string description = LSKYCommon.SanitizeGeneralInputString(txtDescription.Text);
-            string thumbnail = LSKYCommon.SanitizeGeneralInputString(drpThumbnail.SelectedValue);
-            int width = LSKYCommon.ParseDatabaseInt(txtWidth.Text);
-            int height = LSKYCommon.ParseDatabaseInt(txtHeight.Text);
-            string isml = LSKYCommon.SanitizeGeneralInputString(drpISML.SelectedValue);
-            string sidebar = LSKYCommon.SanitizeGeneralInputString(txtSidebar.Text);
-
-            // Dates
-            DateTime? startDate = LSKYCommon.ParseDateFromUser(drpStartYear.SelectedValue, drpStartMonth.SelectedValue, txtStartDay.Text, txtStartHour.Text, txtStartMinute.Text, "00");
-            DateTime? endDate = LSKYCommon.ParseDateFromUser(drpEndYear.SelectedValue, drpEndMonth.SelectedValue, txtEndDay.Text, txtEndHour.Text, txtEndMinute.Text, "00");
-            
-            // Binary values
-            bool ishidden = false;
-            if (chkHidden.Checked)
+            try
             {
-                ishidden = true;
+                LiveBroadcastRepository liveBroadcastRepository = new LiveBroadcastRepository();
+                LiveBroadcast stream = ParseStream();
+                liveBroadcastRepository.Insert(stream);
+                RedirectToStreamList(stream.ID);
             }
-
-            bool isprivate = false;
-            if (chkPrivate.Checked)
+            catch (Exception ex)
             {
-                isprivate = true;
-            }
-
-            bool showsidebar = false;
-            if (chkSidebar.Checked)
-            {
-                showsidebar = true;
-            }
-
-            bool forceonline = false;
-            if (chkForce.Checked)
-            {
-                forceonline = true;
-            }
-
-            if (endDate != null)
-            {
-                if (startDate != null)
-                {
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-                    {
-                        // Create a unique ID for the stream
-                        string newStreamID = string.Empty;
-                        do
-                        {
-                            newStreamID = LSKYCommon.getNewID(6);
-                        } while (LiveBroadcast.DoesIDExist(connection, newStreamID));
-
-                        // Create a new stream in the database
-                        LiveBroadcast newBroadcast = new LiveBroadcast(
-                            newStreamID,
-                            name, 
-                            location,
-                            description,
-                            thumbnail,
-                            width,
-                            height,
-                            isml,
-                            (DateTime)startDate,
-                            (DateTime)endDate,
-                            showsidebar,
-                            true,
-                            ishidden,
-                            isprivate,
-                            forceonline,
-                            sidebar
-                            );
-
-                        LiveBroadcast.InsertNewBroadcast(connection, newBroadcast);
-                        RedirectToStreamList(newStreamID);
-                    }
-                }
-                else
-                {
-                    displayError("Error parsing start date");
-                }
-            }
-            else
-            {
-                displayError("Error parsing end date");
+                displayError(ex.Message);
             }
         }
     }

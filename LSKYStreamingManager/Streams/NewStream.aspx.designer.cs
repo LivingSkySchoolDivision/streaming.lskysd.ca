@@ -94,13 +94,13 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.DropDownList drpThumbnail;
         
         /// <summary>
-        /// drpISML control.
+        /// txtYouTubeID control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpISML;
+        protected global::System.Web.UI.WebControls.TextBox txtYouTubeID;
         
         /// <summary>
         /// drpStartYear control.
@@ -193,15 +193,6 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.TextBox txtEndMinute;
         
         /// <summary>
-        /// txtSidebar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSidebar;
-        
-        /// <summary>
         /// tblControls2 control.
         /// </summary>
         /// <remarks>
@@ -238,13 +229,22 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.CheckBox chkPrivate;
         
         /// <summary>
-        /// chkSidebar control.
+        /// chkDelayed control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkSidebar;
+        protected global::System.Web.UI.WebControls.CheckBox chkDelayed;
+        
+        /// <summary>
+        /// chkCancelled control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkCancelled;
         
         /// <summary>
         /// btnAdd control.

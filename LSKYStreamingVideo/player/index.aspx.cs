@@ -7,74 +7,87 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LSKYStreamingVideo.CommonHTMLParts;
 
 namespace LSKYStreamingVideo.player
 {
     public partial class index : System.Web.UI.Page
-    {        
-        protected void Page_Load(object sender, EventArgs e)
+    {
+        private void displayError(string errorMessage)
         {
-            Video selectedVideo = null;
-            LSKYStreamingCore.LSKYCommonHTMLParts.Player selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.HTML5;
-            
-            // Check to see if we should use the silverlight player
-            if (!string.IsNullOrEmpty(Request.QueryString["silverlight"]))
+            tblContainer.Visible = false;
+            tblErrorMessage.Visible = true;
+            litErrorMessage.Text = "<h1>Error loading video</h1><br/><p>" + errorMessage + "</p>";
+        }
+
+        public static string videoInfoSection(Video video)
+        {
+            StringBuilder returnMe = new StringBuilder();
+            returnMe.Append("<div class=\"video_list_name\">" + video.Name + "</div>");
+            returnMe.Append("<div class=\"video_list_info\"><b>Duration:</b> " + video.DurationInEnglish + "</div>");
+            returnMe.Append("<div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div>");
+            if (video.IsPrivate)
             {
-                selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight;
+                returnMe.Append("<div class=\"video_list_info\"><b>This video is flagged as private</b></div>");
+            }
+            if (!string.IsNullOrEmpty(video.DownloadURL))
+            {
+                returnMe.Append("<div class=\"video_list_info\"><a href=\"/video_files/" + video.DownloadURL + "\">Download available</a></div>");
             }
 
-            // Check if we got a video ID in the querystring
+            returnMe.Append("<br/><div class=\"video_list_description\">" + video.Description + "</div>");
+            return returnMe.ToString();
+        }
+
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
             if (!string.IsNullOrEmpty(Request.QueryString["i"]))
             {
                 // Sanitize the video ID
-                string requestedID = LSKYCommon.SanitizeQueryStringID(Request.QueryString["i"]);
+                string requestedID = Sanitizers.SanitizeQueryStringID(Request.QueryString["i"]);
 
-                // See if this video exists
-                using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
+                VideoRepository videoRepository = new VideoRepository();
+                Video video = videoRepository.Get(requestedID);
+
+                if (video != null)
                 {
-                    if (Video.DoesVideoIDExist(connection, requestedID))
+                    // Determine if the viewer is viewing from inside the network
+                    string clientIP = Request.ServerVariables["REMOTE_ADDR"];
+                    bool canUserAccessPrivateContent = Config.CanAccessPrivate(clientIP);
+
+                    if (
+                        (video.IsPrivate && canUserAccessPrivateContent) || 
+                        (!video.IsPrivate)
+                        )
                     {
-                        selectedVideo = Video.Load(connection, requestedID);
+                        // Set the page title
+                        string originalTitle = Page.Header.Title;
+                        Page.Header.Title = video.Name + " - " + originalTitle;
+
+                        // Determine which player to display the video in
+                        if (video.IsYoutubeAvailable)
+                        {
+                            litPlayer.Text = YoutubeVideoPlayer.GetHTML(video);
+                        }
+                        else
+                        {
+                            litPlayer.Text = HTML5VideoPlayer.GetHTML(video);
+                        }
+                        tblContainer.Visible = true;
+
+                        litVideoInfo.Text = videoInfoSection(video);
                     }
-                }
-            }
-
-            if (selectedVideo != null)
-            {
-                if (!Request.IsSecureConnection)
-                {
-                    // Check which player to use based on what this video supports
-
-                    // File has no HTML5 capable videos associated with it - use silverlight
-                    if (!selectedVideo.IsHTML5Available())
+                    else
                     {
-                        selectedPlayer = LSKYStreamingCore.LSKYCommonHTMLParts.Player.Silverlight;
+                        displayError("This video is marked as private. you can only watch from within the LSKYSD network.");
                     }
-
-                    // Change the browser title                
-                    string originalTitle = Page.Header.Title;
-                    Page.Header.Title = selectedVideo.Name + " - " + originalTitle;
-
-                    // Display player
-                    litPlayer.Text = LSKYCommonHTMLParts.BuildVideoPlayerHTML(selectedVideo, selectedPlayer);
-                    litVideoInfo.Text = LSKYCommonHTMLParts.BuildVideoInfoHTML(selectedVideo);
-                    tblContainer.Visible = true;
-                    tblNotFound.Visible = false;
                 }
                 else
                 {
-                    litPlayer.Text = LSKYCommonHTMLParts.BuildErrorMessage("Streaming video does not work over secure connections - please use a non-encrypted connection");
-                    tblContainer.Visible = true;
-                    tblNotFound.Visible = false;
+                    displayError("A video with that ID was not found.");
                 }
             }
-            else
-            {
-                tblContainer.Visible = false;
-                tblNotFound.Visible = true;
-
-            }
-
         }
     }
 }

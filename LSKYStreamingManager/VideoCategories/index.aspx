@@ -38,6 +38,8 @@
             <asp:TableHeaderCell>Private</asp:TableHeaderCell>
             <asp:TableHeaderCell>ID</asp:TableHeaderCell>
             <asp:TableHeaderCell>Parent</asp:TableHeaderCell>
+            <asp:TableHeaderCell>Menu Level</asp:TableHeaderCell>
+            <asp:TableHeaderCell>#Videos</asp:TableHeaderCell>
         </asp:TableHeaderRow>
     </asp:Table>
     
