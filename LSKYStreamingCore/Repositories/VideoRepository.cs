@@ -405,7 +405,7 @@ namespace LSKYStreamingCore
                 {
                     sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = "UPDATE videos SET name=@NAME, author=@AUTHOR, description=@DESCRIPTION, width=@WIDTH, height=@HEIGHT, thumbnail_url=@THUMB, date_added=@DATEADD, duration_in_seconds=@DURATION, file_mp4=@MP4, file_ogv=@OGV, file_webm=@WEBM, download_url=@DOWNLOADURL, hidden=@HIDDEN, private=@PRIVATE, tags=@TAGS, youtube_url=@YOUTUBEURL, category_id=@CATEGORY WHERE id=@ID";
+                    sqlCommand.CommandText = "UPDATE videos SET name=@NAME, author=@AUTHOR, description=@DESCRIPTION, width=@WIDTH, height=@HEIGHT, thumbnail_url=@THUMB, duration_in_seconds=@DURATION, file_mp4=@MP4, file_ogv=@OGV, file_webm=@WEBM, download_url=@DOWNLOADURL, hidden=@HIDDEN, private=@PRIVATE, tags=@TAGS, youtube_url=@YOUTUBEURL, category_id=@CATEGORY WHERE id=@ID";
 
                     sqlCommand.Parameters.AddWithValue("ID", video.ID);
                     sqlCommand.Parameters.AddWithValue("NAME", video.Name);
@@ -414,7 +414,6 @@ namespace LSKYStreamingCore
                     sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
                     sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
                     sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
-                    sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
                     sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
                     sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
                     sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);

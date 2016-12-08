@@ -23,7 +23,8 @@ namespace LSKYStreamingManager.Videos
             returnMe.Cells.Add(new TableCell() { Text = video.Dimensions });
             returnMe.Cells.Add(new TableCell() { Text = video.IsHidden.ToYesOrNoHTML() });
             returnMe.Cells.Add(new TableCell() { Text = video.IsPrivate.ToYesOrNoHTML() });
-            
+            returnMe.Cells.Add(new TableCell() { Text = video.DateAdded.ToString() });
+
             return returnMe;
         }
 

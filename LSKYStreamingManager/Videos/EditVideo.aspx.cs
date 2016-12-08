@@ -74,9 +74,18 @@ namespace LSKYStreamingManager.Videos
             string file_ogg = txtOGVURL.Text;
             string file_webm = txtWEBM.Text;
             string downloadURL = txtDownloadURL.Text;
-            string cateogryID = drpCategory.SelectedValue;
             bool ishidden = chkhidden.Checked;
             bool isprivate = chkPrivate.Checked;
+
+            // Category
+            string cateogryID = string.Empty;
+
+            VideoCategoryRepository videoCategoryRepo = new VideoCategoryRepository();
+            VideoCategory category = videoCategoryRepo.Get(drpCategory.SelectedValue);
+            if (category != null)
+            {
+                cateogryID = category.ID;
+            }
 
             // Validate
             if (string.IsNullOrEmpty(title)) { throw new Exception("Title cannot be empty."); }
@@ -133,10 +142,11 @@ namespace LSKYStreamingManager.Videos
             // Category
             VideoCategoryRepository videoCategoryRepo = new VideoCategoryRepository();
             drpCategory.Items.Clear();
+            drpCategory.Items.Add(new ListItem() { Text=" - No Category -", Value = "0"} );
             foreach (VideoCategory category in videoCategoryRepo.GetAll().OrderBy(c => c.FullName))
             {
                 bool selected = video.CategoryID == category.ID;
-                drpCategory.Items.Add(new ListItem() { Selected = selected, Text = category.FullName });
+                drpCategory.Items.Add(new ListItem() { Selected = selected, Text = category.FullName, Value = category.ID });
             }
 
 
