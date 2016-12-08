@@ -16,7 +16,7 @@ namespace LSKYStreamingCore
         {
             this._cache = new Dictionary<int, Alert>();
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -82,7 +82,7 @@ namespace LSKYStreamingCore
 
         public void Delete(int alertID)
         {
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -111,7 +111,7 @@ namespace LSKYStreamingCore
                 importance = 1;
             }
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {

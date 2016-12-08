@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LSKYStreamingManager.Streams {
+namespace LSKYStreamingManager.Videos {
     
     
-    public partial class EditStream {
+    public partial class EditVideo {
         
         /// <summary>
         /// lblError control.
@@ -31,15 +31,6 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.Table tblControls;
         
         /// <summary>
-        /// txtID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField txtID;
-        
-        /// <summary>
         /// lblID control.
         /// </summary>
         /// <remarks>
@@ -58,13 +49,13 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.TextBox txtTitle;
         
         /// <summary>
-        /// txtStreamLocation control.
+        /// txtAuthor control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStreamLocation;
+        protected global::System.Web.UI.WebControls.TextBox txtAuthor;
         
         /// <summary>
         /// txtDescription control.
@@ -74,6 +65,15 @@ namespace LSKYStreamingManager.Streams {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtDescription;
+        
+        /// <summary>
+        /// txtTags control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtTags;
         
         /// <summary>
         /// txtWidth control.
@@ -112,103 +112,76 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.DropDownList drpThumbnail;
         
         /// <summary>
-        /// txtYouTubeID control.
+        /// txtDuration control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtYouTubeID;
+        protected global::System.Web.UI.WebControls.TextBox txtDuration;
         
         /// <summary>
-        /// drpStartYear control.
+        /// txtYoutubeURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpStartYear;
+        protected global::System.Web.UI.WebControls.TextBox txtYoutubeURL;
         
         /// <summary>
-        /// drpStartMonth control.
+        /// txtYoutubeStartTime control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpStartMonth;
+        protected global::System.Web.UI.WebControls.TextBox txtYoutubeStartTime;
         
         /// <summary>
-        /// txtStartDay control.
+        /// txtMP4URL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStartDay;
+        protected global::System.Web.UI.WebControls.TextBox txtMP4URL;
         
         /// <summary>
-        /// txtStartHour control.
+        /// txtOGVURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStartHour;
+        protected global::System.Web.UI.WebControls.TextBox txtOGVURL;
         
         /// <summary>
-        /// txtStartMinute control.
+        /// txtWEBM control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtStartMinute;
+        protected global::System.Web.UI.WebControls.TextBox txtWEBM;
         
         /// <summary>
-        /// drpEndYear control.
+        /// txtDownloadURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpEndYear;
+        protected global::System.Web.UI.WebControls.TextBox txtDownloadURL;
         
         /// <summary>
-        /// drpEndMonth control.
+        /// drpCategory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpEndMonth;
-        
-        /// <summary>
-        /// txtEndDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEndDay;
-        
-        /// <summary>
-        /// txtEndHour control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEndHour;
-        
-        /// <summary>
-        /// txtEndMinute control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEndMinute;
+        protected global::System.Web.UI.WebControls.DropDownList drpCategory;
         
         /// <summary>
         /// tblControls2 control.
@@ -220,22 +193,13 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.Table tblControls2;
         
         /// <summary>
-        /// chkForce control.
+        /// chkhidden control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkForce;
-        
-        /// <summary>
-        /// chkHidden control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkHidden;
+        protected global::System.Web.UI.WebControls.CheckBox chkhidden;
         
         /// <summary>
         /// chkPrivate control.
@@ -247,24 +211,6 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.CheckBox chkPrivate;
         
         /// <summary>
-        /// chkDelayed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkDelayed;
-        
-        /// <summary>
-        /// chkCancelled control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkCancelled;
-        
-        /// <summary>
         /// btnDelete control.
         /// </summary>
         /// <remarks>
@@ -274,12 +220,12 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.LinkButton btnDelete;
         
         /// <summary>
-        /// btnAdd control.
+        /// btnEdit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAdd;
+        protected global::System.Web.UI.WebControls.Button btnEdit;
     }
 }

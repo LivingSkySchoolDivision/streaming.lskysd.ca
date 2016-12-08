@@ -46,7 +46,7 @@ namespace LSKYStreamingCore
                 // Use recursion to get all parent full names too, regardless of how many layers deep this category is
                 if (this.HasParent)
                 {
-                    return this.ParentCategory.FullName + "/" + this.Name;
+                    return this.ParentCategory.FullName + " ► " + this.Name;
                 } else
                 {
                     return this.Name;

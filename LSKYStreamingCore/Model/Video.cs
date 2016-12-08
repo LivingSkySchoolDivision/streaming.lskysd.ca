@@ -13,12 +13,10 @@ namespace LSKYStreamingCore
         public string ID { get; set; }
         public string Name { get; set; }
         public string Author { get; set; }
-        public string Location { get; set; }
         public string Description { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public DateTime DateAdded { get; set; }
-        public DateTime DateAired { get; set; }
         public int DurationInSeconds { get; set; }
         public string FileURL_H264 { get; set; }
         public string FileURL_THEORA { get; set; }
@@ -26,13 +24,10 @@ namespace LSKYStreamingCore
         public string DownloadURL { get; set; }
         public string YoutubeURL { get; set; }
         public int YoutubeStartTimeInSeconds { get; set; }
-        public bool IsAlwaysAvailable { get; set; }
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }
         public List<string> Tags { get; set; }
         public string LegacyVideoID { get; set; }
-        public DateTime DateAvailable { get; set; }
-        public DateTime DateExpires { get; set; }
         public string ThumbnailURL { get; set; }
         public string CategoryID { get; set; }
         public VideoCategory Category { get; set; }
@@ -44,13 +39,6 @@ namespace LSKYStreamingCore
             set {
                 this.DurationInSeconds = (int)value.TotalSeconds;
                 } 
-        }
-        public bool Expires
-        {
-            get
-            {
-                return !this.IsAlwaysAvailable;
-            }
         }
         
         public bool IsYoutubeAvailable
@@ -130,7 +118,12 @@ namespace LSKYStreamingCore
                     return string.Empty;
                 }
             }
-        }       
+        }
+
+        public string Dimensions
+        {
+            get { return this.Width + "x" + this.Height; }
+        }
 
     }
 }

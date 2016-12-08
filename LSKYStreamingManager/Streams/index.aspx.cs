@@ -92,7 +92,7 @@ namespace LSKYStreamingManager.Streams
                     HighLightID = Request.QueryString["highlight"].ToString().Trim();
                 }
                 
-                foreach (LiveBroadcast stream in AllLiveBroadcasts.OrderBy(l => l.IsLive).ThenBy(l => l.StartTime))
+                foreach (LiveBroadcast stream in AllLiveBroadcasts.OrderByDescending(l => l.IsLive).ThenByDescending(l => l.StartTime))
                 {
                     bool highlight = (HighLightID != string.Empty) && (HighLightID == stream.ID);
 

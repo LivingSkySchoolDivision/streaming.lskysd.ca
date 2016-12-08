@@ -126,7 +126,7 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkDelayed" runat="server" Enabled="false" />
+                <asp:CheckBox ID="chkDelayed" runat="server" />
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
                 <b>Stream is delayed</b>
@@ -135,7 +135,7 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkCancelled" runat="server" Enabled="false" />
+                <asp:CheckBox ID="chkCancelled" runat="server" />
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
                 <b>Stream is cancelled</b>

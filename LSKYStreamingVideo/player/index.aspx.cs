@@ -7,7 +7,6 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using LSKYStreamingCore.Repositories;
 using LSKYStreamingVideo.CommonHTMLParts;
 
 namespace LSKYStreamingVideo.player
@@ -18,7 +17,7 @@ namespace LSKYStreamingVideo.player
         {
             tblContainer.Visible = false;
             tblErrorMessage.Visible = true;
-            litErrorMessage.Text = "<h1>Error loading stream</h1><br/><p>" + errorMessage + "</p>";
+            litErrorMessage.Text = "<h1>Error loading video</h1><br/><p>" + errorMessage + "</p>";
         }
 
         public static string videoInfoSection(Video video)
@@ -27,7 +26,6 @@ namespace LSKYStreamingVideo.player
             returnMe.Append("<div class=\"video_list_name\">" + video.Name + "</div>");
             returnMe.Append("<div class=\"video_list_info\"><b>Duration:</b> " + video.DurationInEnglish + "</div>");
             returnMe.Append("<div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div>");
-            returnMe.Append("<div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div>");
             if (video.IsPrivate)
             {
                 returnMe.Append("<div class=\"video_list_info\"><b>This video is flagged as private</b></div>");

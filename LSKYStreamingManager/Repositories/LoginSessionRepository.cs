@@ -26,7 +26,7 @@ namespace LSKYStreamingManager
         public List<LoginSession> GetAll()
         {
             List<LoginSession> returnMe = new List<LoginSession>();
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -53,7 +53,7 @@ namespace LSKYStreamingManager
         public LoginSession Get(string hash, string ip, string useragent)
         {
             LoginSession returnMe = null;
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -85,7 +85,7 @@ namespace LSKYStreamingManager
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+                using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
                 {
                     using (SqlCommand sqlCommand = new SqlCommand())
                     {
@@ -110,7 +110,7 @@ namespace LSKYStreamingManager
         {
             List<LoginSession> returnMe = new List<LoginSession>();
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {

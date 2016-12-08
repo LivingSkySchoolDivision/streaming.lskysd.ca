@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using LSKYStreamingCore.ExtensionMethods;
-using LSKYStreamingCore.Repositories;
 using LSKYStreamingVideo.CommonHTMLParts;
 
 namespace LSKYStreamingVideo
@@ -249,7 +248,6 @@ namespace LSKYStreamingVideo
             returnMe.Append("<li class=\"VideoListDescTitle\"> <a style=\"text-decoration: none;\" href=\"" + playerURL + "\"><div class=\"video_list_name\">" + video.Name + "</div></a> </li>");
             returnMe.Append("<li class=\"VideoListDescDuration\"> <div class=\"video_list_info\"><b>Duration:</b> " + video.DurationInEnglish + "</div></li>");
             returnMe.Append("<li class=\"VideoListDescSubmitted\"> <div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div></li>");
-            returnMe.Append("<li class=\"VideoListDescRecorded\"> <div class=\"video_list_info\"><b>Recorded at:</b> " + video.Location + "</div></li>");
             returnMe.Append("</ul>");
 
             if (video.IsPrivate)

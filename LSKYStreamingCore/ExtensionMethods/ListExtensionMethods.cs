@@ -30,6 +30,24 @@ namespace LSKYStreamingCore.ExtensionMethods
             return returnMe.ToString();
         }
 
+        public static string ToSpaceSeparatedString(this List<int> list)
+        {
+            StringBuilder returnMe = new StringBuilder();
+
+            foreach (int item in list)
+            {
+                returnMe.Append(item);
+                returnMe.Append(" ");
+            }
+
+            if (returnMe.Length > 1)
+            {
+                returnMe.Remove(returnMe.Length - 1, 1);
+            }
+
+            return returnMe.ToString();
+        }
+
         public static string ToCommaSeparatedString(this List<string> list)
         {
             StringBuilder returnMe = new StringBuilder();
@@ -43,6 +61,23 @@ namespace LSKYStreamingCore.ExtensionMethods
             if (returnMe.Length > 2)
             {
                 returnMe.Remove(returnMe.Length - 2, 2);
+            }
+
+            return returnMe.ToString();
+        }
+        public static string ToSpaceSeparatedString(this List<string> list)
+        {
+            StringBuilder returnMe = new StringBuilder();
+
+            foreach (string item in list)
+            {
+                returnMe.Append(item);
+                returnMe.Append(" ");
+            }
+
+            if (returnMe.Length > 1)
+            {
+                returnMe.Remove(returnMe.Length - 1, 1);
             }
 
             return returnMe.ToString();

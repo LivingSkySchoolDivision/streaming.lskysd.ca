@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LSKYStreamingCore.ExtensionMethods;
 
 namespace LSKYStreamingCore
 {
@@ -25,25 +26,20 @@ namespace LSKYStreamingCore
                 ID = dbDataReader["id"].ToString(),
                 Name = dbDataReader["name"].ToString(),
                 Author = dbDataReader["author"].ToString(),
-                Location = dbDataReader["location"].ToString(),
                 Description = dbDataReader["description"].ToString(),
                 Width = Parsers.ParseInt(dbDataReader["width"].ToString()),
                 Height = Parsers.ParseInt(dbDataReader["height"].ToString()),
                 DateAdded = Parsers.ParseDate(dbDataReader["date_added"].ToString()),
-                DateAired = Parsers.ParseDate(dbDataReader["date_aired"].ToString()),
                 DurationInSeconds = Parsers.ParseInt(dbDataReader["duration_in_seconds"].ToString()),
                 FileURL_H264 = dbDataReader["file_mp4"].ToString(),
                 FileURL_THEORA = dbDataReader["file_ogv"].ToString(),
                 FileURL_VP8 = dbDataReader["file_webm"].ToString(),
                 DownloadURL = dbDataReader["download_url"].ToString(),
                 YoutubeURL = dbDataReader["youtube_url"].ToString(),
-                IsAlwaysAvailable = Parsers.ParseBool(dbDataReader["always_available"].ToString()),
                 IsHidden = Parsers.ParseBool(dbDataReader["hidden"].ToString()),
                 IsPrivate = Parsers.ParseBool(dbDataReader["private"].ToString()),
                 Tags = dbDataReader["tags"].ToString().Split(';').ToList(),
                 LegacyVideoID = dbDataReader["legacy_video_id"].ToString(),
-                DateAvailable = Parsers.ParseDate(dbDataReader["available_from"].ToString()),
-                DateExpires = Parsers.ParseDate(dbDataReader["available_to"].ToString()),
                 ThumbnailURL = dbDataReader["thumbnail_url"].ToString(),
                 CategoryID = dbDataReader["category_id"].ToString(),
                 Category = categoryRepo.Get(dbDataReader["category_id"].ToString().Trim()),
@@ -56,7 +52,7 @@ namespace LSKYStreamingCore
         public Video Get(string videoID)
         {
             Video ReturnedVideo = null;
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -88,7 +84,7 @@ namespace LSKYStreamingCore
         {
             List<Video> ReturnedVideos = new List<Video>();
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -125,12 +121,12 @@ namespace LSKYStreamingCore
             {
                 SQL += "private=0 AND ";
             }
-            SQL += "hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) ORDER BY date_added DESC;";
+            SQL += "hidden=0 ORDER BY date_added DESC;";
 
             List <Video> ReturnedVideos = new List<Video>();
             if (max > 0)
             {
-                using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+                using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
                 {
                     using (SqlCommand sqlCommand = new SqlCommand())
                     {
@@ -163,12 +159,12 @@ namespace LSKYStreamingCore
             {
                 SQL += "private=0 AND ";
             }
-            SQL += "hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) AND (date_added <= @THISFAR) ORDER BY date_added DESC;";
+            SQL += "hidden=0 AND (date_added <= @THISFAR) ORDER BY date_added DESC;";
 
             List<Video> ReturnedVideos = new List<Video>();
             if (max > 0)
             {
-                using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+                using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
                 {
                     using (SqlCommand sqlCommand = new SqlCommand())
                     {
@@ -198,7 +194,7 @@ namespace LSKYStreamingCore
         public List<Video> GetFeatured(bool includePrivateVideos)
         {
             List<Video> ReturnedVideos = new List<Video>();
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -228,7 +224,7 @@ namespace LSKYStreamingCore
         {
             List<Video> returnMe = new List<Video>();
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -262,7 +258,7 @@ namespace LSKYStreamingCore
 
             // Build an SQL query
             StringBuilder sqlQuery = new StringBuilder();
-            sqlQuery.Append("SELECT TOP 25 * FROM videos WHERE hidden=0 AND ((available_from < @CURRENTDATETIME AND available_to > @CURRENTDATETIME) OR (always_available=1)) AND (");
+            sqlQuery.Append("SELECT TOP 25 * FROM videos WHERE hidden=0 AND (");
             sqlQuery.Append("name like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("author like '%" + sanitizedSearchString + "%' OR ");
             sqlQuery.Append("location like '%" + sanitizedSearchString + "%' OR ");
@@ -274,7 +270,7 @@ namespace LSKYStreamingCore
             }
             sqlQuery.Append(" ORDER BY date_added DESC;");
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -321,7 +317,7 @@ namespace LSKYStreamingCore
             }
 
             bool foundVideoWithGivenID = false;
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -355,23 +351,22 @@ namespace LSKYStreamingCore
                 video.ID = CreateNewVideoID();
             }
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
+                    sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = "INSERT INTO videos(id, name, author, location, description, width, height, thumbnail_url, date_added, date_aired, duration_in_seconds, file_mp4, file_ogv, file_webm, download_url, hidden, private, tags, available_From, available_to, always_available, legacy_video_id, category_id, youtube_url)"
-                                            + "VALUES(@ID, @NAME, @AUTHOR, @LOCATION, @DESCRIPTION, @WIDTH, @HEIGHT, @THUMB, @DATEADD, @DATEAIRED, @DURATION, @MP4, @OGV, @WEBM, @DOWNLOADURL, @HIDDEN, @PRIVATE, @TAGS, @AVAILFROM, @AVAILTO, @ALWAYSAVAIL, @LEGACYID, @CATEGORY, @YOUTUBEURL)";
+                    sqlCommand.CommandText = "INSERT INTO videos(id, name, author, description, width, height, thumbnail_url, date_added, duration_in_seconds, file_mp4, file_ogv, file_webm, download_url, hidden, private, tags, category_id, youtube_url)"
+                                            + "VALUES(@ID, @NAME, @AUTHOR, @DESCRIPTION, @WIDTH, @HEIGHT, @THUMB, @DATEADD, @DURATION, @MP4, @OGV, @WEBM, @DOWNLOADURL, @HIDDEN, @PRIVATE, @TAGS, @CATEGORY, @YOUTUBEURL)";
 
                     sqlCommand.Parameters.AddWithValue("ID", video.ID);
                     sqlCommand.Parameters.AddWithValue("NAME", video.Name);
                     sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
-                    sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
                     sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
                     sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
                     sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
                     sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
-                    sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
                     sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
                     sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
                     sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
@@ -380,11 +375,7 @@ namespace LSKYStreamingCore
                     sqlCommand.Parameters.AddWithValue("YOUTUBEURL", video.YoutubeURL);
                     sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
                     sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
-                    sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
-                    sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
-                    sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
-                    sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
-                    sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
+                    sqlCommand.Parameters.AddWithValue("TAGS", video.Tags.ToSemicolenSeparatedString());
                     sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
                     sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
 
@@ -408,23 +399,22 @@ namespace LSKYStreamingCore
         {
             bool returnMe = false;
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
+                    sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = "UPDATE videos SET name=@NAME, author=@AUTHOR, location=@LOCATION, description=@DESCRIPTION, width=@WIDTH, height=@HEIGHT, thumbnail_url=@THUMB, date_added=@DATEADD, date_aired=@DATEAIRED, duration_in_seconds=@DURATION, file_mp4=@MP4, file_ogv=@OGV, file_webm=@WEBM, download_url=@DOWNLOADURL, hidden=@HIDDEN, private=@PRIVATE, tags=@TAGS, available_From=@AVAILFROM, available_to=@AVAILTO, always_available=@ALWAYSAVAIL, legacy_video_id=@LEGACYID, youtube_url=@YOUTUBEURL, category_id=@CATEGORY WHERE id=@ID";
+                    sqlCommand.CommandText = "UPDATE videos SET name=@NAME, author=@AUTHOR, description=@DESCRIPTION, width=@WIDTH, height=@HEIGHT, thumbnail_url=@THUMB, date_added=@DATEADD, duration_in_seconds=@DURATION, file_mp4=@MP4, file_ogv=@OGV, file_webm=@WEBM, download_url=@DOWNLOADURL, hidden=@HIDDEN, private=@PRIVATE, tags=@TAGS, youtube_url=@YOUTUBEURL, category_id=@CATEGORY WHERE id=@ID";
 
                     sqlCommand.Parameters.AddWithValue("ID", video.ID);
                     sqlCommand.Parameters.AddWithValue("NAME", video.Name);
                     sqlCommand.Parameters.AddWithValue("AUTHOR", video.Author);
-                    sqlCommand.Parameters.AddWithValue("LOCATION", video.Location);
                     sqlCommand.Parameters.AddWithValue("DESCRIPTION", video.Description);
                     sqlCommand.Parameters.AddWithValue("WIDTH", video.Width);
                     sqlCommand.Parameters.AddWithValue("HEIGHT", video.Height);
                     sqlCommand.Parameters.AddWithValue("THUMB", video.ThumbnailURL);
                     sqlCommand.Parameters.AddWithValue("DATEADD", video.DateAdded);
-                    sqlCommand.Parameters.AddWithValue("DATEAIRED", video.DateAired);
                     sqlCommand.Parameters.AddWithValue("DURATION", video.DurationInSeconds);
                     sqlCommand.Parameters.AddWithValue("MP4", video.FileURL_H264);
                     sqlCommand.Parameters.AddWithValue("OGV", video.FileURL_THEORA);
@@ -432,11 +422,7 @@ namespace LSKYStreamingCore
                     sqlCommand.Parameters.AddWithValue("DOWNLOADURL", video.DownloadURL);
                     sqlCommand.Parameters.AddWithValue("HIDDEN", video.IsHidden);
                     sqlCommand.Parameters.AddWithValue("PRIVATE", video.IsPrivate);
-                    sqlCommand.Parameters.AddWithValue("TAGS", video.Tags);
-                    sqlCommand.Parameters.AddWithValue("AVAILFROM", video.DateAvailable);
-                    sqlCommand.Parameters.AddWithValue("AVAILTO", video.DateExpires);
-                    sqlCommand.Parameters.AddWithValue("ALWAYSAVAIL", video.IsAlwaysAvailable);
-                    sqlCommand.Parameters.AddWithValue("LEGACYID", video.LegacyVideoID);
+                    sqlCommand.Parameters.AddWithValue("TAGS", video.Tags.ToSemicolenSeparatedString());
                     sqlCommand.Parameters.AddWithValue("CATEGORY", video.CategoryID);
                     sqlCommand.Parameters.AddWithValue("YOUTUBEURL", video.YoutubeURL);
 
@@ -459,10 +445,11 @@ namespace LSKYStreamingCore
         {
             bool returnMe = false;
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
+                    sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
                     sqlCommand.CommandText = "DELETE FROM videos WHERE id=@ID";
                     sqlCommand.Parameters.AddWithValue("ID", video.ID);

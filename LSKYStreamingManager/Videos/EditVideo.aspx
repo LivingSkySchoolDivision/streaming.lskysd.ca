@@ -1,17 +1,20 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Template.Master" AutoEventWireup="true" CodeBehind="NewVideo.aspx.cs" Inherits="LSKYStreamingManager.Videos.NewVideo" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Template.Master" AutoEventWireup="true" CodeBehind="EditVideo.aspx.cs" Inherits="LSKYStreamingManager.Videos.EditVideo" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <style type="text/css">
-        p {
-            font-size: 8pt;
-        }
-    </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
-    <h2>Add new video</h2>    
+    <h2>Edit video</h2>    
     <div style="text-align: center;">
         <asp:Label ID="lblError" runat="server" Text="" Font-Bold="true" Font-Size="Large" ForeColor="Red" Visible="false"></asp:Label>
     </div>
     <asp:Table ID="tblControls" runat="server" Width="100%" Font-Size="Small">
+        <asp:TableRow>
+            <asp:TableCell Width="350" VerticalAlign="Top">
+                <b>ID</b>
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <asp:Label ID="lblID" runat="server" Text="???"></asp:Label>
+            </asp:TableCell>
+        </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell Width="350" VerticalAlign="Top">
                 <b>Title</b>
@@ -162,8 +165,11 @@
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>
-            <asp:TableCell ColumnSpan="2" HorizontalAlign="Center">
-                <asp:Button ID="btnAdd" runat="server" Text="Add Video" OnClick="btnAdd_Click" />
+            <asp:TableCell HorizontalAlign="Center">
+                <asp:LinkButton ID="btnDelete" runat="server" OnClick="btnDelete_OnClick">Delete video</asp:LinkButton>
+            </asp:TableCell>
+            <asp:TableCell HorizontalAlign="Center">
+                <asp:Button ID="btnEdit" runat="server" Text="Update Video" OnClick="btnEdit_OnClick" />
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>

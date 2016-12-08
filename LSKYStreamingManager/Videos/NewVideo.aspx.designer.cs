@@ -157,13 +157,13 @@ namespace LSKYStreamingManager.Videos {
         protected global::System.Web.UI.WebControls.TextBox txtWEBM;
         
         /// <summary>
-        /// TextBox1 control.
+        /// txtDownloadURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        protected global::System.Web.UI.WebControls.TextBox txtDownloadURL;
         
         /// <summary>
         /// drpCategory control.
@@ -200,15 +200,6 @@ namespace LSKYStreamingManager.Videos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkPrivate;
-        
-        /// <summary>
-        /// chkWasOriginallyLiveStream control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkWasOriginallyLiveStream;
         
         /// <summary>
         /// btnAdd control.

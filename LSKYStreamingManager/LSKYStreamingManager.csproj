@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Alerts\AlertManager.aspx" />
+    <Content Include="GenerateIDs.aspx" />
     <Content Include="icon_3d.gif" />
     <Content Include="icon_doc.gif" />
     <Content Include="icon_file_locked.gif" />
@@ -92,6 +93,7 @@
     <Content Include="Streams\NewStream.aspx" />
     <Content Include="trans_background.png" />
     <Content Include="VideoCategories\index.aspx" />
+    <Content Include="Videos\EditVideo.aspx" />
     <Content Include="Videos\index.aspx" />
     <Content Include="Videos\NewVideo.aspx" />
     <None Include="Properties\PublishProfiles\Development Server.pubxml" />
@@ -107,6 +109,13 @@
     </Compile>
     <Compile Include="Alerts\AlertManager.aspx.designer.cs">
       <DependentUpon>AlertManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GenerateIDs.aspx.cs">
+      <DependentUpon>GenerateIDs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GenerateIDs.aspx.designer.cs">
+      <DependentUpon>GenerateIDs.aspx</DependentUpon>
     </Compile>
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
@@ -177,6 +186,13 @@
     </Compile>
     <Compile Include="VideoCategories\index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Videos\EditVideo.aspx.cs">
+      <DependentUpon>EditVideo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Videos\EditVideo.aspx.designer.cs">
+      <DependentUpon>EditVideo.aspx</DependentUpon>
     </Compile>
     <Compile Include="Videos\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>

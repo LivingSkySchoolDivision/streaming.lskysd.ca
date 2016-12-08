@@ -11,10 +11,8 @@
             <asp:TableHeaderCell>Name</asp:TableHeaderCell>
             <asp:TableHeaderCell>Category</asp:TableHeaderCell>
             <asp:TableHeaderCell>Dimensions</asp:TableHeaderCell>
-            <asp:TableHeaderCell>File Formats</asp:TableHeaderCell>
             <asp:TableHeaderCell>Hidden</asp:TableHeaderCell>
-            <asp:TableHeaderCell>Private</asp:TableHeaderCell>
-            <asp:TableHeaderCell>Expires</asp:TableHeaderCell>       
+            <asp:TableHeaderCell>Private</asp:TableHeaderCell>     
         </asp:TableHeaderRow>
     </asp:Table>
 </asp:Content>

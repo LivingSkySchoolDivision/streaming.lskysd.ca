@@ -30,7 +30,7 @@ namespace LSKYStreamingCore
         {
             _cache = new Dictionary<string, VideoCategory>();
             
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -111,7 +111,7 @@ namespace LSKYStreamingCore
             }
 
             bool foundCategoryWithGivenID = false;
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -143,7 +143,7 @@ namespace LSKYStreamingCore
                 category.ID = CreateNewVideoCategoryID();
             }
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -167,7 +167,7 @@ namespace LSKYStreamingCore
 
         public void Update(VideoCategory category)
         {
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -190,10 +190,11 @@ namespace LSKYStreamingCore
 
         public void Delete(VideoCategory category)
         {
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
+                    sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
                     sqlCommand.CommandText = "DELETE FROM video_categories WHERE id=@ID";
                     sqlCommand.Parameters.AddWithValue("ID", category.ID);

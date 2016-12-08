@@ -38,7 +38,7 @@ namespace LSKYStreamingCore
         public LiveBroadcastRepository()
         {
             _cache = new Dictionary<string, LiveBroadcast>();
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -103,7 +103,7 @@ namespace LSKYStreamingCore
                 broadcast.ID = CreateNewID();
             }
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -135,7 +135,7 @@ namespace LSKYStreamingCore
 
         public void Update(LiveBroadcast broadcast)
         {
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
@@ -166,6 +166,26 @@ namespace LSKYStreamingCore
             }
         }
 
+        public void Delete(LiveBroadcast broadcast)
+        {
+            if (!string.IsNullOrEmpty(broadcast.ID))
+            {
+                using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadWrite))
+                {
+                    using (SqlCommand sqlCommand = new SqlCommand())
+                    {
+                        sqlCommand.Connection = connection;
+                        sqlCommand.CommandType = CommandType.Text;
+                        sqlCommand.CommandText = "DELETE FROM  live_streams WHERE id=@ID";
+                        sqlCommand.Parameters.AddWithValue("ID", broadcast.ID);
+                        sqlCommand.Connection.Open();
+                        sqlCommand.ExecuteNonQuery();
+                        sqlCommand.Connection.Close();
+                    }
+                }
+            }
+        }
+
         public string CreateNewID()
         {
             string returnMe = string.Empty;
@@ -185,7 +205,7 @@ namespace LSKYStreamingCore
             
             bool foundGivenID = false;
 
-            using (SqlConnection connection = new SqlConnection(GlobalStreamingSettings.dbConnectionString_ReadOnly))
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {
