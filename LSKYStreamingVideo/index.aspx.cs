@@ -7,27 +7,29 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using LSKYStreamingCore.ExtensionMethods;
+using LSKYStreamingVideo.CommonHTMLParts;
 
 namespace LSKYStreamingVideo
 {
     public partial class index : System.Web.UI.Page
     {
+        
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<Video> NewestVideos = new List<Video>();
-            List<Video> FeaturedVideos = new List<Video>();
-            List<LiveBroadcast> UpcomingStreams = new List<LiveBroadcast>();
-            List<LiveBroadcast> CurrentlyLiveStreams = new List<LiveBroadcast>();
+            VideoRepository videoRepository = new VideoRepository();
+            LiveBroadcastRepository liveBroadcastRepository = new LiveBroadcastRepository();
+
+            // Determine if the user can access private videos
+            bool includePrivateContent = false;
+
+
+            List<Video> NewestVideos = videoRepository.GetNewest(includePrivateContent, 60);
+            List<Video> FeaturedVideos = videoRepository.GetFeatured(includePrivateContent);
+            List<LiveBroadcast> UpcomingStreams = liveBroadcastRepository.GetUpcoming();
+            List<LiveBroadcast> CurrentlyLiveStreams = liveBroadcastRepository.GetLive();
             
-            using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
-            {
-                NewestVideos = Video.LoadNewest(connection, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
-                FeaturedVideos = Video.LoadFeatured(connection, Config.CanAccessPrivate(Request.ServerVariables["REMOTE_ADDR"]));
-                UpcomingStreams = LiveBroadcast.LoadUpcoming(connection);
-                CurrentlyLiveStreams = LiveBroadcast.LoadCurrentlyBroadcasting(connection, 20);
-
-            }
-
             // Display live streams currently broadcasting
             if (CurrentlyLiveStreams.Count > 0)
             {
@@ -37,14 +39,14 @@ namespace LSKYStreamingVideo
                     litPlayer.Visible = true;
                     litStreamInfo.Visible = true;
                     
-                    litPlayer.Text = LSKYCommonHTMLParts.BuildLiveStreamPlayerHTML(CurrentlyLiveStreams.First(), LSKYCommonHTMLParts.Player.YouTube);
-                    litStreamInfo.Text = LSKYCommonHTMLParts.BuildLiveStreamInfoHTML(CurrentlyLiveStreams.First()) + "<br/><br/><br/>";
+                    litPlayer.Text = YoutubeLiveBroadcastPlayer.GetHTML(CurrentlyLiveStreams.First());
+                    litStreamInfo.Text = buildLiveStreamInfoHTML(CurrentlyLiveStreams.First());
 
                 }
                 else
                 {
                     litLiveStreams.Visible = true;
-                    litLiveStreams.Text = BuildLiveStreamDisplay(CurrentlyLiveStreams);
+                    litLiveStreams.Text = showMultipleLiveStreams(CurrentlyLiveStreams);
                 }
             }
             else
@@ -60,7 +62,7 @@ namespace LSKYStreamingVideo
             {
                 title_upcoming.Visible = true;
                 litUpcomingStreams.Visible = true;
-                litUpcomingStreams.Text = BuildUpcomingStreamDisplay(UpcomingStreams);
+                litUpcomingStreams.Text = upcomingStreamsSection(UpcomingStreams);
             }
             else
             {
@@ -88,7 +90,7 @@ namespace LSKYStreamingVideo
             {
                 title_newest.Visible = true;
                 litNewestVideos.Visible = true;
-                litNewestVideos.Text = BuildNewVideosDisplay(NewestVideos);
+                litNewestVideos.Text = newestVideosSection(NewestVideos);
                 
             }
             else
@@ -97,8 +99,23 @@ namespace LSKYStreamingVideo
                 litNewestVideos.Visible = false;
             }
         }
-        
-        private string LiveStreamListItem(LiveBroadcast stream)
+
+        private static string buildLiveStreamInfoHTML(LiveBroadcast stream)
+        {
+            int container_width = stream.Width;
+            StringBuilder returnMe = new StringBuilder();
+            returnMe.Append("<div style=\"max-width: " + container_width + "px; margin-left: auto; margin-right: auto;\">");
+            returnMe.Append("<div class=\"video_list_name\">" + stream.Name + "</div>");
+            returnMe.Append("<div class=\"video_list_info\"><b>Broadcasting from:</b> " + stream.Location + "</div>");
+            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled start:</b> " + stream.StartTime.ToLongDateString() + " " + stream.StartTime.ToLongTimeString() + "</div>");
+            returnMe.Append("<div class=\"video_list_info\"><b>Scheduled end:</b> " + stream.EndTime.ToLongDateString() + " " + stream.EndTime.ToLongTimeString() + "</div>");
+            returnMe.Append("<br/><div class=\"video_list_description\">" + stream.Description + "</div>");
+            returnMe.Append("</div><br/><br/><br/>");
+            return returnMe.ToString();
+        }
+
+
+        private string liveStreamListItem(LiveBroadcast stream)
         {
             int thumb_width = 360;
             int thumb_height = 240;
@@ -129,7 +146,7 @@ namespace LSKYStreamingVideo
          
             returnMe.Append("<div class=\"liveStreamWrap\">");
             returnMe.Append("<div class=\"liveStream\">");
-            if (stream.IsLive())
+            if (stream.IsLive)
             {
                 returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + player_url + "\">");
             }
@@ -145,13 +162,13 @@ namespace LSKYStreamingVideo
 
 
             returnMe.Append("<div class=\"featuredDesc\">");
-            if (stream.IsLive())
+            if (stream.IsLive)
             {
                 returnMe.Append("<div class=\"stream_title\"><a style=\"text-decoration: none;\" href=\"" + player_url + "\">" + stream.Name + "</a> <div class=\"live_indicator\">LIVE</div></div>");
             }
             else
             {
-                returnMe.Append("<div class=\"stream_title\">" + stream.Name + "</div><div class=\"upcoming_indicator\">Starts in " + stream.GetTimeUntilStartsInEnglish() + "</div>");
+                returnMe.Append("<div class=\"stream_title\">" + stream.Name + "</div><div class=\"upcoming_indicator\">Starts in " + stream.TimeUntilLive + "</div>");
             }
             if (!string.IsNullOrEmpty(stream.Location))
             {
@@ -178,7 +195,7 @@ namespace LSKYStreamingVideo
             
             returnMe.Append("<div class=\"stream_info\">Expected duration: " + Math.Round(expected_duration.TotalMinutes).ToString() + " minutes");
 
-            if (stream.IsLive())
+            if (stream.IsLive)
             {
                 if (minutes_until_finish > 0)
                 {
@@ -206,17 +223,64 @@ namespace LSKYStreamingVideo
             return returnMe.ToString();
         }
 
-        private string BuildLiveStreamDisplay(List<LiveBroadcast> LiveStreams)
+        public static string smallVideoListItem(Video video)
+        {
+            StringBuilder returnMe = new StringBuilder();
+
+            string thumbnailURL = "none.png";
+            string playerURL = "/player/?i=" + video.ID;
+
+            if (!string.IsNullOrEmpty(video.ThumbnailURL))
+            {
+                thumbnailURL = video.ThumbnailURL;
+            }
+
+            returnMe.Append("<div class=\"SmallVideoListItem\">");
+            
+            returnMe.Append("<div class=\"VideoListThumb\" width=\"128\">");
+            returnMe.Append("<a href=\"" + playerURL + "\">");
+            returnMe.Append("<img border=\"0\" src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+            returnMe.Append("</a>");
+            returnMe.Append("</div>");
+            
+            returnMe.Append("<div class=\"video_list_info_container\">");
+            returnMe.Append("<ul>");
+            returnMe.Append("<li class=\"VideoListDescTitle\"> <a style=\"text-decoration: none;\" href=\"" + playerURL + "\"><div class=\"video_list_name\">" + video.Name + "</div></a> </li>");
+            returnMe.Append("<li class=\"VideoListDescDuration\"> <div class=\"video_list_info\"><b>Duration:</b> " + video.DurationInEnglish + "</div></li>");
+            returnMe.Append("<li class=\"VideoListDescSubmitted\"> <div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div></li>");
+            returnMe.Append("</ul>");
+
+            if (video.IsPrivate)
+            {
+                returnMe.Append("<div class=\"video_list_info\"><b>This video is flagged as private</b></div>");
+            }
+
+            if (!string.IsNullOrEmpty(video.DownloadURL))
+            {
+                returnMe.Append("<div class=\"video_list_info\">Download available</div>");
+            }
+            returnMe.Append("<br/><div class=\"video_list_description\">" + video.Description + "</div>");
+
+            returnMe.Append("</div></td>");
+
+
+            returnMe.Append("</ul>");
+            returnMe.Append("</div>");
+
+            return returnMe.ToString();
+
+        }
+
+        private string showMultipleLiveStreams(List<LiveBroadcast> LiveStreams)
         {
             StringBuilder returnMe = new StringBuilder();
 
             // Put in columns
             int numDisplayed = 0;
-            int numColumns = 3;
+            int numColumns = 2;
             double numRows = Math.Ceiling((double)((double)LiveStreams.Count / (double)numColumns));
             
             returnMe.Append("<table border=0 cellpadding=5 cellspacing=0 width=\"900\" style=\"margin-left: auto; margin-right: auto;\">");
-            //returnMe.Append("<div class=\"test2\">"); //@todo 
             for (int rowCount = 0; rowCount < numRows; rowCount++)
             {
                 returnMe.Append("<div class=\"test3\">");
@@ -224,93 +288,31 @@ namespace LSKYStreamingVideo
                 {
                     if (numDisplayed < LiveStreams.Count)
                     {
-                        returnMe.Append("<td valign=\"top\">");
-                        returnMe.Append(LiveStreamListItem(LiveStreams[numDisplayed]));
-                        returnMe.Append("</td>");
+                        // On the last row, if the number of videos is an odd number, make it colspan = 2
+                        if (LiveStreams.Count.IsOdd() && (numDisplayed + 1 == LiveStreams.Count))
+                        {
+                            returnMe.Append("<td valign=\"top\" align=\"Center\" colspan=2>");
+                        }
+                        else
+                        {
+                            returnMe.Append("<td valign=\"top\" align=\"Center\">");
+                        }
+                        returnMe.Append(liveStreamListItem(LiveStreams[numDisplayed]));
+                        returnMe.Append("<br/><br/></td>");
                         numDisplayed++;
+
+
                     }
                 }
                 returnMe.Append("</tr>");
-                returnMe.Append("</div>");  // div.test3
+                returnMe.Append("</div>");
             }
-            returnMe.Append("</div>");  // div.test2
-            returnMe.Append("</table><br/><br/>");  // div.test2
-
+            returnMe.Append("</div>");
+            returnMe.Append("</table><br/><br/>");
             return returnMe.ToString();
         }
               
-
-        private string OLD_BuildUpcomingStreamDisplay(List<LiveBroadcast> UpcomingStreams)
-        {
-            // Only display this many sections
-            int maxDatesToDisplay = 5;
-            
-            StringBuilder returnMe = new StringBuilder();
-
-            // Sort into dates
-            Dictionary<string, List<LiveBroadcast>> StreamsByDate = new Dictionary<string, List<LiveBroadcast>>();
-              
-            foreach (LiveBroadcast stream in UpcomingStreams)
-            {
-                if (!StreamsByDate.ContainsKey(stream.StartTime.ToLongDateString()))
-                {
-                    StreamsByDate.Add(stream.StartTime.ToLongDateString(), new List<LiveBroadcast>());
-                }
-                StreamsByDate[stream.StartTime.ToLongDateString()].Add(stream);
-            }
-
-            int numDatesDisplayed = 0;
-            foreach (KeyValuePair<string, List<LiveBroadcast>> dates in StreamsByDate)
-            {
-                numDatesDisplayed++;
-                if (numDatesDisplayed > maxDatesToDisplay)
-                {
-                    break;
-                }
-                
-                returnMe.Append("<div class=\"index_date_display\">" + dates.Key + "</div>");
-                //returnMe.Append("<table border=0 cellpadding=0 cellspacing=0 style=\"width: 100%;\">");
-                returnMe.Append("<div class=\"upcomingStream\">");
-
-                returnMe.Append("<ul class=\"upcomingStreamUL\">");
-                foreach (LiveBroadcast stream in dates.Value)
-                {
-                    returnMe.Append("<li>");
-                    //returnMe.Append("<td width=\"25%\" valign=\"top\">");
-                    returnMe.Append("<ul width=\"25%\" valign=\"top\">");
-                        //returnMe.Append("<div class=\"upcoming_stream_time\"><b>" + stream.StartTime.ToShortTimeString() + "</b>");
-                        returnMe.Append("<li class=\"upcoming_stream_time\"><b>" + stream.StartTime.ToShortTimeString() + "</b></li>");
-                        if (stream.GetTimeUntilStarts().TotalMinutes <= 120)
-                        {
-                            // If the stream is about to start, draw attention to it
-                            returnMe.Append("<div class=\"upcoming_shortly\">(" + stream.GetTimeUntilStartsInEnglish() + ") </div>");
-                        }
-                    returnMe.Append("</ul>");
-                    //returnMe.Append("<td valign=\"top\">");
-                    returnMe.Append("<ul valign=\"top\">");
-
-                        returnMe.Append("<div class=\"upcoming_stream_name\" >" + stream.Name + "</div>");
-                        
-                        returnMe.Append("<div class=\"upcoming_stream_info\">Expected duration: " + stream.GetExpectedDuration() + "</div>");
-                        if (!string.IsNullOrEmpty(stream.Location))
-                        {
-                            returnMe.Append("<div class=\"upcoming_stream_info\">Streaming from: " + stream.Location + "</div>");
-                        }
-                    returnMe.Append("</br></li>");
-                    
-                    returnMe.Append("</ul>");
-                }
-
-                returnMe.Append("</ul>");
-                returnMe.Append("<br/>");
-               
-            }
-            
-
-            return returnMe.ToString();
-        }
-
-        private string BuildUpcomingStreamDisplay(List<LiveBroadcast> UpcomingStreams)
+        private string upcomingStreamsSection(List<LiveBroadcast> UpcomingStreams)
         {
             int maxUpcomingStreams = 10;
 
@@ -322,14 +324,14 @@ namespace LSKYStreamingVideo
             {
                 returnMe.Append("<div class=\"upcomingBroadcast\">");
                 returnMe.Append("<div class=\"upcomingBroadcastDate\">");
-                returnMe.Append("<div class=\"upcomingBroadcastDate_Month\">" + LSKYCommon.GetMonthName(upcomingStream.StartTime.Month) + "</div>");
+                returnMe.Append("<div class=\"upcomingBroadcastDate_Month\">" + upcomingStream.StartTime.MonthName() + "</div>");
                 returnMe.Append("<div class=\"upcomingBroadcastDate_Day\">" + upcomingStream.StartTime.Day + "</div>");
                 returnMe.Append("</div>");
 
-                if (upcomingStream.GetTimeUntilStarts().TotalMinutes <= 120)
+                if (upcomingStream.TimeUntilLive.TotalMinutes <= 120)
                 {
                     // If the stream is about to start, draw attention to it
-                    returnMe.Append("<div class=\"upcomingBroadcastTime\">Starts in " + upcomingStream.GetTimeUntilStartsInEnglish() + "</div>");
+                    returnMe.Append("<div class=\"upcomingBroadcastTime\">Starts in " + upcomingStream.TimeUntilLive + "</div>");
                 }
                 else
                 {
@@ -371,53 +373,14 @@ namespace LSKYStreamingVideo
 
             foreach (Video video in VideosToDisplay)
             {
-                returnMe.Append(LSKYCommonHTMLParts.SmallVideoListItem(video, true));
+                returnMe.Append(smallVideoListItem(video));
             }
 
             return returnMe.ToString();
 
         }
         
-        /*
-         * Mike 12/23/2015 - 10:30 - previous code - changing structure out of tables
-        private string BuildNewVideosDisplay(List<Video> videos)
-        {
-            int numColumns = 2;
-
-            int columnWidthPercent = (int)Math.Round((double)100 / (double)numColumns,0);
-
-            StringBuilder returnMe = new StringBuilder();
-
-            returnMe.Append("<table border=0 cellpadding=5 cellspacing=5 style=\"width: 100%\">");
-            returnMe.Append("<tr>");
-
-            int numDisplayed = 0;
-            foreach (Video video in videos)
-            {
-                numDisplayed++;
-                returnMe.Append("<td valign=\"top\" width=\"" + columnWidthPercent + "%\">");
-                returnMe.Append(LSKYCommonHTMLParts.SmallVideoListItem(video, true));
-                returnMe.Append("</td>");
-                if (numDisplayed >= numColumns)
-                {
-                    returnMe.Append("</tr><tr>");
-                    numDisplayed = 0;
-                }
-            }
-
-            returnMe.Append("</tr>");
-            returnMe.Append("</table>");
-
-            return returnMe.ToString();
-
-        }
-        */
-       
-        /*
-         * Newest Videos - Main structure - 2 column table. 
-         * 
-         */
-        private string BuildNewVideosDisplay(List<Video> videos)
+        private string newestVideosSection(List<Video> videos)
         {
             int numColumns = 2;
 
@@ -434,7 +397,7 @@ namespace LSKYStreamingVideo
                 numDisplayed++;
                 //returnMe.Append("<td valign=\"top\" width=\"" + columnWidthPercent + "%\">");
                 returnMe.Append("<div class=\"col span_1_of_2\">");
-                returnMe.Append(LSKYCommonHTMLParts.SmallVideoListItem(video, true));
+                returnMe.Append(smallVideoListItem(video));
                 //returnMe.Append("</td>");
                 returnMe.Append("</div>");
 

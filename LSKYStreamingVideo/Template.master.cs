@@ -17,11 +17,8 @@ namespace LSKYStreamingVideo
             lblServerTime.Text = DateTime.Now.ToLongDateString() + " - " + DateTime.Now.ToLongTimeString() + " (" + Request.ServerVariables["REMOTE_ADDR"] + ")";
 
             // Load any alerts from the database
-            List<Alert> ActiveAlerts = new List<Alert>();
-            using (SqlConnection connection = new SqlConnection(LSKYCommon.dbConnectionString_ReadOnly))
-            {
-                ActiveAlerts = Alert.LoadActiveAlerts(connection);
-            }
+            AlertRepository alertRepository = new AlertRepository();
+            List<Alert> ActiveAlerts = alertRepository.GetActive();
             
             if (ActiveAlerts.Count > 0)
             {
@@ -29,7 +26,7 @@ namespace LSKYStreamingVideo
 
                 foreach (Alert alert in ActiveAlerts)
                 {
-                    if (alert.Importance == Alert.importance.High)
+                    if (alert.Importance == AlertImportance.High)
                     {
                         AlertBarContent.Append("<div class=\"alertbar_high\">" + alert.Content + "</div>");
                     }

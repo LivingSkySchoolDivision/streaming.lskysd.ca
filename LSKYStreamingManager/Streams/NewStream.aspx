@@ -55,23 +55,14 @@
                 <asp:Image ID="imgThumbnail" ImageUrl="/thumbnails/broadcasts/blank.png" CssClass="thumbnail_editor" runat="server" /><br />
                 <asp:DropDownList ID="drpThumbnail" runat="server" AutoPostBack="true" OnSelectedIndexChanged="drpThumbnail_SelectedIndexChanged"></asp:DropDownList>
             </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
-                <b>ISML URL</b>
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:DropDownList ID="drpISML" runat="server"></asp:DropDownList>
-            </asp:TableCell>
-        </asp:TableRow>        
+        </asp:TableRow>      
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
                 <b>YouTube Stream ID</b>
                 <p>
-                Get this from after the "watch?v=" text in the URL.  For example: https://www.youtube.com/watch?v=<b>COPYTHISPART</b>
-                <br />or at the end of the share/Embed URL: https://youtu.be/<b>COPYTHISPART</b>
-                <br /><b>Note:</b> Having any value in here will disable the ISML URL and only use YouTube Live
-                    </p>
+                    Get this from after the "watch?v=" text in the URL.  For example: https://www.youtube.com/watch?v=<b>COPYTHISPART</b>
+                    <br />or at the end of the share/Embed URL: https://youtu.be/<b>COPYTHISPART</b>
+                </p>
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
                 <asp:TextBox ID="txtYouTubeID" runat="server"></asp:TextBox>
@@ -99,15 +90,6 @@
                 <asp:TextBox ID="txtEndDay" runat="server" MaxLength="2" Width="25"></asp:TextBox> &nbsp;&nbsp;
                 <asp:TextBox ID="txtEndHour" runat="server" MaxLength="2" Width="25"></asp:TextBox>:
                 <asp:TextBox ID="txtEndMinute" runat="server" MaxLength="2" Width="25"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Sidebar content</b>  
-                <p>Note: Not currently implemented</p>              
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:TextBox ID="txtSidebar" runat="server" TextMode="MultiLine" Width="100%" Height="100" Enabled="false"></asp:TextBox>
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>
@@ -144,11 +126,20 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkSidebar" runat="server" Enabled="false" />
+                <asp:CheckBox ID="chkDelayed" runat="server" />
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
-                <b>Display sidebar</b>
-                <p>Note: Sidebars are not currently implemented.</p>
+                <b>Stream is delayed</b>
+                <p>Check this to indicate that this stream may be delayed.</p>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow>
+            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
+                <asp:CheckBox ID="chkCancelled" runat="server" />
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <b>Stream is cancelled</b>
+                <p>Check this to indicate that this stream has been cancelled. If you just delete it, it will disappear, and users won't know what happened.</p>
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>

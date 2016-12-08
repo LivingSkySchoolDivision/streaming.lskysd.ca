@@ -61,13 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="about\index.aspx" />
-    <Content Include="about\livetext.jpg" />
-    <Content Include="about\streaming_equipment_uchsindia.png" />
-    <Content Include="about\stream_player.png" />
-    <Content Include="about\title_helper.png" />
-    <Content Include="about\tricaster_front.jpg" />
-    <Content Include="about\uchs_j20_logo.png" />
-    <Content Include="about\uchs_j20_logo_small.png" />
     <Content Include="help\index.aspx" />
     <Content Include="icon_3d.gif" />
     <Content Include="icon_doc.gif" />
@@ -117,6 +110,11 @@
     <Compile Include="help\index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
+    <Compile Include="HTMLParts\BrowserCompatibilityChart.cs" />
+    <Compile Include="HTMLParts\VideoPlayers\HTML5VideoPlayer.cs" />
+    <Compile Include="HTMLParts\VideoPlayer.cs" />
+    <Compile Include="HTMLParts\LiveBroadcastPlayers\YoutubeLiveBroadcastPlayer.cs" />
+    <Compile Include="HTMLParts\VideoPlayers\YoutubeVideoPlayer.cs" />
     <Compile Include="index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -40,12 +40,21 @@ namespace LSKYStreamingVideo.player {
         protected global::System.Web.UI.WebControls.Literal litVideoInfo;
         
         /// <summary>
-        /// tblNotFound control.
+        /// tblErrorMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblNotFound;
+        protected global::System.Web.UI.WebControls.Table tblErrorMessage;
+        
+        /// <summary>
+        /// litErrorMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litErrorMessage;
     }
 }

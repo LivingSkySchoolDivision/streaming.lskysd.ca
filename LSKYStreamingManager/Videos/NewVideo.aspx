@@ -31,15 +31,6 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
-                <b>Location</b>
-                <p>What physical location was this video recorded at? You can be as specific or generic as you'd like, or if you leave this blank it won't be displayed.</p>
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:TextBox ID="txtLocation" runat="server" Width="300"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
                 <b>Description</b>
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
@@ -83,20 +74,7 @@
                 <asp:TextBox ID="txtDuration" runat="server" Width="75"></asp:TextBox> seconds
             </asp:TableCell>
         </asp:TableRow>
-
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Original Air Date</b>
-                <p>Only displayed if the option "Display airdate" is selected below</p>
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:DropDownList ID="drpAirDateYear" runat="server"></asp:DropDownList>&nbsp;
-                <asp:DropDownList ID="drpAirDateMonth" runat="server"></asp:DropDownList>&nbsp;
-                <asp:TextBox ID="txtAirDateDay" runat="server" MaxLength="2" Width="25"></asp:TextBox> &nbsp;&nbsp;
-                <asp:TextBox ID="txtAirDateHour" runat="server" MaxLength="2" Width="25"></asp:TextBox>:
-                <asp:TextBox ID="txtAirDateMin" runat="server" MaxLength="2" Width="25"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>                   
+                 
         <asp:TableRow>
             <asp:TableCell ColumnSpan="2">
                 <br /><br />
@@ -107,12 +85,20 @@
         </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
-                <b>ISM URL</b>
+                <b>Youtube URL</b>
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
-                /Video_files/<asp:TextBox ID="txtISMURL" runat="server" Width="400"></asp:TextBox>
+                www.youtube.com/watch?v=<asp:TextBox ID="txtYoutubeURL" runat="server" Width="400"></asp:TextBox>
             </asp:TableCell>
-        </asp:TableRow>        
+        </asp:TableRow>  
+        <asp:TableRow>
+            <asp:TableCell VerticalAlign="Top">
+                <b>Youtube start time (in seconds)</b>
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <asp:TextBox ID="txtYoutubeStartTime" runat="server" Width="20"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>  
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
                 <b>MP4/H.264 URL</b>
@@ -143,44 +129,9 @@
                 <p>If left blank, download will not be available. This does not have to be a video file - you can make this a ZIP file or something else if you wish.</p>                
             </asp:TableCell>
             <asp:TableCell VerticalAlign="Top">
-                /Video_files/<asp:TextBox ID="TextBox1" runat="server" Width="400"></asp:TextBox>
+                /Video_files/<asp:TextBox ID="txtDownloadURL" runat="server" Width="400"></asp:TextBox>
             </asp:TableCell>
-        </asp:TableRow>        
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Available from</b>
-                <p>If you wish to "prestage" a video, and have it show up on the site at a later date, put that date in here. If you want the video to show up immediately, this should be set to today's date, or a date in the past.</p>
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:DropDownList ID="drpAvailFromYear" runat="server" Enabled="false"></asp:DropDownList>&nbsp;
-                <asp:DropDownList ID="drpAvailFromMonth" runat="server" Enabled="false"></asp:DropDownList>&nbsp;
-                <asp:TextBox ID="txtAvailFromDay" runat="server" MaxLength="2" Width="25" Enabled="false"></asp:TextBox> &nbsp;&nbsp;
-                <asp:TextBox ID="txtAvailFromHour" runat="server" MaxLength="2" Width="25" Enabled="false"></asp:TextBox>:
-                <asp:TextBox ID="txtAvailFromMin" runat="server" MaxLength="2" Width="25" Enabled="false"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>                       
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Available to</b>
-                <p>If you wish for a video to "expire" and disappear from the site, enter the date here that you want the video to disappear.</p>
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:DropDownList ID="drpAvailToYear" runat="server" Enabled="false"></asp:DropDownList>&nbsp;
-                <asp:DropDownList ID="drpAvailToMonth" runat="server" Enabled="false"></asp:DropDownList>&nbsp;
-                <asp:TextBox ID="txtAvailToDay" runat="server" MaxLength="2" Width="25" Enabled="false"></asp:TextBox> &nbsp;&nbsp;
-                <asp:TextBox ID="txtAvailToHour" runat="server" MaxLength="2" Width="25" Enabled="false"></asp:TextBox>:
-                <asp:TextBox ID="txtAvailToMin" runat="server" MaxLength="2" Width="25" Enabled="false"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Legacy Video ID</b>
-                <p>If this video existed before the streaming site was updated and changed the ID scheme, enter it's original ID here. Otherwise this should be blank.</p>   
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <asp:TextBox ID="txtLegacyID" runat="server" Width="300"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>
+        </asp:TableRow>   
         <asp:TableRow>
             <asp:TableCell VerticalAlign="Top">
                 <b>Category</b>                
@@ -211,42 +162,8 @@
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkWasOriginallyLiveStream" runat="server" Checked="true" />
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Was originally a live broadcast on this site</b>
-                <p>Not currently implemented, but might be useful later on.</p>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkShowAirDate" runat="server" Checked="true" />
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Display original air date</b>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkAlwaysAvailable" runat="server" Checked="true" OnCheckedChanged="chkAlwaysAvailable_CheckedChanged" AutoPostBack="true" />
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Video is always available</b>
-                <p>Uncheck this if you would like a video to be available for a specific time period only</p>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
-            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
-                <asp:CheckBox ID="chkAllowEmbed" runat="server" Checked="true" />
-            </asp:TableCell>
-            <asp:TableCell VerticalAlign="Top">
-                <b>Allow this video to be embedded in other sites</b>                
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow>
             <asp:TableCell ColumnSpan="2" HorizontalAlign="Center">
-                <asp:Button ID="btnAdd" runat="server" Text="Add new stream" OnClick="btnAdd_Click" />
+                <asp:Button ID="btnAdd" runat="server" Text="Add Video" OnClick="btnAdd_Click" />
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>

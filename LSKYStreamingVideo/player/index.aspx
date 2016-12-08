@@ -56,11 +56,11 @@
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>
-
-    <asp:Table ID="tblNotFound" runat="server" HorizontalAlign="Center" Visible="false">
+    
+    <asp:Table ID="tblErrorMessage" runat="server" HorizontalAlign="Center" Visible="false">
         <asp:TableRow>
             <asp:TableCell>
-                <div class="large_infobox">Video not found</div>
+                <asp:Literal ID="litErrorMessage" runat="server"></asp:Literal>
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>

@@ -18,7 +18,7 @@ namespace LSKYStreamingManager
 
         public static void logLoginAttempt(string username, string remoteIP, string useragent, string status, string info)
         {
-            using (SqlConnection dbConnection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+            using (SqlConnection dbConnection = new SqlConnection(Settings.dbConnectionString_ReadWrite))
             {
                 using (SqlCommand sqlCommand = new SqlCommand())
                 {

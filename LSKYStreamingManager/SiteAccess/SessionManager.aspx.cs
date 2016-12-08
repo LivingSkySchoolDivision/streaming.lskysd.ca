@@ -27,10 +27,10 @@ namespace LSKYStreamingManager.SiteAccess
             TableCell cell_endtime = new TableCell();
             TableCell cell_IP = new TableCell();
 
-            cell_username.Text = "<abbr title=\"" + session.useragent + "\">" + session.username + "</abbr>";
-            cell_starttime.Text = session.starts.ToLongDateString() + " " + session.starts.ToLongTimeString();
-            cell_endtime.Text = session.ends.ToLongDateString() + " " + session.ends.ToLongTimeString();
-            cell_IP.Text = session.ip;
+            cell_username.Text = "<abbr title=\"" + session.BrowserUserAgent + "\">" + session.Username + "</abbr>";
+            cell_starttime.Text = session.SessionStarted.ToLongDateString() + " " + session.SessionStarted.ToLongTimeString();
+            cell_endtime.Text = session.SessionExpires.ToLongDateString() + " " + session.SessionExpires.ToLongTimeString();
+            cell_IP.Text = session.IPAddress;
 
             if (isCurrentUser)
             {
@@ -49,7 +49,7 @@ namespace LSKYStreamingManager.SiteAccess
             if ((showExpireLinks) && (!isCurrentUser))
             {
                 TableCell cell_ExpireLink = new TableCell();
-                cell_ExpireLink.Text = "<a href=\"?expiresession=" + session.hash + "\">Disconnect</a>";
+                cell_ExpireLink.Text = "<a href=\"?expiresession=" + session.Thumbprint + "\">Disconnect</a>";
                 cell_ExpireLink.HorizontalAlign = HorizontalAlign.Center;
                 returnMe.Cells.Add(cell_ExpireLink);
             }
@@ -60,46 +60,32 @@ namespace LSKYStreamingManager.SiteAccess
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<LoginSession> AllSessions = new List<LoginSession>();
-            LoginSession currentUser = null;
-
             // Load all active sessions
-            using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
+            LoginSessionRepository loginRepository = new LoginSessionRepository();
+            string userSessionID = Settings.getSessionIDFromCookies(Settings.logonCookieName, Request);
+            LoginSession currentUser = loginRepository.Get(userSessionID, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
+            List<LoginSession> AllSessions = loginRepository.GetActive();
+
+            if (!string.IsNullOrEmpty(Request.QueryString["expiresession"]))
             {
-                // Get the currenly logged in user object to determine what permissions they have
-                string userSessionID = LSKYStreamingManagerCommon.getSessionIDFromCookies(LSKYStreamingManagerCommon.logonCookieName, Request);
-                currentUser = LoginSession.loadThisSession(connection, userSessionID, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
-
-                // Expire a session if given the option to                
-                if (!string.IsNullOrEmpty(Request.QueryString["expiresession"]))
+                string hashToExpire = Sanitizers.SanitizeSearchString(Request.QueryString["expiresession"]);
+                if (!string.IsNullOrEmpty(hashToExpire))
                 {
-                    string hashToExpire = LSKYCommon.SanitizeSearchString(Request.QueryString["expiresession"]);
-                    if (!string.IsNullOrEmpty(hashToExpire))
-                    {
-                        LoginSession.expireThisSession(connection, hashToExpire);
-                    }
+                    loginRepository.Delete(hashToExpire);
                 }
-                
-
-                AllSessions = LoginSession.loadActiveSessions(connection);
             }
-
+            
             // Some of the following code won't work if the currentUser object is null. Ideally this shouldn't 
             // happen because the template should catch this before this page loads, but it's better to be safe
             if (currentUser != null)
             {
                 // Display them in a table
-                List<LoginSession> AllSessionsSorted = AllSessions.OrderBy(c => c.username).ToList<LoginSession>();
+                List<LoginSession> AllSessionsSorted = AllSessions.OrderBy(c => c.Username).ToList<LoginSession>();
 
                 foreach (LoginSession session in AllSessionsSorted)
                 {
-                    
                     // Determine if this session is the current user
-                    bool isCurrentUser = false;
-                    if (currentUser.hash == session.hash)
-                    {
-                        isCurrentUser = true;
-                    }
+                    bool isCurrentUser = currentUser.Thumbprint == session.Thumbprint;
 
                     tsblSessions.Rows.Add(AddTableRow_Sessions(session, isCurrentUser, true));                    
 

@@ -13,12 +13,12 @@ namespace LSKYStreamingManager {
     public partial class GenerateIDs {
         
         /// <summary>
-        /// litIDs control.
+        /// tblIDs control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litIDs;
+        protected global::System.Web.UI.WebControls.Table tblIDs;
     }
 }

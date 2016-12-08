@@ -16,7 +16,7 @@ namespace LSKYStreamingManager.Login
         /// <param name="sessionID"></param>
         private void createCookie(string sessionID)
         {
-            HttpCookie newCookie = new HttpCookie(LSKYStreamingManagerCommon.logonCookieName);
+            HttpCookie newCookie = new HttpCookie(Settings.logonCookieName);
             newCookie.Value = sessionID;
             newCookie.Expires = DateTime.Now.AddHours(8);
             newCookie.Domain = Request.Url.Host;
@@ -30,22 +30,20 @@ namespace LSKYStreamingManager.Login
             {
                 // Check to see if a user is already logged in and display an appropriate message
                 LoginSession currentUser = null;
-                string userSessionID = LSKYStreamingManagerCommon.getSessionIDFromCookies(LSKYStreamingManagerCommon.logonCookieName, Request);
+                string userSessionID = Settings.getSessionIDFromCookies(Settings.logonCookieName, Request);
 
                 // Load the current user to get a listof allowed schools
                 if (!string.IsNullOrEmpty(userSessionID))
                 {
-                    using (SqlConnection connection = new SqlConnection(LSKYStreamingManagerCommon.dbConnectionString_ReadWrite))
-                    {
-                        currentUser = LoginSession.loadThisSession(connection, userSessionID, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
-                    }
+                    LoginSessionRepository loginSessionRepository = new LoginSessionRepository();
+                    currentUser = loginSessionRepository.Get(userSessionID, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
                 }
 
                 if (currentUser != null)
                 {
                     tblAlreadyLoggedIn.Visible = true;
                     tblLoginform.Visible = false;
-                    lblUsername.Text = currentUser.username;
+                    lblUsername.Text = currentUser.Username;
                 }
             }
         }
@@ -120,7 +118,7 @@ namespace LSKYStreamingManager.Login
         /// </summary>
         public void redirectToIndex()
         {
-            string IndexURL = Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + LSKYStreamingManagerCommon.indexURL;
+            string IndexURL = Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + Settings.indexURL;
 
             Response.Clear();
             Response.Write("<html>");
@@ -142,14 +140,15 @@ namespace LSKYStreamingManager.Login
                 )
             {
                 // Validate username and password
-                if (LSKYStreamingManagerCommon.validateADCredentials("lskysd", username, password))
+                if (Settings.validateADCredentials("lskysd", username, password))
                 {
                     // Check if the password is complex enough
 
                     if (isPasswordStrongEnough(password))
                     {
                         // Attempt to create a session for the user
-                        string newSessionID = LoginSession.createSession(username, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
+                        LoginSessionRepository loginSessionRepository = new LoginSessionRepository();
+                        string newSessionID = loginSessionRepository.Create(username, Request.ServerVariables["REMOTE_ADDR"], Request.ServerVariables["HTTP_USER_AGENT"]);
 
                         if (newSessionID != string.Empty)
                         {

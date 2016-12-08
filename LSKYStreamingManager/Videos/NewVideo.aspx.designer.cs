@@ -49,15 +49,6 @@ namespace LSKYStreamingManager.Videos {
         protected global::System.Web.UI.WebControls.TextBox txtAuthor;
         
         /// <summary>
-        /// txtLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLocation;
-        
-        /// <summary>
         /// txtDescription control.
         /// </summary>
         /// <remarks>
@@ -121,58 +112,22 @@ namespace LSKYStreamingManager.Videos {
         protected global::System.Web.UI.WebControls.TextBox txtDuration;
         
         /// <summary>
-        /// drpAirDateYear control.
+        /// txtYoutubeURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpAirDateYear;
+        protected global::System.Web.UI.WebControls.TextBox txtYoutubeURL;
         
         /// <summary>
-        /// drpAirDateMonth control.
+        /// txtYoutubeStartTime control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpAirDateMonth;
-        
-        /// <summary>
-        /// txtAirDateDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAirDateDay;
-        
-        /// <summary>
-        /// txtAirDateHour control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAirDateHour;
-        
-        /// <summary>
-        /// txtAirDateMin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAirDateMin;
-        
-        /// <summary>
-        /// txtISMURL control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtISMURL;
+        protected global::System.Web.UI.WebControls.TextBox txtYoutubeStartTime;
         
         /// <summary>
         /// txtMP4URL control.
@@ -202,112 +157,13 @@ namespace LSKYStreamingManager.Videos {
         protected global::System.Web.UI.WebControls.TextBox txtWEBM;
         
         /// <summary>
-        /// TextBox1 control.
+        /// txtDownloadURL control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
-        
-        /// <summary>
-        /// drpAvailFromYear control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpAvailFromYear;
-        
-        /// <summary>
-        /// drpAvailFromMonth control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpAvailFromMonth;
-        
-        /// <summary>
-        /// txtAvailFromDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAvailFromDay;
-        
-        /// <summary>
-        /// txtAvailFromHour control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAvailFromHour;
-        
-        /// <summary>
-        /// txtAvailFromMin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAvailFromMin;
-        
-        /// <summary>
-        /// drpAvailToYear control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpAvailToYear;
-        
-        /// <summary>
-        /// drpAvailToMonth control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList drpAvailToMonth;
-        
-        /// <summary>
-        /// txtAvailToDay control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAvailToDay;
-        
-        /// <summary>
-        /// txtAvailToHour control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAvailToHour;
-        
-        /// <summary>
-        /// txtAvailToMin control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtAvailToMin;
-        
-        /// <summary>
-        /// txtLegacyID control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLegacyID;
+        protected global::System.Web.UI.WebControls.TextBox txtDownloadURL;
         
         /// <summary>
         /// drpCategory control.
@@ -344,42 +200,6 @@ namespace LSKYStreamingManager.Videos {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkPrivate;
-        
-        /// <summary>
-        /// chkWasOriginallyLiveStream control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkWasOriginallyLiveStream;
-        
-        /// <summary>
-        /// chkShowAirDate control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkShowAirDate;
-        
-        /// <summary>
-        /// chkAlwaysAvailable control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkAlwaysAvailable;
-        
-        /// <summary>
-        /// chkAllowEmbed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkAllowEmbed;
         
         /// <summary>
         /// btnAdd control.
