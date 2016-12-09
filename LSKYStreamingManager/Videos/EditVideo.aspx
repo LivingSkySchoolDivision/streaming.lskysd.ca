@@ -2,7 +2,8 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="Body" runat="server">
-    <h2>Edit video</h2>    
+    <h2>Edit video</h2>  
+    <a href="index.aspx" style="font-size: 8pt;"><< Back to video list</a><br/><br/>
     <div style="text-align: center;">
         <asp:Label ID="lblError" runat="server" Text="" Font-Bold="true" Font-Size="Large" ForeColor="Red" Visible="false"></asp:Label>
     </div>
