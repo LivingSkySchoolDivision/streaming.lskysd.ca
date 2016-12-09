@@ -1323,3 +1323,34 @@ div.sidebar + div.content {
 .featuredDesc {
     text-align: center;
 }
+
+.live_stream_collection_container {
+    float: left;
+    text-align: center;
+    width: 100%;
+}
+
+.index_live_stream {
+    max-width: 370px;
+    text-align: center;
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-bottom: 25px;
+    float: left;
+}
+
+.live_stream_collection_container:after {
+    content: " "; /* Older browser do not support empty content */
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.liveStream {
+}
+
+.liveStreamDescription {
+    padding: 10px;
+    padding-top: 0;
+}

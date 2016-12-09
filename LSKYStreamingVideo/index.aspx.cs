@@ -144,7 +144,6 @@ namespace LSKYStreamingVideo
             //returnMe.Append("<tr>");
             //returnMe.Append("<td align=\"left\" valign=\"top\" width=\"" + thumb_width + "\">");
          
-            returnMe.Append("<div class=\"liveStreamWrap\">");
             returnMe.Append("<div class=\"liveStream\">");
             if (stream.IsLive)
             {
@@ -161,7 +160,7 @@ namespace LSKYStreamingVideo
             //returnMe.Append("<tr>");
 
            
-            returnMe.Append("<div class=\"featuredDesc\">");
+            returnMe.Append("<div class=\"liveStreamDescription\">");
             returnMe.Append("<div class=\"stream_title\"><a style=\"text-decoration: none;\" href=\"" + player_url + "\">" + stream.Name + "</a> <div class=\"live_indicator\">LIVE</div></div>");
             if (!string.IsNullOrEmpty(stream.Location))
             {
@@ -183,15 +182,6 @@ namespace LSKYStreamingVideo
                 }
             }
             returnMe.Append("</div>");
-            
-            //returnMe.Append("<br/><div class=\"stream_description\">" + stream.DescriptionSmall + "</div>");
-            
-            //returnMe.Append("</td>");
-
-            returnMe.Append("</div>"); //div.liveStreamWrap
-
-            //returnMe.Append("</tr>");
-            //returnMe.Append("</table>");
 
             return returnMe.ToString();
         }
@@ -247,44 +237,25 @@ namespace LSKYStreamingVideo
         private string showMultipleLiveStreams(List<LiveBroadcast> LiveStreams)
         {
             StringBuilder returnMe = new StringBuilder();
-
-            // Put in columns
-            int numDisplayed = 0;
-            int numColumns = 2;
-            double numRows = Math.Ceiling((double)((double)LiveStreams.Count / (double)numColumns));
             
-            returnMe.Append("<table border=0 cellpadding=5 cellspacing=0 width=\"900\" style=\"margin-left: auto; margin-right: auto;\">");
-            for (int rowCount = 0; rowCount < numRows; rowCount++)
+            //returnMe.Append("<table border=0 cellpadding=5 cellspacing=0 width=\"900\" style=\"margin-left: auto; margin-right: auto;\">");
+            returnMe.Append("<div class=\"front_page_heading\">Live right now</div>");
+            returnMe.Append("<div class=\"live_stream_collection_container\">");
+
+            foreach (LiveBroadcast broadcast in LiveStreams)
             {
-                returnMe.Append("<div class=\"test3\">");
-                for (int colCount = 0; colCount < numColumns; colCount++)
-                {
-                    if (numDisplayed < LiveStreams.Count)
-                    {
-                        // On the last row, if the number of videos is an odd number, make it colspan = 2
-                        if (LiveStreams.Count.IsOdd() && (numDisplayed + 1 == LiveStreams.Count))
-                        {
-                            returnMe.Append("<td valign=\"top\" align=\"Center\" colspan=2>");
-                        }
-                        else
-                        {
-                            returnMe.Append("<td valign=\"top\" align=\"Center\">");
-                        }
-                        returnMe.Append(liveStreamListItem(LiveStreams[numDisplayed]));
-                        returnMe.Append("<br/><br/></td>");
-                        numDisplayed++;
-
-
-                    }
-                }
-                returnMe.Append("</tr>");
+                returnMe.Append("<div class=\"index_live_stream\">");
+                returnMe.Append(liveStreamListItem(broadcast));
                 returnMe.Append("</div>");
             }
+
             returnMe.Append("</div>");
-            returnMe.Append("</table><br/><br/>");
+            
             return returnMe.ToString();
         }
-              
+
+        
+
         private string upcomingStreamsSection(List<LiveBroadcast> UpcomingStreams)
         {
             int maxUpcomingStreams = 10;
