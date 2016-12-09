@@ -70,32 +70,15 @@ namespace LSKYStreamingVideo
                 litUpcomingStreams.Visible = false;
             }
             
-
-            // If there are featured videos, display them on the front page
-            if (FeaturedVideos.Count > 0)
-            {
-                title_featured.Visible = true;
-                litFeaturedVideos.Visible = true;
-                litFeaturedVideos.Text = BuildFeaturedVideoDisplay(FeaturedVideos);
-            }
-            else
-            {
-                title_featured.Visible = false;
-                litFeaturedVideos.Visible = false;
-            }
-
-
             // Display newest videos (if any exist)
             if (NewestVideos.Count > 0)
             {
-                title_newest.Visible = true;
                 litNewestVideos.Visible = true;
                 litNewestVideos.Text = newestVideosSection(NewestVideos);
                 
             }
             else
             {
-                title_newest.Visible = false;
                 litNewestVideos.Visible = false;
             }
         }
@@ -198,37 +181,30 @@ namespace LSKYStreamingVideo
                 thumbnailURL = video.ThumbnailURL;
             }
 
-            returnMe.Append("<div class=\"SmallVideoListItem\">");
-            
-            returnMe.Append("<div class=\"VideoListThumb\" width=\"128\">");
+            returnMe.Append("<div class=\"index_video\">");
+
+            // Thumbnail
+            returnMe.Append("<div class=\"index_video_thumbnail\">");
             returnMe.Append("<a href=\"" + playerURL + "\">");
-            returnMe.Append("<img border=\"0\" src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+            returnMe.Append("<img src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"index_video_thumbnail\">");
             returnMe.Append("</a>");
             returnMe.Append("</div>");
-            
-            returnMe.Append("<div class=\"video_list_info_container\">");
+
+            // Description
+            returnMe.Append("<div class=\"index_video_description\">");
             returnMe.Append("<ul>");
             returnMe.Append("<li class=\"VideoListDescTitle\"> <a style=\"text-decoration: none;\" href=\"" + playerURL + "\"><div class=\"video_list_name\">" + video.Name + "</div></a> </li>");
             returnMe.Append("<li class=\"VideoListDescDuration\"> <div class=\"video_list_info\"><b>Duration:</b> " + video.DurationInEnglish + "</div></li>");
             returnMe.Append("<li class=\"VideoListDescSubmitted\"> <div class=\"video_list_info\"><b>Submitted by:</b> " + video.Author + "</div></li>");
             returnMe.Append("</ul>");
 
-            if (video.IsPrivate)
-            {
-                returnMe.Append("<div class=\"video_list_info\"><b>This video is flagged as private</b></div>");
-            }
-
-            if (!string.IsNullOrEmpty(video.DownloadURL))
-            {
-                returnMe.Append("<div class=\"video_list_info\">Download available</div>");
-            }
-            returnMe.Append("<br/><div class=\"video_list_description\">" + video.Description + "</div>");
-
-            returnMe.Append("</div></td>");
-
-
-            returnMe.Append("</ul>");
             returnMe.Append("</div>");
+            
+
+
+            returnMe.Append("</div>");
+            
+            
 
             return returnMe.ToString();
 
@@ -354,37 +330,35 @@ namespace LSKYStreamingVideo
         {
             int numColumns = 2;
 
-            int columnWidthPercent = (int)Math.Round((double)100 / (double)numColumns, 0);
-
             StringBuilder returnMe = new StringBuilder();
 
-            //returnMe.Append("<tr>");
-            returnMe.Append("<div class=\"section clearfix first\" >");
+            // Put the videos in a collection by date
+            Dictionary<string, List<Video>> videosByDate = new Dictionary<string, List<Video>>();
 
-            int numDisplayed = 0;
             foreach (Video video in videos)
             {
-                numDisplayed++;
-                //returnMe.Append("<td valign=\"top\" width=\"" + columnWidthPercent + "%\">");
-                returnMe.Append("<div class=\"col span_1_of_2\">");
-                returnMe.Append(smallVideoListItem(video));
-                //returnMe.Append("</td>");
-                returnMe.Append("</div>");
+                string dateCode = video.DateAdded.ToLongDateString();
 
-                //if (numDisplayed >= numColumns).
-                if (numDisplayed >= numColumns)
+                if (!videosByDate.ContainsKey(dateCode))
                 {
-                    //returnMe.Append("</tr><tr>");
-                    //(next row)
-                    returnMe.Append("</div><div class=\"section clearfix\">");
-                    numDisplayed = 0;
+                    videosByDate.Add(dateCode, new List<Video>());
                 }
+                videosByDate[dateCode].Add(video);
             }
 
-            //returnMe.Append("</tr>");
-            returnMe.Append("</div>");
+            returnMe.Append("<div class=\"index_video_container\" >");
 
-            //returnMe.Append("</table>");
+            int numDisplayed = 0;
+            foreach (string dateCode in videosByDate.Keys)
+            {
+                returnMe.Append("<div class=\"index_video_section\">");
+                returnMe.Append("<div class=\"index_date_code\">Added " + dateCode + "</div>");
+                foreach (Video video in videosByDate[dateCode])
+                {
+                    returnMe.Append(smallVideoListItem(video));
+                }
+                returnMe.Append("</div>");
+            }
 
             return returnMe.ToString();
 

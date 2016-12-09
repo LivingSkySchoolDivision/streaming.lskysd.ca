@@ -1354,3 +1354,52 @@ div.sidebar + div.content {
     padding: 10px;
     padding-top: 0;
 }
+
+.index_date_code {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.index_video_container {
+}
+
+.index_video_section:after {
+    content: " "; 
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+.index_video_section {
+    
+}
+
+.index_video {
+    float: left;
+    max-width: 300px;
+    margin-right: 20px;
+    margin-bottom: 50px;
+    min-height: 375px;
+}
+
+.index_video_thumbnail {
+    
+}
+
+.index_video_thumbnail {
+    width: 300px;
+    margin: 0;
+    padding: 0;
+}
+
+.index_video_description {
+    margin: 0;
+    padding: 0;
+}
+
+.index_video_description ul {
+    padding: 0;
+    margin: 0;
+}

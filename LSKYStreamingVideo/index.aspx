@@ -13,16 +13,10 @@
             </div>
         </div>
     
-    <div runat="server" id="title_featured" class="front_page_heading" visible="false">Featured videos</div>
-    <asp:Literal ID="litFeaturedVideos" Visible="false" runat="server"></asp:Literal> 
-
     <div runat="server" id="title_upcoming" class="front_page_heading" visible="false">Upcoming live broadcasts</div> 
     <asp:Literal ID="litUpcomingStreams" Visible="false" runat="server"></asp:Literal>
     
-
-
     <div class="newestWrapOuter">
-        <div runat="server" id="title_newest" class="front_page_heading" visible="false">Newest videos</div>
         <div class="newestWrapInner">
             <asp:Literal ID="litNewestVideos" Visible="false" runat="server"></asp:Literal>
         </div>
