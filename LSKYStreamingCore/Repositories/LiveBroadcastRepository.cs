@@ -92,7 +92,7 @@ namespace LSKYStreamingCore
         public List<LiveBroadcast> GetUpcoming()
         {
             // Use end time, so that streams are still listed while they are happening
-            return _cache.Values.Where(lb => DateTime.Now < lb.EndTime && !lb.IsHidden).ToList();
+            return _cache.Values.Where(lb => DateTime.Now < lb.EndTime && !lb.IsHidden && !lb.IsLive).ToList();
         }
 
 
