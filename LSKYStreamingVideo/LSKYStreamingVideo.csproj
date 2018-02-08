@@ -21,6 +21,7 @@
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,8 +91,8 @@
     <Content Include="robots.txt" />
     <Content Include="trans_background.png" />
     <Content Include="videos\index.aspx" />
-    <None Include="Properties\PublishProfiles\Development Server.pubxml" />
-    <None Include="Properties\PublishProfiles\Live.pubxml" />
+    <None Include="Properties\PublishProfiles\Live - Streaming-1.pubxml" />
+    <None Include="Properties\PublishProfiles\Live - Streaming-2.pubxml" />
     <None Include="Web.config.TEMPLATE" />
   </ItemGroup>
   <ItemGroup>
