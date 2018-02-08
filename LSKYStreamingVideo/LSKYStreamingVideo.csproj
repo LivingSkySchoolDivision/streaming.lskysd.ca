@@ -62,6 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="about\index.aspx" />
+    <Content Include="Fonts\ClearSans-Bold.svg" />
+    <Content Include="Fonts\ClearSans-BoldItalic.svg" />
+    <Content Include="Fonts\ClearSans-Italic.svg" />
+    <Content Include="Fonts\ClearSans-Light.svg" />
+    <Content Include="Fonts\ClearSans-Medium.svg" />
+    <Content Include="Fonts\ClearSans-MediumItalic.svg" />
+    <Content Include="Fonts\ClearSans-Regular.svg" />
+    <Content Include="Fonts\ClearSans-Thin.svg" />
     <Content Include="help\index.aspx" />
     <Content Include="icon_3d.gif" />
     <Content Include="icon_doc.gif" />
@@ -91,6 +99,33 @@
     <Content Include="robots.txt" />
     <Content Include="trans_background.png" />
     <Content Include="videos\index.aspx" />
+    <Content Include="Fonts\ArchivoNarrow-Bold.otf" />
+    <Content Include="Fonts\ArchivoNarrow-BoldItalic.otf" />
+    <Content Include="Fonts\ArchivoNarrow-Italic.otf" />
+    <Content Include="Fonts\ArchivoNarrow-Regular.otf" />
+    <Content Include="Fonts\ClearSans-Bold.ttf" />
+    <Content Include="Fonts\ClearSans-Bold.woff" />
+    <Content Include="Fonts\ClearSans-BoldItalic.ttf" />
+    <Content Include="Fonts\ClearSans-BoldItalic.woff" />
+    <Content Include="Fonts\ClearSans-Italic.ttf" />
+    <Content Include="Fonts\ClearSans-Italic.woff" />
+    <Content Include="Fonts\ClearSans-Light.ttf" />
+    <Content Include="Fonts\ClearSans-Light.woff" />
+    <Content Include="Fonts\ClearSans-Medium.ttf" />
+    <Content Include="Fonts\ClearSans-Medium.woff" />
+    <Content Include="Fonts\ClearSans-MediumItalic.ttf" />
+    <Content Include="Fonts\ClearSans-MediumItalic.woff" />
+    <Content Include="Fonts\ClearSans-Regular.ttf" />
+    <Content Include="Fonts\ClearSans-Regular.woff" />
+    <Content Include="Fonts\ClearSans-Thin.ttf" />
+    <Content Include="Fonts\ClearSans-Thin.woff" />
+    <Content Include="Fonts\Roboto-Black.ttf" />
+    <Content Include="Fonts\Roboto-Bold.ttf" />
+    <Content Include="Fonts\Roboto-Italic.ttf" />
+    <Content Include="Fonts\Roboto-Light.ttf" />
+    <Content Include="Fonts\Roboto-Medium.ttf" />
+    <Content Include="Fonts\Roboto-Regular.ttf" />
+    <Content Include="Fonts\Roboto-Thin.ttf" />
     <None Include="Properties\PublishProfiles\Live - Streaming-1.pubxml" />
     <None Include="Properties\PublishProfiles\Live - Streaming-2.pubxml" />
     <None Include="Web.config.TEMPLATE" />
@@ -168,9 +203,7 @@
       <Name>LSKYStreamingCore</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fonts\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
