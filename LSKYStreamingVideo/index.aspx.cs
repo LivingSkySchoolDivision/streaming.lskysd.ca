@@ -13,9 +13,7 @@ using LSKYStreamingVideo.CommonHTMLParts;
 namespace LSKYStreamingVideo
 {
     public partial class index : System.Web.UI.Page
-    {
-        
-
+    {     
         protected void Page_Load(object sender, EventArgs e)
         {
             VideoRepository videoRepository = new VideoRepository();

@@ -546,26 +546,29 @@ ul.main_navigation {
 
 /** @todo working on it - responsive*/
 
-ul.main_navigation li  {
-    display:block;
-    float:left;
-    min-height:45px;
-    padding-right:20px;
-
+ul.main_navigation li {
+    display: block;
+    float: left;
+    min-height: 45px;
+    padding-right: 20px;
+    font-family: 'ArchivoNarrow', sans-serif;
 }
+
 .main_navigation li a {
-    color:#FFF;
-    text-decoration:none;
-    padding:0px 5px;
+    color: white;
+    text-decoration: none;
+    padding: 0px 5px;
     display: inline-block;
     min-height: 45px;
-    padding-top:10px;
-}
-.main_navigation a:hover {
-    /*background-color:rgba(0, 0, 0, 0.10);*/
-    color:#555555;
+    padding-top: 10px;
+    font-size: 23px;
+    font-family: 'ArchivoNarrow', sans-serif;
 }
 
+.main_navigation a:hover {
+    /*background-color:rgba(0, 0, 0, 0.10);*/
+    color: #555555;
+}
 
 /*
    *******may not be used anymore********
@@ -1325,9 +1328,10 @@ div.sidebar + div.content {
 }
 
 .live_stream_collection_container {
-    float: left;
     text-align: center;
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .index_live_stream {

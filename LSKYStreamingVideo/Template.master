@@ -51,7 +51,7 @@
         <asp:ContentPlaceHolder ID="Body" runat="server"></asp:ContentPlaceHolder>
         <div class="footer">
         <p>All content on this site is owned by Living Sky School Division No. 202, unless otherwise specified</p>
-        <p>All times are in CST (GMT-6), No daylight savings time. Current server time is <asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label></p>
+        <p>All times are in CST (UTC-6), No DST. Current server time is <asp:Label ID="lblServerTime" runat="server" Text=""></asp:Label></p>
         </div>
 
         <!-- Google analytics tracking code -->
