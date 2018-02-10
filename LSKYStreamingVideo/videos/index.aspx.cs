@@ -128,7 +128,7 @@ namespace LSKYStreamingVideo.videos
             returnMe.Append("<div class=\"VideoListThumb\" width=\"128\">");
             returnMe.Append("<a href=\"" + playerURL + "\">");
             //returnMe.Append("<div style=\"width: 200px;\">");
-            returnMe.Append("<img border=\"0\" src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
+            returnMe.Append("<img border=\"0\" src=\"" + Config.ThumbnailPath + "/videos/" + thumbnailURL + "\" class=\"video_thumbnail_list_item_container_image\">");
             returnMe.Append("</a>");
             returnMe.Append("</div>");
             

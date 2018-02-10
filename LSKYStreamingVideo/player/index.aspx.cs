@@ -32,7 +32,7 @@ namespace LSKYStreamingVideo.player
             }
             if (!string.IsNullOrEmpty(video.DownloadURL))
             {
-                returnMe.Append("<div class=\"video_list_info\"><a href=\"/video_files/" + video.DownloadURL + "\">Download available</a></div>");
+                returnMe.Append("<div class=\"video_list_info\"><a href=\""  + Config.VideoPath + "" + video.DownloadURL + "\">Download available</a></div>");
             }
 
             returnMe.Append("<br/><div class=\"video_list_description\">" + video.Description + "</div>");

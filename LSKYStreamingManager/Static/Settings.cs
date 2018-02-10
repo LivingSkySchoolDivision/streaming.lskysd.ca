@@ -27,8 +27,32 @@ namespace LSKYStreamingManager
         public static string outsideErrorMessage = "/Login/outside.html";
 
         // Only IP addresses starting with this are allowed to access the site        
-        public static string localNetworkChunk = "10.177.";
-        
+        public static string localNetworkChunk
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["LocalNetworkIPChunk"].ToString();
+            }
+        }
+
+        // Thumbnail Path
+        public static string ThumbnailPath
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["ThumbnailPath"].ToString();
+            }
+        }
+
+        // Video path
+        public static string VideoPath
+        {
+            get
+            {
+                return System.Configuration.ConfigurationManager.AppSettings["VideoPath"].ToString();
+            }
+        }
+
         /// <summary>
         /// Returns a List of members of the specified group (in lower case)
         /// </summary>

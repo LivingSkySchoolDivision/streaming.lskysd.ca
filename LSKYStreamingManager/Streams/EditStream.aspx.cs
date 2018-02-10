@@ -152,8 +152,9 @@ namespace LSKYStreamingManager.Streams
             }
 
             // Populate thumbnail dropdown
-            imgThumbnail.ImageUrl = "/thumbnails/broadcasts/" + SelectedBroadcast.ThumbnailURL;
+            imgThumbnail.ImageUrl = Settings.ThumbnailPath + "/broadcasts/" + SelectedBroadcast.ThumbnailURL;
 
+            // TODO: This is not going to work with the new system - will need to find another way to get a list of available thumbnails
             DirectoryInfo ThumbnailDirectory = new DirectoryInfo(Server.MapPath("/thumbnails/broadcasts"));
             foreach (FileInfo file in ThumbnailDirectory.GetFiles())
             {
@@ -217,7 +218,7 @@ namespace LSKYStreamingManager.Streams
         protected void drpThumbnail_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Set the preview thumbnail to the selected one
-            imgThumbnail.ImageUrl = "/thumbnails/broadcasts/" + drpThumbnail.SelectedValue;
+            imgThumbnail.ImageUrl = Settings.ThumbnailPath + "/broadcasts/" + drpThumbnail.SelectedValue;
         }
 
         protected void btnAdd_Click(object sender, EventArgs e)

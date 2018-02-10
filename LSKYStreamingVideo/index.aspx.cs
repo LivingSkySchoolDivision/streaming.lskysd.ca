@@ -21,8 +21,7 @@ namespace LSKYStreamingVideo
 
             // Determine if the user can access private videos
             bool includePrivateContent = false;
-
-
+            
             List<Video> NewestVideos = videoRepository.GetNewest(includePrivateContent, 60);
             List<Video> FeaturedVideos = videoRepository.GetFeatured(includePrivateContent);
             List<LiveBroadcast> UpcomingStreams = liveBroadcastRepository.GetUpcoming();
@@ -130,7 +129,7 @@ namespace LSKYStreamingVideo
             {
                 returnMe.Append("<a style=\"text-decoration: none;\" href=\"" + player_url + "\">");
             }
-            returnMe.Append("<img src=\"/thumbnails/broadcasts/" + thumbnailURL + "\" width=\"" + thumb_width + "\" height=\"" + thumb_height + "\">");
+            returnMe.Append("<img src=\"" + Config.ThumbnailPath + "/broadcasts/" + thumbnailURL + "\" width=\"" + thumb_width + "\" height=\"" + thumb_height + "\">");
             returnMe.Append("</div>"); //div.liveStream
             
             returnMe.Append("</a>");
@@ -184,7 +183,7 @@ namespace LSKYStreamingVideo
             // Thumbnail
             returnMe.Append("<div class=\"index_video_thumbnail\">");
             returnMe.Append("<a href=\"" + playerURL + "\">");
-            returnMe.Append("<img src=\"/thumbnails/videos/" + thumbnailURL + "\" class=\"index_video_thumbnail\">");
+            returnMe.Append("<img src=\"" + Config.ThumbnailPath + "/videos/" + thumbnailURL + "\" class=\"index_video_thumbnail\">");
             returnMe.Append("</a>");
             returnMe.Append("</div>");
 

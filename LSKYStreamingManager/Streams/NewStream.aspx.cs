@@ -113,7 +113,7 @@ namespace LSKYStreamingManager.Streams
         protected void drpThumbnail_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Set the preview thumbnail to the selected one
-            imgThumbnail.ImageUrl = "/thumbnails/broadcasts/" + drpThumbnail.SelectedValue;
+            imgThumbnail.ImageUrl = Settings.ThumbnailPath + "/broadcasts/" + drpThumbnail.SelectedValue;
         }
 
         /// <summary>
