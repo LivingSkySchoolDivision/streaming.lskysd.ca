@@ -115,7 +115,8 @@ namespace LSKYStreamingCore
                     sqlCommand.Parameters.AddWithValue("NAME", broadcast.Name);
                     sqlCommand.Parameters.AddWithValue("DESC", broadcast.Description);
                     sqlCommand.Parameters.AddWithValue("LOC", broadcast.Location);
-                    sqlCommand.Parameters.AddWithValue("THUMB", broadcast.ThumbnailURL);
+                    //sqlCommand.Parameters.AddWithValue("THUMB", broadcast.ThumbnailURL);
+                    sqlCommand.Parameters.AddWithValue("THUMB", "");
                     sqlCommand.Parameters.AddWithValue("WIDTH", broadcast.Width);
                     sqlCommand.Parameters.AddWithValue("HEIGHT", broadcast.Height);
                     sqlCommand.Parameters.AddWithValue("STARTS", broadcast.StartTime);
@@ -148,7 +149,8 @@ namespace LSKYStreamingCore
                     sqlCommand.Parameters.AddWithValue("NAME", broadcast.Name);
                     sqlCommand.Parameters.AddWithValue("LOC", broadcast.Location);
                     sqlCommand.Parameters.AddWithValue("DESC", broadcast.Description);
-                    sqlCommand.Parameters.AddWithValue("THUMB", broadcast.ThumbnailURL);
+                    //sqlCommand.Parameters.AddWithValue("THUMB", broadcast.ThumbnailURL);
+                    sqlCommand.Parameters.AddWithValue("THUMB", "");
                     sqlCommand.Parameters.AddWithValue("WIDTH", broadcast.Width);
                     sqlCommand.Parameters.AddWithValue("HEIGHT", broadcast.Height);
                     sqlCommand.Parameters.AddWithValue("STARTS", broadcast.StartTime);
