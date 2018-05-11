@@ -35,6 +35,7 @@ namespace LSKYStreamingManager.Streams
             bool forceonline = chkForce.Checked;
             bool isDelayed = chkDelayed.Checked;
             bool isCancelled = chkCancelled.Checked;
+            bool embed = chkEmbed.Checked;
 
             // Validate
             if (string.IsNullOrEmpty(name)) { throw new Exception("Name cannot be empty. "); }
@@ -60,7 +61,8 @@ namespace LSKYStreamingManager.Streams
                 IsPrivate = isprivate,
                 IsHidden = ishidden,
                 IsDelayed = isDelayed,
-                IsCancelled = isCancelled
+                IsCancelled = isCancelled,
+                EmbedInsteadOfLink = embed
             };
 
 
@@ -90,6 +92,7 @@ namespace LSKYStreamingManager.Streams
             chkForce.Checked = SelectedBroadcast.ForcedLive;
             chkDelayed.Checked = SelectedBroadcast.IsDelayed;
             chkCancelled.Checked = SelectedBroadcast.IsCancelled;
+            chkEmbed.Checked = SelectedBroadcast.EmbedInsteadOfLink;
 
             // Populate date dropdowns
             txtStartDay.Text = SelectedBroadcast.StartTime.Day.ToString();
@@ -155,6 +158,7 @@ namespace LSKYStreamingManager.Streams
             imgThumbnail.ImageUrl = Settings.ThumbnailPath + "/broadcasts/" + SelectedBroadcast.ThumbnailURL;
 
             // TODO: This is not going to work with the new system - will need to find another way to get a list of available thumbnails
+            /*
             DirectoryInfo ThumbnailDirectory = new DirectoryInfo(Server.MapPath("/thumbnails/broadcasts"));
             foreach (FileInfo file in ThumbnailDirectory.GetFiles())
             {
@@ -170,12 +174,9 @@ namespace LSKYStreamingManager.Streams
                         NewThumb.Selected = true;
                     }
                     drpThumbnail.Items.Add(NewThumb);
-
-
-
-
                 }
             }
+            */
 
         }
 

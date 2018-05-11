@@ -32,13 +32,18 @@ namespace LSKYStreamingVideo
             {
                 if (CurrentlyLiveStreams.Count == 1)
                 {
+                    if (CurrentlyLiveStreams.First().EmbedInsteadOfLink)
+                    {
+                        litPlayer.Visible = true;
+                        litStreamInfo.Visible = true;
 
-                    litPlayer.Visible = true;
-                    litStreamInfo.Visible = true;
-                    
-                    litPlayer.Text = YoutubeLiveBroadcastPlayer.GetHTML(CurrentlyLiveStreams.First());
-                    litStreamInfo.Text = buildLiveStreamInfoHTML(CurrentlyLiveStreams.First());
-
+                        litPlayer.Text = YoutubeLiveBroadcastPlayer.GetHTML(CurrentlyLiveStreams.First());
+                        litStreamInfo.Text = buildLiveStreamInfoHTML(CurrentlyLiveStreams.First());
+                    } else
+                    {
+                        litLiveStreams.Visible = true;
+                        litLiveStreams.Text = showMultipleLiveStreams(CurrentlyLiveStreams);
+                    }
                 }
                 else
                 {
@@ -99,7 +104,7 @@ namespace LSKYStreamingVideo
         {
             int thumb_width = 360;
             int thumb_height = 240;
-            string player_url = "live/?i=" + stream.ID;
+            string player_url = stream.EmbedInsteadOfLink ? "live/?i=" + stream.ID : @"https://www.youtube.com/watch?v=" + stream.YouTubeID; ;
 
             string thumbnailURL = "none.png";
             if (!string.IsNullOrEmpty(stream.ThumbnailURL))

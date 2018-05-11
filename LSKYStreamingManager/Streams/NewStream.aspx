@@ -144,6 +144,15 @@
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow>
+            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
+                <asp:CheckBox ID="chkEmbed" runat="server" />
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <b>Enable embedding</b>
+                <p>Attempt to embed this video instead of linking to a Youtube page. Only certain YouTube accounts are capable of embedding, so this is <b>off</b> by default.</p>                
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow>
             <asp:TableCell ColumnSpan="2" HorizontalAlign="Center">
                 <asp:Button ID="btnAdd" runat="server" Text="Add new stream" OnClick="btnAdd_Click" />
             </asp:TableCell>

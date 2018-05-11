@@ -148,7 +148,15 @@
                 <p>Check this to indicate that this stream has been cancelled. If you just delete it, it will disappear, and users won't know what happened.</p>
             </asp:TableCell>
         </asp:TableRow>
-
+        <asp:TableRow>
+            <asp:TableCell VerticalAlign="Top" HorizontalAlign="Right">
+                <asp:CheckBox ID="chkEmbed" runat="server" />
+            </asp:TableCell>
+            <asp:TableCell VerticalAlign="Top">
+                <b>Enable embedding</b>
+                <p>Attempt to embed this video instead of linking to a Youtube page. Only certain YouTube accounts are capable of embedding, so this is <b>off</b> by default.</p>                
+            </asp:TableCell>
+        </asp:TableRow>
         <asp:TableRow>
             <asp:TableCell HorizontalAlign="Center">
                 <asp:LinkButton ID="btnDelete" runat="server" OnClick="btnDelete_OnClick">Delete this stream</asp:LinkButton>

@@ -22,6 +22,7 @@ namespace LSKYStreamingCore
         public bool IsHidden { get; set; }
         public bool IsPrivate { get; set; }
         public string YouTubeID { get; set; }
+        public bool EmbedInsteadOfLink { get; set; }
 
         public bool IsDelayed { get; set; }
         public bool IsCancelled { get; set; }

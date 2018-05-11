@@ -31,7 +31,8 @@ namespace LSKYStreamingCore
                 ForcedLive = Parsers.ParseBool(dataReader["force_online"].ToString().Trim()),
                 YouTubeID = dataReader["youtube_id"].ToString().Trim(),
                 IsDelayed = Parsers.ParseBool(dataReader["delayed"].ToString().Trim()),
-                IsCancelled = Parsers.ParseBool(dataReader["cancelled"].ToString().Trim())
+                IsCancelled = Parsers.ParseBool(dataReader["cancelled"].ToString().Trim()),
+                EmbedInsteadOfLink = Parsers.ParseBool(dataReader["embed_instead_of_linking"].ToString().Trim())
             };
         }
 
@@ -143,7 +144,7 @@ namespace LSKYStreamingCore
                     sqlCommand.Connection = connection;
                     sqlCommand.CommandType = CommandType.Text;
                     sqlCommand.CommandText = "UPDATE live_streams SET name=@NAME, location=@LOC, description=@DESC, thumbnail_url=@THUMB, width=@WIDTH, height=@HEIGHT,"
-                                                + " stream_start=@STARTS, stream_end=@ENDS, hidden=@ISHIDDEN, private=@ISPRIVATE, force_online=@FORCEONLINE, youtube_id=@YOUTUBEID, cancelled=@CANCELLED, delayed=@DELAYED"
+                                                + " stream_start=@STARTS, stream_end=@ENDS, hidden=@ISHIDDEN, private=@ISPRIVATE, force_online=@FORCEONLINE, youtube_id=@YOUTUBEID, cancelled=@CANCELLED, delayed=@DELAYED, embed_instead_of_linking=@EMBED"
                                                 + " WHERE id=@ID";
                     sqlCommand.Parameters.AddWithValue("ID", broadcast.ID);
                     sqlCommand.Parameters.AddWithValue("NAME", broadcast.Name);
@@ -161,6 +162,7 @@ namespace LSKYStreamingCore
                     sqlCommand.Parameters.AddWithValue("YOUTUBEID", broadcast.YouTubeID);
                     sqlCommand.Parameters.AddWithValue("DELAYED", broadcast.IsDelayed);
                     sqlCommand.Parameters.AddWithValue("CANCELLED", broadcast.IsCancelled);
+                    sqlCommand.Parameters.AddWithValue("EMBED", broadcast.EmbedInsteadOfLink);
                     sqlCommand.Connection.Open();
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.Connection.Close();

@@ -247,6 +247,15 @@ namespace LSKYStreamingManager.Streams {
         protected global::System.Web.UI.WebControls.CheckBox chkCancelled;
         
         /// <summary>
+        /// chkEmbed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkEmbed;
+        
+        /// <summary>
         /// btnAdd control.
         /// </summary>
         /// <remarks>

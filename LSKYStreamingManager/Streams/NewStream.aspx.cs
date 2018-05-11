@@ -78,6 +78,7 @@ namespace LSKYStreamingManager.Streams
                 
 
                 // Populate thumbnail dropdown
+                /*
                 DirectoryInfo ThumbnailDirectory = new DirectoryInfo(Server.MapPath("/thumbnails/broadcasts"));
                 foreach (FileInfo file in ThumbnailDirectory.GetFiles())
                 {
@@ -94,7 +95,7 @@ namespace LSKYStreamingManager.Streams
                         }
                         drpThumbnail.Items.Add(Thumb);
                     }
-                }
+                }*/
             }
 
         }
@@ -138,6 +139,7 @@ namespace LSKYStreamingManager.Streams
             bool forceonline = chkForce.Checked;
             bool isDelayed = chkDelayed.Checked;
             bool isCancelled = chkCancelled.Checked;
+            bool embed = chkEmbed.Checked;
 
             // Validate
             if (string.IsNullOrEmpty(name)) { throw new Exception("Name cannot be empty. "); }
@@ -162,12 +164,9 @@ namespace LSKYStreamingManager.Streams
                 IsPrivate = isprivate,
                 IsHidden = ishidden,
                 IsDelayed = isDelayed,
-                IsCancelled = isCancelled
+                IsCancelled = isCancelled,
+                EmbedInsteadOfLink = embed                
             };
-
-
-
-
         }
 
         protected void btnAdd_Click(object sender, EventArgs e)
