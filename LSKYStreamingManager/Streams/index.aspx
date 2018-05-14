@@ -14,6 +14,7 @@
             <asp:TableHeaderCell>Hidden</asp:TableHeaderCell>
             <asp:TableHeaderCell>Private</asp:TableHeaderCell>
             <asp:TableHeaderCell>Always Online</asp:TableHeaderCell>
+            <asp:TableHeaderCell>Youtube ID</asp:TableHeaderCell>
         </asp:TableHeaderRow>
     </asp:Table>
 </asp:Content>

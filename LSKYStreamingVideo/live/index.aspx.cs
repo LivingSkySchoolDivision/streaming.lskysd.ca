@@ -52,7 +52,20 @@ namespace LSKYStreamingVideo.live
                             (!liveStream.IsPrivate))
                         {
                             tblContainer.Visible = true;
-                            litPlayer.Text = YoutubeLiveBroadcastPlayer.GetHTML(liveStream);
+                            if (liveStream.EmbedInsteadOfLink)
+                            {
+                                litPlayer.Text = YoutubeLiveBroadcastPlayer.GetHTML(liveStream);
+                            } else
+                            {
+                                if (!string.IsNullOrEmpty(liveStream.YouTubeID))
+                                {
+                                    Response.Redirect(@"https://www.youtube.com/watch?v=" + liveStream.YouTubeID);
+                                } else
+                                {
+                                    displayError("Live stream has no Youtube ID set");
+                                }
+                            }
+
                             litStreamInfo.Text = streamInfoBox(liveStream);
                         }
                         else
