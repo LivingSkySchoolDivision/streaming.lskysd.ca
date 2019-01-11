@@ -172,7 +172,7 @@ namespace LSKYStreamingManager
                         sqlCommand.Parameters.AddWithValue("@USERNAME", username);
                         sqlCommand.Parameters.AddWithValue("@IP", remoteIP);
                         sqlCommand.Parameters.AddWithValue("@USERAGENT", useragent);
-                        sqlCommand.Parameters.AddWithValue("@SESSIONSTART", DateTime.Now);
+                        sqlCommand.Parameters.AddWithValue("@SESSIONSTART", DateTime.Now.AddMinutes(-10));
                         sqlCommand.Parameters.AddWithValue("@SESSIONEND", DateTime.Now.Add(sessionDuration));
                         sqlCommand.Connection.Open();
                         sqlCommand.ExecuteNonQuery();
