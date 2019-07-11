@@ -126,8 +126,7 @@
     <Content Include="Fonts\Roboto-Medium.ttf" />
     <Content Include="Fonts\Roboto-Regular.ttf" />
     <Content Include="Fonts\Roboto-Thin.ttf" />
-    <None Include="Properties\PublishProfiles\Live - Streaming-1.pubxml" />
-    <None Include="Properties\PublishProfiles\Live - Streaming-2.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Web.config.TEMPLATE" />
   </ItemGroup>
   <ItemGroup>
