@@ -17,12 +17,12 @@
     <pages controlRenderingCompatibilityVersion="4.0"/>
     <pages validateRequest="false" />
   </system.web>
-  
-  <appsettings>
+
+  <appSettings>
     <add key="LocalNetworkIPChunk" value="10.177."/>
     <add key="ThumbnailPath" value="/thumbnails/"/>
     <add key="VideoPath" value="/videos/"/>
-  </appsettings>
+  </appSettings>
 
   <connectionStrings>
   <add
