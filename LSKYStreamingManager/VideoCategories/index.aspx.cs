@@ -30,8 +30,23 @@ namespace LSKYStreamingManager.VideoCategories
             returnMe.Cells.Add(new TableCell() { Text = category.IsPrivate.ToYesOrNoHTML() });
             returnMe.Cells.Add(new TableCell() { Text = category.ID });
             returnMe.Cells.Add(new TableCell() { Text = category.ParentCategoryID });
-            returnMe.Cells.Add(new TableCell() { Text = category.MenuLevel.ToString() });
+            returnMe.Cells.Add(new TableCell() { Text = category.MenuLevel > 0 ? category.MenuLevel.ToString() : "<b style=\"color: red;\">INVALID PARENT CATEGORY</b>" });
             returnMe.Cells.Add(new TableCell() { Text = category.VideoCount.ToString() });
+
+            return returnMe;
+        }
+
+        private TableRow AddVideoCategoryTableHeadings()
+        {
+            TableHeaderRow returnMe = new TableHeaderRow();
+
+            returnMe.Cells.Add(new TableHeaderCell() { Text = "Category Name" });
+            returnMe.Cells.Add(new TableHeaderCell() { Text = "Hidden?" });
+            returnMe.Cells.Add(new TableHeaderCell() { Text = "Private?" });
+            returnMe.Cells.Add(new TableHeaderCell() { Text = "ID" });
+            returnMe.Cells.Add(new TableHeaderCell() { Text = "Parent" });
+            returnMe.Cells.Add(new TableHeaderCell() { Text = "Menu Level" });
+            returnMe.Cells.Add(new TableHeaderCell() { Text = "Videos" });
 
             return returnMe;
         }
@@ -43,6 +58,8 @@ namespace LSKYStreamingManager.VideoCategories
             List<VideoCategory> AllCategories = videoCategoryRepo.GetAll();
 
             tblCategories.Rows.Clear();
+            tblCategories.Rows.Add(AddVideoCategoryTableHeadings());
+
             drpParent.Items.Clear();
             drpParent.Items.Add(new ListItem(" - No Parent Category -", string.Empty));
 
@@ -61,13 +78,7 @@ namespace LSKYStreamingManager.VideoCategories
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            VideoCategoryRepository videoCategoryRepo = new VideoCategoryRepository();
-            List<VideoCategory> AllCategories = videoCategoryRepo.GetAll();
-
-            if (!IsPostBack)
-            {
-                refreshCategoryList();
-            }
+            refreshCategoryList();
         }
 
         protected void btnNewCategory_Click(object sender, EventArgs e)
