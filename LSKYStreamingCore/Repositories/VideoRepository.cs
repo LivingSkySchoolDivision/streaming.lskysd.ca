@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using LSKYStreamingCore.ExtensionMethods;
 
 namespace LSKYStreamingCore
@@ -253,48 +252,92 @@ namespace LSKYStreamingCore
         {
             List<Video> ReturnedVideos = new List<Video>();
 
-            // Sanitize the input string
-            string sanitizedSearchString = Sanitizers.SanitizeSearchString(searchTerms.Trim()).ToLower().Trim();
-
-            // Build an SQL query
-            StringBuilder sqlQuery = new StringBuilder();
-            sqlQuery.Append("SELECT TOP 25 * FROM videos WHERE hidden=0 AND (");
-            sqlQuery.Append("name like '%" + sanitizedSearchString + "%' OR ");
-            sqlQuery.Append("author like '%" + sanitizedSearchString + "%' OR ");
-            sqlQuery.Append("location like '%" + sanitizedSearchString + "%' OR ");
-            sqlQuery.Append("description like '%" + sanitizedSearchString + "%' OR ");
-            sqlQuery.Append("tags like '%" + sanitizedSearchString + "%')");
-            if (!includePrivateVideos)
+            List<string> searchTermsList = new List<string>();
+            foreach(string term in searchTerms.Trim().Split(new char[] { ';', ' ', ',', '+' }))
             {
-                sqlQuery.Append(" AND private=0 ");
-            }
-            sqlQuery.Append(" ORDER BY date_added DESC;");
-
-            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
-            {
-                using (SqlCommand sqlCommand = new SqlCommand())
+                if (!string.IsNullOrEmpty(term))
                 {
-                    sqlCommand.Connection = connection;
-                    sqlCommand.CommandType = CommandType.Text;
-                    sqlCommand.CommandText = sqlQuery.ToString();
-                    sqlCommand.Parameters.AddWithValue("CURRENTDATETIME", DateTime.Now);
-                    sqlCommand.Parameters.AddWithValue("SEARCHTERM", sanitizedSearchString);
-                    sqlCommand.Connection.Open();
-                    SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
-
-                    if (dbDataReader.HasRows)
+                    if (!searchTermsList.Contains(term.ToLower()))
                     {
-                        while (dbDataReader.Read())
-                        {
-
-                            ReturnedVideos.Add(dbDataReaderToVideo(dbDataReader));
-                        }
+                        searchTermsList.Add(term.ToLower());
                     }
-
-                    sqlCommand.Connection.Close();
                 }
             }
+
+            Dictionary<string, int> videoHits = new Dictionary<string, int>();
+            Dictionary<string, Video> videosByID = new Dictionary<string, Video>();
             
+            using (SqlConnection connection = new SqlConnection(DatabaseConnectionStrings.ReadOnly))
+            {
+
+                foreach (string term in searchTermsList)
+                {
+                    StringBuilder sqlQuery = new StringBuilder();
+                    sqlQuery.Append("SELECT TOP 100 * " +
+                                        "FROM videos " +
+                                        "WHERE hidden=0 AND " +
+                                        "(" +
+                                            "name like @QNAME OR " +
+                                            "author like @QAUTHOR OR " +
+                                            "location like @QLOCATION OR " +
+                                            "description like @QDESC OR " +
+                                            "tags like @QTAGS OR " +
+                                            "LOWER(id) = @QID OR " +
+                                            "LOWER(legacy_video_id) = @QLID)");                   
+                    if (!includePrivateVideos)
+                    {
+                        sqlQuery.Append(" AND private=0 ");
+                    }
+                    sqlQuery.Append(" ORDER BY date_added DESC;");
+
+                    using (SqlCommand sqlCommand = new SqlCommand())
+                    {
+                        sqlCommand.Connection = connection;
+                        sqlCommand.CommandType = CommandType.Text;
+                        sqlCommand.CommandText = sqlQuery.ToString();
+                        sqlCommand.Parameters.AddWithValue("QID", term);
+                        sqlCommand.Parameters.AddWithValue("QLID", term);
+                        sqlCommand.Parameters.AddWithValue("QNAME", "%" + term + "%");
+                        sqlCommand.Parameters.AddWithValue("QAUTHOR", "%" + term + "%");
+                        sqlCommand.Parameters.AddWithValue("QLOCATION", "%" + term + "%");
+                        sqlCommand.Parameters.AddWithValue("QDESC", "%" + term + "%");
+                        sqlCommand.Parameters.AddWithValue("QTAGS", "%" + term + "%");
+                        sqlCommand.Connection.Open();
+                        SqlDataReader dbDataReader = sqlCommand.ExecuteReader();
+
+                        if (dbDataReader.HasRows)
+                        {
+                            while (dbDataReader.Read())
+                            {
+                                Video obj = dbDataReaderToVideo(dbDataReader);
+                                if (!videosByID.ContainsKey(obj.ID))
+                                {
+                                    videosByID.Add(obj.ID, obj);
+                                }
+
+                                if (!videoHits.ContainsKey(obj.ID))
+                                {
+                                    videoHits.Add(obj.ID, 1);
+                                } else
+                                {
+                                    videoHits[obj.ID]++;
+                                }
+                            }
+                        }
+
+                        sqlCommand.Connection.Close();
+                    }
+                }
+            }            
+            
+            foreach(KeyValuePair<string, int> videoHit in videoHits.OrderByDescending(x => x.Value))
+            {
+                if (videosByID.ContainsKey(videoHit.Key))
+                {
+                    ReturnedVideos.Add(videosByID[videoHit.Key]);
+                }
+            }
+
             return ReturnedVideos;
         }
 
